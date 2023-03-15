@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/modules/cloudsim-examples/cloudsim-examples.iml" filepath="$PROJECT_DIR$/modules/cloudsim-examples/cloudsim-examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/distribution/distribution.iml" filepath="$PROJECT_DIR$/distribution/distribution.iml" />
+      <module fileurl="file://$PROJECT_DIR$/documentation/documentation.iml" filepath="$PROJECT_DIR$/documentation/documentation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/cloudsim/iquantum.iml" filepath="$PROJECT_DIR$/modules/cloudsim/iquantum.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/iquantum-examples/iquantum-examples.iml" filepath="$PROJECT_DIR$/modules/iquantum-examples/iquantum-examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iquantum-package.iml" filepath="$PROJECT_DIR$/iquantum-package.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/iquantum/src/main/main.iml" filepath="$PROJECT_DIR$/modules/iquantum/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/modules.iml" filepath="$PROJECT_DIR$/modules/modules.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modules/iquantum/src/test/test.iml" filepath="$PROJECT_DIR$/modules/iquantum/src/test/test.iml" />
+    </modules>
+  </component>
+</project>
