@@ -1,4 +1,4 @@
-package org.iquantum.components;
+package org.iquantum;
 
 import java.util.List;
 import java.util.Map;

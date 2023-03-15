@@ -14,6 +14,7 @@ import org.cloudbus.cloudsim.Datacenter;
  * Contains various static command tags that indicate a type of action that needs to be undertaken
  * by CloudSim entities when they receive or send events. <b>NOTE:</b> To avoid conflicts with other
  * tags, CloudSim reserves negative numbers, 0 - 299, and 9600.
+ * Updates (2023-03-15) by Hoa Nguyen: CloudSimTags for iQuantum starts from 1000
  * 
  * @todo There aren't negative reserved tags, but only positive tags (with 2 exceptions).
  * 
@@ -272,9 +273,16 @@ public class CloudSimTags {
 
 	public static final int NextCycle = BASE + 48;
 
+	// IQUANTUM IMPLEMENTATION
+	// iQuantum Tags start from 1000
+	public static final int QULET_SUBMIT = BASE + 1000;
+
+
+
+	// END IQUANTUM IMPLEMENTATION
+
 	/** Private Constructor. */
 	private CloudSimTags() {
 		throw new UnsupportedOperationException("CloudSimTags cannot be instantiated");
 	}
-
 }

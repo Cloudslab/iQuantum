@@ -1,4 +1,4 @@
-package org.iquantum.components;
+package org.iquantum;
 
 import org.cloudbus.cloudsim.core.CloudSim;
 
@@ -13,7 +13,10 @@ public class Qulet {
     private int numShots;
     private List<List<Integer>> qubitTopology;
 
+    private double estimatedCompletionTime;
+
     private int brokerId;
+
 
     /**
      * Indicates if transaction history records for this Qulet is to be
@@ -71,7 +74,16 @@ public class Qulet {
         }
     }
 
-    // //////////////////////// PROTECTED METHODS //////////////////////////////
+    public int getBrokerId() {
+        return brokerId;
+    }
+
+    public double getEstimatedCompletionTime() {
+        // TEMPORARY assume the estimated completion time is the number of shots (MUST BE CHANGED)
+        estimatedCompletionTime = 1.0 * numShots;
+        return estimatedCompletionTime;
+    }
+
     /**
      * Writes this particular history transaction of this Cloudlet into a log.
      *

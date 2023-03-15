@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/modules/iquantum/cloudsim.iml" filepath="$PROJECT_DIR$/modules/iquantum/cloudsim.iml" />
       <module fileurl="file://$PROJECT_DIR$/modules/cloudsim-examples/cloudsim-examples.iml" filepath="$PROJECT_DIR$/modules/cloudsim-examples/cloudsim-examples.iml" />
       <module fileurl="file://$PROJECT_DIR$/distribution/distribution.iml" filepath="$PROJECT_DIR$/distribution/distribution.iml" />
       <module fileurl="file://$PROJECT_DIR$/documentation/documentation.iml" filepath="$PROJECT_DIR$/documentation/documentation.iml" />

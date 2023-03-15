@@ -6,12 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="cloudsim-examples" />
+        <module name="cloudsim" />
         <module name="documentation" />
         <module name="iquantum-examples" />
         <module name="iquantum" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="cloudsim" target="1.8" />
       <module name="cloudsim-examples" target="1.8" />
       <module name="distribution" target="1.5" />
       <module name="documentation" target="1.8" />
