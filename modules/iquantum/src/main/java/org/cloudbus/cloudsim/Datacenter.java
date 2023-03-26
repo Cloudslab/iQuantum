@@ -898,10 +898,13 @@ public class Datacenter extends SimEntity {
 		// if some time passed since last processing
 		// R: for term is to allow loop at simulation start. Otherwise, one initial
 		// simulation step is skipped and schedulers are not properly initialized
+		//--// Check if enough time has passed since last processing
 		if (CloudSim.clock() < 0.111 || CloudSim.clock() >= getLastProcessTime() + CloudSim.getMinTimeBetweenEvents()) {
+			// Get list of all hosts from VM allocation policy
 			List<? extends Host> list = getVmAllocationPolicy().getHostList();
+			// Initialize variable to keep track of smallest time
 			double smallerTime = Double.MAX_VALUE;
-			// for each host...
+			// Iterate through each host
 			for (int i = 0; i < list.size(); i++) {
 				Host host = list.get(i);
 				// inform VMs to update processing
@@ -911,13 +914,15 @@ public class Datacenter extends SimEntity {
 					smallerTime = time;
 				}
 			}
-			// gurantees a minimal interval before scheduling the event
+			// gurantees a minimal interval (0.01s) before scheduling the event
 			if (smallerTime < CloudSim.clock() + CloudSim.getMinTimeBetweenEvents() + 0.01) {
 				smallerTime = CloudSim.clock() + CloudSim.getMinTimeBetweenEvents() + 0.01;
 			}
+			// Schedule next processing event with CloudSim simulation engine
 			if (smallerTime != Double.MAX_VALUE) {
 				schedule(getId(), (smallerTime - CloudSim.clock()), CloudSimTags.VM_DATACENTER_EVENT);
 			}
+			// Set last process time to current simulation time
 			setLastProcessTime(CloudSim.clock());
 		}
 	}

@@ -15,20 +15,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.cloudbus.cloudsim.Cloudlet;
-import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
-import org.cloudbus.cloudsim.Datacenter;
-import org.cloudbus.cloudsim.DatacenterBroker;
-import org.cloudbus.cloudsim.DatacenterCharacteristics;
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Log;
-import org.cloudbus.cloudsim.Pe;
-import org.cloudbus.cloudsim.Storage;
-import org.cloudbus.cloudsim.UtilizationModel;
-import org.cloudbus.cloudsim.UtilizationModelFull;
-import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmAllocationPolicySimple;
-import org.cloudbus.cloudsim.VmSchedulerTimeShared;
+import org.cloudbus.cloudsim.*;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
@@ -101,7 +88,7 @@ public class CloudSimExample1 {
 			String vmm = "Xen"; // VMM name
 
 			// create VM
-			Vm vm = new Vm(vmid, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
+			Vm vm = new Vm(vmid, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerSpaceShared());
 
 			// add the VM to the vmList
 			vmlist.add(vm);
@@ -126,8 +113,15 @@ public class CloudSimExample1 {
 			cloudlet.setUserId(brokerId);
 			cloudlet.setVmId(vmid);
 
+			Cloudlet cloudlet2 =
+					new Cloudlet(1, length, pesNumber, fileSize,
+							outputSize, utilizationModel, utilizationModel,
+							utilizationModel);
+			cloudlet2.setUserId(brokerId);
+
 			// add the cloudlet to the list
 			cloudletList.add(cloudlet);
+			cloudletList.add(cloudlet2);
 
 			// submit cloudlet list to the broker
 			broker.submitCloudletList(cloudletList);

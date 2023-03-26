@@ -505,6 +505,9 @@ public class CloudSim {
 	/**
 	 * Internal method used to run one tick of the simulation. This method should <b>not</b> be
 	 * called in simulations.
+	 * The function returns a boolean value indicating whether there are any more events in the future event list.
+	 * If there are no more events, the value is true, indicating that the simulation has ended.
+	 * If there are more events, the value is false, indicating that the simulation is still running.
 	 * 
 	 * @return true, if successful otherwise
          * @todo If the method shouldn't be called by the user,
@@ -512,11 +515,11 @@ public class CloudSim {
          * its visibility to package.
 	 */
 	public static boolean runClockTick() {
+		// Iterates through all the entities in the simulation to check if there are any entities in a "RUNNABLE" state.
+		// If there are, it executes the "run" method of those entities.
 		SimEntity ent;
 		boolean queue_empty;
-		
 		int entities_size = entities.size();
-
 		for (int i = 0; i < entities_size; i++) {
 			ent = entities.get(i);
 			if (ent.getState() == SimEntity.RUNNABLE) {
@@ -524,7 +527,10 @@ public class CloudSim {
 			}
 		}
 				
-		// If there are more future events then deal with them
+		// Checks if there are any future events in the simulation. If there are, it removes the first event from the
+		// future event list and processes it. If there are more events with the same time, it processes all of them
+		// in the order they appear in the list.
+		/// Try the first one
 		if (future.size() > 0) {
 			List<SimEvent> toRemove = new ArrayList<SimEvent>();
 			Iterator<SimEvent> fit = future.iterator();
@@ -532,10 +538,9 @@ public class CloudSim {
 			SimEvent first = fit.next();
 			processEvent(first);
 			future.remove(first);
-
 			fit = future.iterator();
 
-			// Check if next events are at same time...
+			// Check if next event, if yes, process it
 			boolean trymore = fit.hasNext();
 			while (trymore) {
 				SimEvent next = fit.next();
@@ -547,15 +552,13 @@ public class CloudSim {
 					trymore = false;
 				}
 			}
-
+			// Remove all processed events
 			future.removeAll(toRemove);
-
 		} else {
 			queue_empty = true;
 			running = false;
 			printMessage(CloudSim.clock()+": Simulation: No more future events");
 		}
-
 		return queue_empty;
 	}
 
@@ -877,27 +880,36 @@ public class CloudSim {
 	}
 
 	/**
+	 * THE MAIN SIMULATION LOOP.
 	 * Start the simulation running. This should be called after all the entities have been setup
 	 * and added, and their ports linked.
 	 * 
 	 * @return the last clock value
 	 */
 	public static double run() {
+		// checks if the simulation is currently running, and if not, it starts the simulation by calling the runStart() function
 		if (!running) {
 			runStart();
 		}
+		// continuously calls the runClockTick() function, which runs a single clock tick of the simulation,
+		// i.e., it processes all the events that have occurred at the current simulation time.
 		while (true) {
 			if (runClockTick() || abruptTerminate) {
 				break;
 			}
-
 			// this block allows termination of simulation at a specific time
+			// If there are no more future events in the queue, the function checks if the simulation should be
+			// terminated at a specific time by checking the terminateAt variable.
+			// If terminateAt is greater than 0 and the current simulation time is greater than or equal to it,
+			// the terminateSimulation() function is called to stop the simulation.
 			if (terminateAt > 0.0 && clock >= terminateAt) {
 				terminateSimulation();
 				clock = terminateAt;
 				break;
 			}
-
+			// If the pauseAt variable is set to a specific time, the function checks if the current simulation time
+			// is equal to or greater than pauseAt. If it is, the simulation is paused by calling the
+			// pauseSimulation() function.
 			if (pauseAt != -1
 					&& ((future.size() > 0 && clock <= pauseAt && pauseAt <= future.iterator().next()
 							.eventTime()) || future.size() == 0 && pauseAt <= clock)) {
@@ -913,9 +925,10 @@ public class CloudSim {
 				}
 			}
 		}
-
+		// Finally, once all the events in the future event queue have been processed or the simulation has been terminated,
+		// the function returns the current simulation time by calling clock(). It then calls the finishSimulation()
+		// and runStop() functions to complete the simulation.
 		double clock = clock();
-
 		finishSimulation();
 		runStop();
 

@@ -1,25 +1,33 @@
 package org.iquantum;
 
+import org.cloudbus.cloudsim.Vm;
+
 import java.util.List;
 import java.util.Map;
 
 
 public class QNode {
+    private int id;
     private int qubits;
     private int quantumVolume;
     private double clops;
     private List<String> gateSets;
-    private List<List<Integer>> qubitTopology;
+    private QubitTopology qubitTopology;
     private Map<String, Double> errorRates;
 
+    private QuletScheduler quletScheduler;
+
+    private QDatacenter qDatacenter;
+
     public QNode(int qubits, int quantumVolume, double clops, List<String> gateSets,
-                 List<List<Integer>> qubitTopology, Map<String, Double> errorRates) {
+                 QubitTopology qubitTopology, Map<String, Double> errorRates, QuletScheduler quletScheduler) {
         this.qubits = qubits;
         this.quantumVolume = quantumVolume;
         this.clops = clops;
         this.gateSets = gateSets;
         this.qubitTopology = qubitTopology;
         this.errorRates = errorRates;
+        this.quletScheduler = quletScheduler;
     }
 
     public int getQubits() {
@@ -38,12 +46,20 @@ public class QNode {
         return gateSets;
     }
 
-    public List<List<Integer>> getQubitTopology() {
+    public QubitTopology getQubitTopology() {
         return qubitTopology;
     }
 
     public Map<String, Double> getErrorRates() {
         return errorRates;
+    }
+
+    public QuletScheduler getQuletScheduler() {
+        return quletScheduler;
+    }
+
+    public void setQuletScheduler(QuletScheduler quletScheduler) {
+        this.quletScheduler = quletScheduler;
     }
 
     // Other methods
@@ -59,9 +75,25 @@ public class QNode {
         return 0.0; // Replace with actual implementation
     }
 
-    public void addQulet(Qulet qulet) {
-        // Add the given Qulet to this QNode's workload
-        // for execution at the next available time slot
+    public int getId() {
+        return id;
+    }
+
+    public void setQDatacenter(QDatacenter qDatacenter) {
+        this.qDatacenter = qDatacenter;
+    }
+
+    public QDatacenter getQDatacenter() {
+        return qDatacenter;
+    }
+
+    public double updateQuletProcessing(double currentTime) {
+        double smallerTime = Double.MAX_VALUE;
+        double time = getQuletScheduler().updateQNodeProcessing(currentTime, getCLOPS());
+        if (time > 0.0 && time < smallerTime) {
+            smallerTime = time;
+        }
+        return smallerTime;
     }
 }
 

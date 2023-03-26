@@ -275,7 +275,13 @@ public class CloudSimTags {
 
 	// IQUANTUM IMPLEMENTATION
 	// iQuantum Tags start from 1000
-	public static final int QULET_SUBMIT = BASE + 1000;
+	public static final int QULET_SUBMIT_READY = BASE + 1000;
+
+	public static final int QULET_SUBMIT = BASE + 1001;
+
+	public static final int QULET_RETURN = BASE + 1002;
+
+	public static final int UPDATE_QULET_PROCESSING = BASE + 1003;
 
 
 
