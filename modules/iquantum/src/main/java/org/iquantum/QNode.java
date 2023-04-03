@@ -1,14 +1,20 @@
+/*
+ * Title:        iQuantum Toolkit
+ * Description:  Simulation Toolkit for Modeling and Simulation of Quantum Computing Environments
+ * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
+ *
+ * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
+ */
 package org.iquantum;
 
-import org.cloudbus.cloudsim.Vm;
-
+import org.iquantum.schedulers.QuletScheduler;
 import java.util.List;
 import java.util.Map;
 
 
 public class QNode {
     private int id;
-    private int qubits;
+    private int numQubits;
     private int quantumVolume;
     private double clops;
     private List<String> gateSets;
@@ -19,9 +25,20 @@ public class QNode {
 
     private QDatacenter qDatacenter;
 
-    public QNode(int qubits, int quantumVolume, double clops, List<String> gateSets,
+    /**
+     * Creates a new QNode object.
+     * @param numQubits number of qubits
+     * @param quantumVolume quantum volume
+     * @param clops circuit layer operations per second (CLOPS)
+     * @param gateSets all gate sets supported by the quantum node
+     * @param qubitTopology qubit topology of the quantum node
+     * @param errorRates error rates of the quantum node
+     * @param quletScheduler qulet scheduler of the quantum node
+     */
+    public QNode(int id, int numQubits, int quantumVolume, double clops, List<String> gateSets,
                  QubitTopology qubitTopology, Map<String, Double> errorRates, QuletScheduler quletScheduler) {
-        this.qubits = qubits;
+        this.id = id;
+        this.numQubits = numQubits;
         this.quantumVolume = quantumVolume;
         this.clops = clops;
         this.gateSets = gateSets;
@@ -30,8 +47,8 @@ public class QNode {
         this.quletScheduler = quletScheduler;
     }
 
-    public int getQubits() {
-        return qubits;
+    public int getNumQubits() {
+        return numQubits;
     }
 
     public int getQuantumVolume() {
@@ -60,19 +77,6 @@ public class QNode {
 
     public void setQuletScheduler(QuletScheduler quletScheduler) {
         this.quletScheduler = quletScheduler;
-    }
-
-    // Other methods
-    public boolean isAvailable(Qulet qulet) {
-        // Check if this QNode can execute the given Qulet
-        // based on its attributes and the QNode's current workload
-        return true; // Replace with actual implementation
-    }
-
-    public double getExpectedCompletionTime(Qulet qulet) {
-        // Calculate the expected completion time for the given Qulet
-        // on this QNode, based on its attributes and the QNode's current workload
-        return 0.0; // Replace with actual implementation
     }
 
     public int getId() {

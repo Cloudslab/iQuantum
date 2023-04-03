@@ -1,12 +1,15 @@
 /*
- * Title:        CloudSim Toolkit
- * Description:  CloudSim (Cloud Simulation) Toolkit for Modeling and Simulation of Clouds
+ * Title:        iQuantum Toolkit
+ * Description:  Simulation Toolkit for Modeling and Simulation of Quantum Computing Environments
  * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
  *
- * Copyright (c) 2009-2012, The University of Melbourne, Australia
+ * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
  */
 
-package org.iquantum;
+package org.iquantum.schedulers;
+
+import org.iquantum.Qulet;
+import org.iquantum.ResQulet;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,27 +17,26 @@ import java.util.List;
 
 /**
  * QuletScheduler is an abstract class that represents the policy of scheduling performed by a
- * virtual machine to run its {@link Qulet Qulets}.
+ * quantum node to run its {@link Qulet Qulets}.
  * So, classes extending this must execute Qulets. Also, the interface for
  * Qulet management is also implemented in this class.
- * Each VM has to have its own instance of a QuletScheduler.
+ * Each QNode has to have its own instance of a QuletScheduler.
  * 
- * @author Rodrigo N. Calheiros
- * @author Anton Beloglazov
- * @since CloudSim Toolkit 1.0
+ * @author Hoa Nguyen
+ * @since iQuantum 1.0
  */
 public abstract class QuletScheduler {
 
 	/** The previous time. */
 	private double previousTime;
 
-	/** The list of current mips share available for the VM using the scheduler. */
+	/** The list of current CLOPS share available for the QNode using the scheduler. */
 	private double currentClops;
 
-	/** The list of Qulet waiting to be executed on the VM. */
+	/** The list of Qulet waiting to be executed on the QNode. */
 	protected List<? extends ResQulet> quletWaitingList;
 
-	/** The list of Qulets being executed on the VM. */
+	/** The list of Qulets being executed on the QNode. */
 	protected List<? extends ResQulet> quletExecList;
 
 	/** The list of paused Qulets. */
@@ -66,7 +68,7 @@ public abstract class QuletScheduler {
 	 * Updates the processing of Qulets running under management of this scheduler.
 	 * 
 	 * @param currentTime current simulation time
-	 * @param clopsShare list with MIPS share of each Pe available to the scheduler
+	 * @param clopsShare list with CLOPS share of each Pe available to the scheduler
 	 * @return the predicted completion time of the earliest finishing Qulet, 
          * or 0 if there is no next events
 	 * @pre currentTime >= 0
@@ -75,10 +77,10 @@ public abstract class QuletScheduler {
 	public abstract double updateQNodeProcessing(double currentTime, double clopsShare);
 
 	/**
-	 * Receives an Qulet to be executed in the VM managed by this scheduler.
+	 * Receives an Qulet to be executed in the QNode managed by this scheduler.
 	 * 
 	 * @param ql the submited Qulet 
-	 * @param fileTransferTime time required to move the required files from the SAN to the VM
+	 * @param fileTransferTime time required to move the required files from the SAN to the QNode
 	 * @return expected finish time of this Qulet, or 0 if it is in a waiting queue
 	 * @pre gl != null
 	 * @post $none
@@ -86,9 +88,9 @@ public abstract class QuletScheduler {
 	public abstract double quletSubmit(Qulet ql, double fileTransferTime);
 
 	/**
-	 * Receives an Qulet to be executed in the VM managed by this scheduler.
+	 * Receives an Qulet to be executed in the QNode managed by this scheduler.
 	 * 
-	 * @param gl the submited Qulet
+	 * @param ql the submited Qulet
 	 * @return expected finish time of this Qulet, or 0 if it is in a waiting queue
 	 * @pre gl != null
 	 * @post $none
@@ -147,7 +149,7 @@ public abstract class QuletScheduler {
 	public abstract int getQuletStatus(int qlId);
 
 	/**
-	 * Informs if there is any Qulet that finished to execute in the VM managed by this scheduler.
+	 * Informs if there is any Qulet that finished to execute in the QNode managed by this scheduler.
 	 * 
 	 * @return $true if there is at least one finished Qulet; $false otherwise
 	 * @pre $none
@@ -175,7 +177,7 @@ public abstract class QuletScheduler {
 	public abstract int runningQulets();
 
 	/**
-	 * Returns one Qulet to migrate to another vm.
+	 * Returns one Qulet to migrate to another QNode.
 	 * 
 	 * @return one running Qulet
 	 * @pre $none
@@ -183,49 +185,6 @@ public abstract class QuletScheduler {
 	 */
 	public abstract Qulet migrateQulet();
 
-
-	/**
-	 * Gets the current requested mips.
-	 * 
-	 * @return the current mips
-	 */
-	public abstract List<Double> getCurrentRequestedClops();
-
-	/**
-	 * Gets the total current available mips for the Qulet.
-	 * 
-	 * @param rcl the rcl
-	 * @param mipsShare the mips share
-	 * @return the total current mips
-         * @todo In fact, this method is returning different data depending 
-         * of the subclass. It is expected that the way the method use to compute
-         * the resulting value can be different in every subclass,
-         * but is not supposed that each subclass returns a complete different 
-         * result for the same method of the superclass.
-         * In some class such as {@link NetworkQuletSpaceSharedScheduler},
-         * the method returns the average MIPS for the available PEs,
-         * in other classes such as {@link QuletSchedulerDynamicWorkload} it returns
-         * the MIPS' sum of all PEs.
-	 */
-	public abstract double getTotalCurrentAvailableClopsForQulet(ResQulet rql, double clops);
-
-	/**
-	 * Gets the total current requested mips for a given Qulet.
-	 * 
-	 * @param rcl the rcl
-	 * @param time the time
-	 * @return the total current requested mips for the given Qulet
-	 */
-	public abstract double getTotalCurrentRequestedClopsForQulet(ResQulet rql, double time);
-
-	/**
-	 * Gets the total current allocated mips for Qulet.
-	 * 
-	 * @param rcl the rcl
-	 * @param time the time
-	 * @return the total current allocated mips for Qulet
-	 */
-	public abstract double getTotalCurrentAllocatedClopsForQulet(ResQulet rql, double time);
 
 	/**
 	 * Gets the previous time.
@@ -246,18 +205,18 @@ public abstract class QuletScheduler {
 	}
 
 	/**
-	 * Sets the current mips share.
+	 * Sets the current CLOPS share.
 	 * 
-	 * @param currentClopsShare the new current mips share
+	 * @param currentClops the new current CLOPS share
 	 */
 	protected void setCurrentClops(double currentClops) {
 		this.currentClops = currentClops;
 	}
 
 	/**
-	 * Gets the current mips share.
+	 * Gets the current CLOPS share.
 	 * 
-	 * @return the current mips share
+	 * @return the current CLOPS share
 	 */
 	public double getCurrentClops() {
 		return currentClops;

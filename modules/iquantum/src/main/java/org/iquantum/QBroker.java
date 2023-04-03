@@ -1,7 +1,15 @@
+/*
+ * Title:        iQuantum Toolkit
+ * Description:  Simulation Toolkit for Modeling and Simulation of Quantum Computing Environments
+ * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
+ *
+ * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
+ */
 package org.iquantum;
 
-import org.cloudbus.cloudsim.Log;
+import org.iquantum.utils.Log;
 import org.cloudbus.cloudsim.core.*;
+import org.iquantum.core.iQuantumTags;
 import org.iquantum.lists.QNodeList;
 import org.iquantum.lists.QuletList;
 
@@ -116,31 +124,31 @@ public class QBroker extends SimEntity {
     @Override
     public void startEntity() {
         Log.printConcatLine(getName(), " is starting...");
-        schedule(getId(), 0, CloudSimTags.RESOURCE_CHARACTERISTICS_REQUEST);
+        schedule(getId(), 0, iQuantumTags.RESOURCE_CHARACTERISTICS_REQUEST);
     }
 
     @Override
     public void processEvent(SimEvent ev) {
         switch (ev.getTag()) {
             // Resource characteristics request
-            case CloudSimTags.RESOURCE_CHARACTERISTICS_REQUEST:
+            case iQuantumTags.RESOURCE_CHARACTERISTICS_REQUEST:
                 processQResourceCharacteristicsRequest(ev);
                 break;
 
             // Resource characteristics request, but not create VM like classical datacenter
-            case CloudSimTags.RESOURCE_CHARACTERISTICS:
+            case iQuantumTags.RESOURCE_CHARACTERISTICS:
                 processQDatacenterCharacteristics(ev);
                 break;
             // Qulet submit
-            case CloudSimTags.QULET_SUBMIT_READY:
+            case iQuantumTags.QULET_SUBMIT_READY:
                 processQuletSubmit(ev);
                 break;
             // Qulet return event
-            case CloudSimTags.QULET_RETURN:
+            case iQuantumTags.QULET_RETURN:
                 processQuletReturn(ev);
                 break;
             // if the simulation finishes
-            case CloudSimTags.END_OF_SIMULATION:
+            case iQuantumTags.END_OF_SIMULATION:
                 shutdownEntity();
                 break;
             // other unknown tags are processed by this method
@@ -159,7 +167,7 @@ public class QBroker extends SimEntity {
                 getDatacenterIdsList().size(), " resource(s)");
 
         for (Integer datacenterId : getDatacenterIdsList()) {
-            sendNow(datacenterId, CloudSimTags.RESOURCE_CHARACTERISTICS, getId());
+            sendNow(datacenterId, iQuantumTags.RESOURCE_CHARACTERISTICS, getId());
         }
     }
 
@@ -177,14 +185,14 @@ public class QBroker extends SimEntity {
     }
 
     /**
-     * Key: Process Qulet Submit and Scheduling
+     * Process Qulet Submit and Scheduling
      * @param ev
      */
     private void processQuletSubmit(SimEvent ev) {
         int[] data = (int[]) ev.getData();
         int qDatacenter = data[0];
         int qNodeId = 0;
-        List<Qulet> succesfullySubmittedQulets = new ArrayList<Qulet>();
+        List<Qulet> submittedQulets = new ArrayList<Qulet>();
         Log.printConcatLine(CloudSim.clock(), ": ", getName(), " : Started scheduling all Qulets to QDatacenter #", qDatacenter);
 
         List<? extends QNode> qNodeList = getQDatacenterCharacteristicsList().get(qDatacenter).getQNodeList();
@@ -193,6 +201,8 @@ public class QBroker extends SimEntity {
         for (Qulet qulet : getQuletList()) {
             QNode qNode;
             if (qulet.getQNodeId() == -1) {
+                // Submit qulet to a the first available QNode
+                // TODO: Implement a better (default) scheduling algorithm
                 qNode = getQNodeList().get(qNodeId);
             } else {
                 // Submit qulet to a specific QNode
@@ -200,22 +210,62 @@ public class QBroker extends SimEntity {
                 if (qNode == null) {
                     if(!Log.isDisabled()) {
                         Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": Postponing execution of Qulet ", qulet.getQuletId(),
-                                ": bount QNode not available");
+                                ": QNode is not available");
                     }
                     continue;
                 }
             }
-
+            // TODO: Check the constraints
+            /** QNode must have enough resources to execute the Qulet
+             * number of qubits of QNode >= number of qubits of Qulet
+             */
             if (!Log.isDisabled()) {
-                Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": Sending Qulet ",
-                        qulet.getQuletId(), " to QNode #", qNode.getId());
+                Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": Checking if QNode #", qNode.getId(), " has enough qubits to execute Qulet",
+                        qulet.getQuletId());
             }
-
-            sendNow(qNode.getQDatacenter().getId(), CloudSimTags.QULET_SUBMIT, qulet);
-            numQuletSubmitted++;
-            succesfullySubmittedQulets.add(qulet);
+            if(verifyConstraints(qNode, qulet, submittedQulets)) {
+                if (!Log.isDisabled()) {
+                    Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": Sending Qulet ",
+                            qulet.getQuletId(), " to QNode #", qNode.getId());
+                }
+                sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QULET_SUBMIT, qulet);
+                numQuletSubmitted++;
+                submittedQulets.add(qulet);
+            }
         }
-        getQuletList().removeAll(succesfullySubmittedQulets);
+        getQuletList().removeAll(submittedQulets);
+    }
+
+    private boolean verifyConstraints(QNode qNode, Qulet qulet, List<Qulet> submittedQulets){
+        if(qNode.getNumQubits() < qulet.getNumQubits()) {
+            if (!Log.isDisabled()) {
+                Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": Cancel the execution of Qulet #", qulet.getQuletId(),
+                        ": QNode #", qNode.getId(), " does not have enough qubits (", qNode.getNumQubits(), " < ", qulet.getNumQubits(), ")");
+            }
+            sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QULET_FAILED_QUBIT, qulet);
+            numQuletSubmitted++;
+            submittedQulets.add(qulet);
+            return false;
+        } else if (!isSubset(qulet.getGateSet(),qNode.getGateSets())) {
+            if (!Log.isDisabled()) {
+                Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": Cancel the execution of Qulet #", qulet.getQuletId(),
+                        ": QNode #", qNode.getId(), " does not support all gates of qulet");
+            }
+            sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QULET_FAILED_GATES, qulet);
+            numQuletSubmitted++;
+            submittedQulets.add(qulet);
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean isSubset(List<String> firstList, List<String> secondList) {
+        for (String element : firstList) {
+            if (!secondList.contains(element)) {
+                return false; // element is not present in secondList, so firstList is not a subset of secondList
+            }
+        }
+        return true; // all elements of firstList are present in secondList, so firstList is a subset of secondList
     }
 
     private void processOtherEvent(SimEvent ev) {
@@ -234,7 +284,7 @@ public class QBroker extends SimEntity {
         // Do not create VMs like classical DatacenterBroker
 
         for (Integer datacenterId : getDatacenterIdsList()) {
-            sendNow(datacenterId, CloudSimTags.QULET_SUBMIT_READY, getId());
+            sendNow(datacenterId, iQuantumTags.QULET_SUBMIT_READY, getId());
         }
     }
 
@@ -245,12 +295,11 @@ public class QBroker extends SimEntity {
         numQuletSubmitted--;
         if (getQuletList().size() == 0 && numQuletSubmitted == 0) { // all Qulets executed
             Log.printConcatLine(CloudSim.clock(), ": ",getName(), ": All Qulets executed. Finishing...");
-//            finishExecution();
         }
     }
 
     protected void finishExecution() {
-            sendNow(getId(), CloudSimTags.END_OF_SIMULATION);
+            sendNow(getId(), iQuantumTags.END_OF_SIMULATION);
     }
 
     @Override

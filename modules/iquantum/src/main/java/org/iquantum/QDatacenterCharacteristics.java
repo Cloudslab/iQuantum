@@ -1,8 +1,13 @@
+/*
+ * Title:        iQuantum Toolkit
+ * Description:  Simulation Toolkit for Modeling and Simulation of Quantum Computing Environments
+ * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
+ *
+ * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
+ */
 package org.iquantum;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.core.CloudSim;
-
+import org.iquantum.core.iQuantum;
 import java.util.List;
 
 public class QDatacenterCharacteristics {
@@ -33,7 +38,7 @@ public class QDatacenterCharacteristics {
     }
 
     public String getResourceName() {
-        return CloudSim.getEntityName(getId());
+        return iQuantum.getEntityName(getId());
     }
 
     /////// GETTERS AND SETTERS ///////

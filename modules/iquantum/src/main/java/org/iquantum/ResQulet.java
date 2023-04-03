@@ -1,18 +1,17 @@
 /*
- * Title:        CloudSim Toolkit
- * Description:  CloudSim (Cloud Simulation) Toolkit for Modeling and Simulation of Clouds
+ * Title:        iQuantum Toolkit
+ * Description:  Simulation Toolkit for Modeling and Simulation of Quantum Computing Environments
  * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
  *
- * Copyright (c) 2009-2012, The University of Melbourne, Australia
+ * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
  */
 
 package org.iquantum;
 
-import org.cloudbus.cloudsim.Consts;
-import org.cloudbus.cloudsim.core.CloudSim;
+import org.iquantum.core.iQuantum;
 
 /**
- * CloudSim ResQulet represents a Qulet submitted to CloudResource for processing. This class
+ * iQuantum ResQulet represents a Qulet submitted to CloudResource for processing. This class
  * keeps track the time for all activities in the CloudResource for a specific Qulet. Before a
  * Qulet exits the CloudResource, it is RECOMMENDED to call this method
  * {@link #finalizeQulet()}.
@@ -20,10 +19,10 @@ import org.cloudbus.cloudsim.core.CloudSim;
  * It contains a Qulet object along with its arrival time and the ID of the machine and the Pe
  * (Processing Element) allocated to it. It acts as a placeholder for maintaining the amount of
  * resource share allocated at various times for simulating any scheduling using internal events.
- * 
- * @author Manzur Murshed
- * @author Rajkumar Buyya
- * @since CloudSim Toolkit 1.0
+ * <p/>
+ * Note: This class is inspired from CloudSim's ResCloudlet class.
+ * @author Hoa Nguyen
+ * @since iQuantum Toolkit 1.0
  */
 public class ResQulet {
 
@@ -83,11 +82,10 @@ public class ResQulet {
 	private int pesNumber;
 
 	/**
-	 * Allocates a new ResQulet object upon the arrival of a Qulet object. The arriving time
-	 * is determined by {@link gridsim.CloudSim#clock()}.
+	 * Allocates a new ResQulet object upon the arrival of a Qulet object.
 	 * 
 	 * @param Qulet a Qulet object
-	 * @see gridsim.CloudSim#clock()
+	 * @see iQuantum#clock()
 	 * @pre Qulet != null
 	 * @post $none
 	 */
@@ -105,7 +103,7 @@ public class ResQulet {
 	/**
 	 * Allocates a new ResQulet object upon the arrival of a Qulet object. Use this
 	 * constructor to store reserved Qulets, i.e. Qulets that done reservation before. The
-	 * arriving time is determined by {@link gridsim.CloudSim#clock()}.
+	 * arriving time is determined by {@link gridsim.iQuantum#clock()}.
 	 * 
 	 * @param Qulet a Qulet object
 	 * @param startTime a reservation start time. Can also be interpreted as starting time to
@@ -113,7 +111,7 @@ public class ResQulet {
 	 * @param duration a reservation duration time. Can also be interpreted as how long to execute
 	 *            this Qulet.
 	 * @param reservID a reservation ID that owns this Qulet
-	 * @see gridsim.CloudSim#clock()
+	 * @see gridsim.iQuantum#clock()
 	 * @pre Qulet != null
 	 * @pre startTime > 0
 	 * @pre duration > 0
@@ -204,7 +202,7 @@ public class ResQulet {
 //			peArrayId = new int[pesNumber];
 //		}
 
-		arrivalTime = CloudSim.clock();
+		arrivalTime = iQuantum.clock();
 		qulet.setSubmissionTime(arrivalTime);
 
 		// default values
@@ -217,7 +215,7 @@ public class ResQulet {
 
 		// In case a Qulet has been executed partially by some other grid
 		// hostList.
-		quletFinishedSoFar = qulet.getQuletFinishedSoFar() * Consts.MILLION;
+		quletFinishedSoFar = qulet.getQuletFinishedSoFar();
 	}
 
 	/**
@@ -257,6 +255,10 @@ public class ResQulet {
 		return qulet.getNumLayers();
 	}
 
+	public long getQuletLength() {
+		return qulet.getNumLayers() * qulet.getNumShots();
+	}
+
 	/**
 	 * Sets the Qulet status.
 	 * 
@@ -276,13 +278,13 @@ public class ResQulet {
 
 		boolean success = true;
 		try {
-			double clock = CloudSim.clock();   // gets the current clock
+			double clock = iQuantum.clock();   // gets the current clock
 
 			// sets Qulet's current status
 			qulet.setQuletStatus(status);
 
 			// if a previous Qulet status is INEXEC
-			if (prevStatus == Qulet.INEXEC) {
+			if (prevStatus == Qulet.RUNNING) {
 				// and current status is either CANCELED, PAUSED or SUCCESS
 				if (status == Qulet.CANCELED || status == Qulet.PAUSED || status == Qulet.SUCCESS) {
 					// then update the Qulet completion time
@@ -299,7 +301,7 @@ public class ResQulet {
 			}
 
 			// if a Qulet is now in execution
-			if (status == Qulet.INEXEC || (prevStatus == Qulet.PAUSED && status == Qulet.RESUMED)) {
+			if (status == Qulet.RUNNING || (prevStatus == Qulet.PAUSED && status == Qulet.RESUMED)) {
 				startExecTime = clock;
 				qulet.setExecStartTime(startExecTime);
 			}
@@ -337,91 +339,16 @@ public class ResQulet {
 		qulet.setExecParam(wallClockTime, actualQPUTime);
 	}
 
-	/**
-	 * Sets the machine and Pe (Processing Element) ID.
-	 * 
-	 * @param machineId machine ID
-	 * @param peId Pe ID
-	 * @pre machineID >= 0
-	 * @pre peID >= 0
-	 * @post $none
-         * 
-         * @todo the machineId param and attribute mean a VM or a PM id?
-         * Only the term machine is ambiguous. 
-         * At {@link  QuletSchedulerSpaceShared#QuletSubmit(Qulet)}
-         * it is stated it is a VM.
-	 */
-	public void setMachineAndPeId(int machineId, int peId) {
-		// if this job only requires 1 Pe
-		this.machineId = machineId;
-		this.peId = peId;
-
-		// if this job requires many PEs
-		if (peArrayId != null && pesNumber > 1) {
-			machineArrayId[index] = machineId;
-			peArrayId[index] = peId;
-			index++;
-		}
-	}
-
-	/**
-	 * Gets machine ID.
-	 * 
-	 * @return machine ID or <tt>-1</tt> if it is not specified before
-	 * @pre $none
-	 * @post $result >= -1
-	 */
-	public int getMachineId() {
-		return machineId;
-	}
-
-	/**
-	 * Gets Pe ID.
-	 * 
-	 * @return Pe ID or <tt>-1</tt> if it is not specified before
-	 * @pre $none
-	 * @post $result >= -1
-	 */
-	public int getPeId() {
-		return peId;
-	}
-
-	/**
-	 * Gets a list of Pe IDs. <br>
-	 * NOTE: To get the machine IDs corresponding to these Pe IDs, use {@link #getMachineIdList()}.
-	 * 
-	 * @return an array containing Pe IDs.
-	 * @pre $none
-	 * @post $none
-	 */
-	public int[] getPeIdList() {
-		return peArrayId;
-	}
-
-	/**
-	 * Gets a list of Machine IDs. <br>
-	 * NOTE: To get the Pe IDs corresponding to these machine IDs, use {@link #getPeIdList()}.
-	 * 
-	 * @return an array containing Machine IDs.
-	 * @pre $none
-	 * @post $none
-	 */
-	public int[] getMachineIdList() {
-		return machineArrayId;
-	}
-
-
-
-
-	public long getRemainingQuletLayers() {
-		long rLayers = qulet.getNumLayers() - quletFinishedSoFar;
+	public long getRemainingQuletLength() {
+		// Remaining Qulet length.
+		long rLength = this.getQuletLength() - quletFinishedSoFar;
 
 		// Remaining Qulet length can't be negative number.
-		if (rLayers < 0) {
+		if (rLength < 0) {
 			return 0;
 		}
 
-		return (long) Math.floor(rLayers);
+		return rLength;
 	}
 
 	/**
@@ -438,13 +365,13 @@ public class ResQulet {
 	 * @post $none
 	 */
 	public void finalizeQulet() {
-		// Sets the wall clock time and actual CPU time
-		double wallClockTime = CloudSim.clock() - arrivalTime;
+		// Sets the wall clock time and actual QPU time
+		double wallClockTime = iQuantum.clock() - arrivalTime;
 		qulet.setExecParam(wallClockTime, totalCompletionTime);
 
 		long finished = 0;
 		if (qulet.getQuletStatus()==Qulet.SUCCESS) {
-			finished = qulet.getNumLayers();
+			finished = qulet.getNumLayers() * qulet.getNumShots();
 		} else {
 			finished = quletFinishedSoFar;
 		}

@@ -312,7 +312,7 @@ public class CloudInformationService extends SimEntity {
 	}
 
 	/**
-	 * Sends a {@link CloudSimTags#END_OF_SIMULATION} signal to all entity IDs 
+	 * Sends a {@link CloudSimTags#END_OF_SIMULATION} signal to all entity IDs
          * mentioned in the given list.
 	 * 
 	 * @param list List storing entity IDs

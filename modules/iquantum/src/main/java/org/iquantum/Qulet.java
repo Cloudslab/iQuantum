@@ -1,11 +1,28 @@
-package org.iquantum;
+/*
+ * Title:        iQuantum Toolkit
+ * Description:  Simulation Toolkit for Modeling and Simulation of Quantum Computing Environments
+ * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
+ *
+ * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
+ */
 
-import org.cloudbus.cloudsim.Cloudlet;
-import org.cloudbus.cloudsim.core.CloudSim;
+package org.iquantum;
+import org.iquantum.core.iQuantum;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Qulet is the class that represents a quantum task to be executed by a Quantum Computer.
+ * It contains all the information about the quantum task, such as the number of qubits,
+ * the number of layers, the number of shots, the gate set, the topology of the qubits,
+ * the estimated completion time, the execution status, the execution start time and
+ * the execution finish time.
+ * <p/>
+ * Note: This class is inspired on the Cloudlet class from CloudSim Toolkit.
+ * @author Hoa Nguyen
+ * @since iQuantum 1.0
+ */
 public class Qulet {
     /** The id of the Qulet. */
     private int quletId;
@@ -49,15 +66,9 @@ public class Qulet {
     /**
      * The index of the last resource where the qulet was executed. If the
      * qulet is migrated during its execution, this index is updated. The
-     * value -1 indicates the qulet has not been executed
-     yet.
+     * value -1 indicates the qulet has not been executed yet.
      */
     private int index;
-
-    /**
-     * The classType or priority of this qulet for scheduling on a resource.
-     */
-    private int classType;
 
     /** Constants attributes */
     /**
@@ -79,7 +90,7 @@ public class Qulet {
     /**
      * The Qulet is in execution in a Cloud node.
      */
-    public static final int INEXEC = 3;
+    public static final int RUNNING = 3;
 
     /**
      * The Qulet has been executed successfully.
@@ -112,14 +123,27 @@ public class Qulet {
      */
     public static final int FAILED_RESOURCE_UNAVAILABLE = 9;
 
+    /**
+     * The Qulet has failed due to qubits insufficient.
+     */
+    public static final int FAILED_QUBITS_INSUFFICIENT = 10;
+
+    /**
+     * The Qulet has failed due to gates insufficient.
+     */
+    public static final int FAILED_GATES_INSUFFICIENT = 11;
+
+    /**
+     * Initializes a Qulet (Gate-based Quantum Task) object.
+     * @param quletId: the id of the Qulet
+     * @param numQubits: the number of qubits in the Qulet
+     * @param numLayers: the number of circuit layers in the Qulet
+     * @param numShots: the number of shots the Qulet is to be executed
+     * @param gateSet: the list of all gate set in the Qulet
+     * @param qubitTopology: the topology of the qubits in the Qulet
+     */
     public Qulet(final int quletId, final int numQubits, final int numLayers,
                  final int numShots, final List<String> gateSet, final QubitTopology qubitTopology) {
-        this(quletId, numQubits, numLayers, numShots, gateSet, qubitTopology, false);
-        qNodeId = -1;
-    }
-
-    public Qulet(final int quletId, final int numQubits, final int numLayers,
-                 final int numShots, final List<String> gateSet, final QubitTopology qubitTopology, final boolean record) {
         brokerId = -1;
         status = CREATED;
         this.quletId = quletId;
@@ -128,7 +152,7 @@ public class Qulet {
         this.numShots = numShots;
         this.gateSet = gateSet;
         this.qubitTopology = qubitTopology;
-        this.record = record;
+        this.record = iQuantum.getTraceFlag();
         execStartTime = 0.0;
         execFinishTime = -1.0;
         qNodeId = -1;
@@ -137,6 +161,9 @@ public class Qulet {
 
     }
 
+    /**
+     * GETTERS AND SETTERS START------------------------------------------------
+     */
     public int getQuletStatus() {
         return status;
     }
@@ -145,36 +172,58 @@ public class Qulet {
         quletId = id;
     }
 
-    public void setResourceParameter(final int resourceID, final double cost) {
-        final Resource res = new Resource();
-        res.resourceId = resourceID;
-        res.costPerSec = cost;
-        res.resourceName = CloudSim.getEntityName(resourceID);
-
-        // add into a list if moving to a new grid resource
-        resList.add(res);
-
-        if (index == -1 && record) {
-            write("Allocates this Qulet to " + res.resourceName + " (ID #" + resourceID
-                    + ") with cost = $" + cost + "/sec");
-        } else if (record) {
-            final int id = resList.get(index).resourceId;
-            final String name = resList.get(index).resourceName;
-            write("Moves Qulet from " + name + " (ID #" + id + ") to " + res.resourceName + " (ID #"
-                    + resourceID + ") with cost = $" + cost + "/sec");
-        }
-
-        index++;  // initially, index = -1
+    public List<String> getGateSet() {
+        return gateSet;
     }
 
-    // ////////////////////// INTERNAL CLASS ///////////////////////////////////
+    public int getNumQubits() {
+        return numQubits;
+    }
+
+    public int getNumLayers() {
+        return numLayers;
+    }
+
+    public int getNumShots() {
+        return numShots;
+    }
+
+    public QubitTopology getQubitTopology() {
+        return qubitTopology;
+    }
+
+    public void setBrokerId(final int id) {
+        brokerId = id;
+        if (record) {
+            write("Assigns the Qulet to " + iQuantum.getEntityName(id) + " (ID #" + id + ")");
+        }
+    }
+
+    public int getBrokerId() {
+        return brokerId;
+    }
+
+    public int getQuletId() {
+        return quletId;
+    }
+    public int getQNodeId() {
+        return qNodeId;
+    }
+    public void setQNodeId(final int qNodeId) {
+        this.qNodeId = qNodeId;
+    }
+
     /**
+     * GETTERS AND SETTERS END------------------------------------------------
+     */
+
+    /**
+     * INTERNAL CLASSES START------------------------------------------------
      * Internal class that keeps track of qulet's movement in different
      * CloudResources. Each time a qulet is run on a given VM, the qulet's
      * execution history on each VM is registered at {@link Qulet#resList}
      */
     private static class Resource {
-
         /**
          * Qulet's submission (arrival) time to a CloudResource.
          */
@@ -211,64 +260,56 @@ public class Qulet {
          */
         public String resourceName = null;
     }
-    //////////////////////// END OF INTERNAL CLASS ////////////////////////////
-    public List<String> getGateSet() {
-        return gateSet;
-    }
+    /** INTERNAL CLASSES END------------------------------------------------*/
 
-    public int getNumQubits() {
-        return numQubits;
-    }
+    /**
+     * Sets the resource parameters for which the Qulet is going to be
+     * executed. From the second time this method is called, every call make the
+     * qulet to be migrated to the indicated resource.<br>
+     *
+     * NOTE: This method <tt>should</tt> be called only by a resource entity,
+     * not the user or owner of this Qulet.
+     *
+     * @param resourceID the CloudResource ID
+     * @param cost the cost running this CloudResource per second
+     * @pre resourceID >= 0
+     * @pre cost > 0.0
+     */
+    public void setResourceParameter(final int resourceID, final double cost) {
+        final Resource res = new Resource();
+        res.resourceId = resourceID;
+        res.costPerSec = cost;
+        res.resourceName = iQuantum.getEntityName(resourceID);
+        resList.add(res);
 
-    public int getNumLayers() {
-        return numLayers;
-    }
-
-    public int getNumShots() {
-        return numShots;
-    }
-
-    public QubitTopology getQubitTopology() {
-        return qubitTopology;
-    }
-
-    public void setBrokerId(final int id) {
-        brokerId = id;
-        if (record) {
-            write("Assigns the Qulet to " + CloudSim.getEntityName(id) + " (ID #" + id + ")");
+        if (index == -1 && record) {
+            write("Allocates this Qulet to " + res.resourceName + " (ID #" + resourceID
+                    + ") with cost = $" + cost + "/sec");
+        } else if (record) {
+            final int id = resList.get(index).resourceId;
+            final String name = resList.get(index).resourceName;
+            write("Moves Qulet from " + name + " (ID #" + id + ") to " + res.resourceName + " (ID #"
+                    + resourceID + ") with cost = $" + cost + "/sec");
         }
+        index++;
     }
 
-    public int getBrokerId() {
-        return brokerId;
-    }
-
-    public int getQuletId() {
-        return quletId;
-    }
-    public int getQNodeId() {
-        return qNodeId;
-    }
-    public void setQNodeId(final int qNodeId) {
-        this.qNodeId = qNodeId;
-    }
-
+    /**
+     * Get waiting time of the Qulet.
+     */
     public double getWaitingTime() {
         if (index == -1) {
             return 0;
         }
-
-        // use the latest resource submission time
+        // Use the latest resource submission time
         final double subTime = resList.get(index).submissionTime;
         return execStartTime - subTime;
     }
 
-    public double getEstimatedCompletionTime() {
-        // TEMPORARY assume the estimated completion time is the number of shots (MUST BE CHANGED)
-        estimatedCompletionTime = 1.0 * numShots;
-        return estimatedCompletionTime;
-    }
-
+    /**
+     * Prints the Qulet's execution history.
+     * @return Qulet's execution history
+     */
     public String getQuletHistory() {
         String msg = null;
         if (history == null) {
@@ -279,25 +320,44 @@ public class Qulet {
 
         return msg;
     }
+
+    /**
+     * Get the number of circuit layers of qulet finished so far.
+     */
     public long getQuletFinishedSoFar() {
         if (index == -1) {
             return numLayers;
         }
-
         final long finish = resList.get(index).finishedSoFar;
-        if (finish > numLayers) {
-            return numLayers;
+        if (finish > numLayers * numShots) {
+            return numLayers * numShots;
         }
-
         return finish;
     }
+
+    /**
+     * Set the number of circuit layers of qulet finished so far.
+     */
+    public void setQuletFinishedSoFar(final long layers) {
+        if (layers < 0.0 || index < 0) {
+            return;
+        }
+        final Resource res = resList.get(index);
+        res.finishedSoFar = layers;
+
+        if (record) {
+            write("Sets the circuit layers finished so far to " + layers);
+        }
+    }
+
+    /**
+     * Check if the Qulet has finished.
+     */
     public boolean isFinished() {
         if (index == -1) {
             return false;
         }
-
         boolean completed = false;
-
         // if result is 0 or -ve then this Qulet has finished
         final long finish = resList.get(index).finishedSoFar;
         final long result = numLayers - finish;
@@ -307,20 +367,6 @@ public class Qulet {
         return completed;
     }
 
-    public void setQuletFinishedSoFar(final long layers) {
-        // if layers is -ve then ignore
-        if (layers < 0.0 || index < 0) {
-            return;
-        }
-
-        final Resource res = resList.get(index);
-        res.finishedSoFar = layers;
-
-        if (record) {
-            write("Sets the layers's finished so far to " + layers);
-        }
-    }
-
     /** Get the latest resource id that this Qulet has run on. */
     public int getResourceId() {
         if (index == -1) {
@@ -328,6 +374,7 @@ public class Qulet {
         }
         return resList.get(index).resourceId;
     }
+
     /**
      * Sets the submission (arrival) time of this Qulet into a CloudResource.
      *
@@ -339,7 +386,6 @@ public class Qulet {
         if (clockTime < 0.0 || index < 0) {
             return;
         }
-
         final Resource res = resList.get(index);
         res.submissionTime = clockTime;
 
@@ -389,7 +435,6 @@ public class Qulet {
         if (wallTime < 0.0 || actualTime < 0.0 || index < 0) {
             return;
         }
-
         final Qulet.Resource res = resList.get(index);
         res.wallClockTime = wallTime;
         res.actualQPUTime = actualTime;
@@ -407,48 +452,29 @@ public class Qulet {
         }
 
         // throws an exception if the new status is outside the range
-        if (newStatus < Qulet.CREATED || newStatus > Qulet.FAILED_RESOURCE_UNAVAILABLE) {
+        if (newStatus < Qulet.CREATED || newStatus > Qulet.FAILED_GATES_INSUFFICIENT) {
             throw new Exception(
                     "Qulet.setQuletStatus() : Error - Invalid integer range for Qulet status.");
         }
 
         if (newStatus == Qulet.SUCCESS) {
-            execFinishTime = CloudSim.clock();
+            execFinishTime = iQuantum.clock();
         }
 
         if (record) {
             write("Sets Qulet status from " + getQuletStatusString() + " to "
-                    + Qulet.QuletString(newStatus));
+                    + Qulet.quletStatusString(newStatus));
         }
 
         status = newStatus;
     }
 
     public String getQuletStatusString() {
-        return Qulet.QuletString(status);
+        return Qulet.quletStatusString(status);
     }
 
-    /**
-     * Get the status of the Cloudlet.
-     *
-     * @return status of the Cloudlet
-     * @pre $none
-     * @post $none
-     *
-     */
-    public int Qulet() {
-        return status;
-    }
 
-    /**
-     * Gets the ID of this Cloudlet.
-     *
-     * @return Cloudlet Id
-     * @pre $none
-     * @post $none
-     */
-
-    public static String QuletString(final int status) {
+    public static String quletStatusString(final int status) {
         String statusString = null;
         switch (status) {
             case Qulet.CREATED:
@@ -459,8 +485,8 @@ public class Qulet {
                 statusString = "Ready";
                 break;
 
-            case Qulet.INEXEC:
-                statusString = "InExec";
+            case Qulet.RUNNING:
+                statusString = "Running";
                 break;
 
             case Qulet.SUCCESS:
@@ -488,7 +514,15 @@ public class Qulet {
                 break;
 
             case Qulet.FAILED_RESOURCE_UNAVAILABLE:
-                statusString = "Failed_resource_unavailable";
+                statusString = "Failed as resource is unavailable";
+                break;
+
+            case Qulet.FAILED_QUBITS_INSUFFICIENT:
+                statusString = "FAILED (as the number of qubits at scheduled QNode is insufficient)";
+                break;
+
+            case Qulet.FAILED_GATES_INSUFFICIENT:
+                statusString = "FAILED (as the gate set of scheduled QNode is insufficient)";
                 break;
 
             default:
@@ -696,12 +730,12 @@ public class Qulet {
             history.append(System.getProperty("line.separator"));
             history.append("------------------------------------------");
             history.append(System.getProperty("line.separator"));
-            history.append(num.format(CloudSim.clock()));
+            history.append(num.format(iQuantum.clock()));
             history.append("   Creates Qulet ID #" + quletId);
             history.append(System.getProperty("line.separator"));
         }
 
-        history.append(num.format(CloudSim.clock()));
+        history.append(num.format(iQuantum.clock()));
         history.append("   " + str + newline);
     }
 

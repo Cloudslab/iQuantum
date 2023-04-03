@@ -1,11 +1,18 @@
+/*
+ * Title:        iQuantum Toolkit
+ * Description:  Simulation Toolkit for Modeling and Simulation of Quantum Computing Environments
+ * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
+ *
+ * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
+ */
 package org.iquantum;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Log;
-import org.cloudbus.cloudsim.core.CloudSim;
+import org.iquantum.utils.Log;
+import org.iquantum.core.iQuantum;
 import org.cloudbus.cloudsim.core.SimEntity;
 import org.cloudbus.cloudsim.core.SimEvent;
-import org.cloudbus.cloudsim.core.CloudSimTags;
+import org.iquantum.core.iQuantumTags;
+import org.iquantum.schedulers.QuletScheduler;
 
 import java.util.List;
 
@@ -66,13 +73,13 @@ public class QDatacenter extends SimEntity {
         Log.printConcatLine(getName(), " is starting...");
         // This resource should register to regional CIS
         // If it is not specified, then it will be registered to the default CIS entity
-        int cisId = CloudSim.getEntityId(regionalCISName);
+        int cisId = iQuantum.getEntityId(regionalCISName);
         if (cisId == -1) {
-            cisId = CloudSim.getCloudInfoServiceEntityId();
+            cisId = iQuantum.getCloudInfoServiceEntityId();
         }
 
         // Send the registration request to the CIS to register the QDatacenter
-        sendNow(cisId, CloudSimTags.REGISTER_RESOURCE, getId());
+        sendNow(cisId, iQuantumTags.REGISTER_RESOURCE, getId());
         registerOtherEntity();
     }
 
@@ -84,25 +91,41 @@ public class QDatacenter extends SimEntity {
         int srcId = -1;
 
         switch (ev.getTag()) {
-            case CloudSimTags.RESOURCE_CHARACTERISTICS:
+            case iQuantumTags.RESOURCE_CHARACTERISTICS:
                 srcId = ((Integer) ev.getData()).intValue();
                 sendNow(srcId, ev.getTag(), getCharacteristics());
                 break;
 
-            case CloudSimTags.QULET_SUBMIT_READY:
+            case iQuantumTags.QULET_SUBMIT_READY:
                 int[] data = new int[2];
                 data[0] = getId();
                 srcId = ((Integer) ev.getData()).intValue();
-                send(srcId, CloudSim.getMinTimeBetweenEvents(), ev.getTag(), data);
+                send(srcId, iQuantum.getMinTimeBetweenEvents(), ev.getTag(), data);
                 break;
 
-            case CloudSimTags.QULET_SUBMIT:
+            case iQuantumTags.QULET_SUBMIT:
                 processQuletSubmit(ev,false);
                 break;
 
-            case CloudSimTags.UPDATE_QULET_PROCESSING:
+            case iQuantumTags.UPDATE_QULET_PROCESSING:
                 updateQuletProcessing();
                 checkQuletCompletion();
+                break;
+
+            case iQuantumTags.QULET_FAILED_QUBIT:
+                try {
+                    processQulet(ev, iQuantumTags.QULET_FAILED_QUBIT);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+
+            case iQuantumTags.QULET_FAILED_GATES:
+                try {
+                    processQulet(ev, iQuantumTags.QULET_FAILED_GATES);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 break;
 
             // other unknown tags are processed by this method
@@ -113,6 +136,24 @@ public class QDatacenter extends SimEntity {
 
     }
 
+    private void processQulet(SimEvent ev, int type) throws Exception {
+        Qulet qulet = (Qulet) ev.getData();
+        switch (type) {
+            case iQuantumTags.QULET_FAILED_QUBIT:
+                qulet.setQuletStatus(Qulet.FAILED_QUBITS_INSUFFICIENT);
+                sendNow(qulet.getBrokerId(), iQuantumTags.QULET_RETURN, qulet);
+                break;
+
+            case iQuantumTags.QULET_FAILED_GATES:
+                qulet.setQuletStatus(Qulet.FAILED_GATES_INSUFFICIENT);
+                sendNow(qulet.getBrokerId(), iQuantumTags.QULET_RETURN, qulet);
+                break;
+
+            default:
+                break;
+        }
+    }
+
     private void checkQuletCompletion() {
         List<? extends QNode> qNodeList = getCharacteristics().getQNodeList();
         for (QNode qNode : qNodeList) {
@@ -120,7 +161,7 @@ public class QDatacenter extends SimEntity {
             while (scheduler.isFinishedQulets()) {
                 Qulet qulet = scheduler.getNextFinishedQulet();
                 if (qulet != null) {
-                    sendNow(qulet.getBrokerId(), CloudSimTags.QULET_RETURN, qulet);
+                    sendNow(qulet.getBrokerId(), iQuantumTags.QULET_RETURN, qulet);
                 }
             }
         }
@@ -138,20 +179,20 @@ public class QDatacenter extends SimEntity {
             Qulet qulet = (Qulet) ev.getData();
             int qBrokerId = qulet.getBrokerId();
 
-            // checks whether this Cloudlet has finished or not
+            // checks whether this qulet has finished or not
             if (qulet.isFinished()) {
-                String name = CloudSim.getEntityName(qulet.getBrokerId());
-                Log.printConcatLine(getName(), ": Warning - Cloudlet #", qulet.getQuletId(), " owned by ", name,
+                String name = iQuantum.getEntityName(qulet.getBrokerId());
+                Log.printConcatLine(getName(), ": Warning - Qulet #", qulet.getQuletId(), " owned by ", name,
                         " is already completed/finished.");
                 Log.printLine("Therefore, it is not being executed again");
                 Log.printLine();
 
-                // NOTE: If a Cloudlet has finished, then it won't be processed.
+                // NOTE: If a Qulet has finished, then it won't be processed.
                 // So, if ack is required, this method sends back a result.
                 // If ack is not required, this method don't send back a result.
-                // Hence, this might cause CloudSim to be hanged since waiting
-                // for this Cloudlet back.
-                sendNow(qulet.getBrokerId(), CloudSimTags.QULET_RETURN, qulet);
+                // Hence, this might cause iQuantum to be hanged since waiting
+                // for this Qulet back.
+                sendNow(qBrokerId, iQuantumTags.QULET_RETURN, qulet);
                 return;
             }
 
@@ -171,7 +212,7 @@ public class QDatacenter extends SimEntity {
 
             if(estimatedCompletionTime > 0.0 && !Double.isInfinite(estimatedCompletionTime)) {
                 estimatedCompletionTime += transferTime;
-                send(getId(), estimatedCompletionTime, CloudSimTags.UPDATE_QULET_PROCESSING);
+                send(getId(), estimatedCompletionTime, iQuantumTags.UPDATE_QULET_PROCESSING);
             }
 
         } catch (Exception e) {
@@ -185,27 +226,22 @@ public class QDatacenter extends SimEntity {
         // if some time passed since last processing
         // R: for term is to allow loop at simulation start. Otherwise, one initial
         // simulation step is skipped and schedulers are not properly initialized
-        if (CloudSim.clock() < 0.111 || CloudSim.clock() >= getLastProcessTime() + CloudSim.getMinTimeBetweenEvents()) {
+        if (iQuantum.clock() < 0.111 || iQuantum.clock() >= getLastProcessTime() + iQuantum.getMinTimeBetweenEvents()) {
             List<? extends QNode> list = getCharacteristics().getQNodeList();
             double smallerTime = Double.MAX_VALUE;
             // for each host...
             for (int i = 0; i < list.size(); i++) {
                 QNode qNode = list.get(i);
-                // inform VMs to update processing
-                double time = qNode.updateQuletProcessing(CloudSim.clock());
-                // what time do we expect that the next cloudlet will finish?
+                double time = qNode.updateQuletProcessing(iQuantum.clock());
+                // what time do we expect that the next qulet will finish?
                 if (time < smallerTime) {
                     smallerTime = time;
                 }
             }
-            // gurantees a minimal interval before scheduling the event
-            if (smallerTime < CloudSim.clock() + CloudSim.getMinTimeBetweenEvents() + 0.01) {
-                smallerTime = CloudSim.clock() + CloudSim.getMinTimeBetweenEvents() + 0.01;
-            }
             if (smallerTime != Double.MAX_VALUE) {
-                schedule(getId(), (smallerTime - CloudSim.clock()), CloudSimTags.UPDATE_QULET_PROCESSING);
+                schedule(getId(), (smallerTime - iQuantum.clock()), iQuantumTags.UPDATE_QULET_PROCESSING);
             }
-            setLastProcessTime(CloudSim.clock());
+            setLastProcessTime(iQuantum.clock());
         }
     }
 

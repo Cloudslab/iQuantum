@@ -145,7 +145,7 @@ public class SDNHost extends SimEntity implements Node {
 				cl.setVmId(vmId);
 				
 				requestsTable.put(cl, req);
-				sendNow(host.getDatacenter().getId(),CloudSimTags.CLOUDLET_SUBMIT,cl);
+				sendNow(host.getDatacenter().getId(), CloudSimTags.CLOUDLET_SUBMIT,cl);
 		} else {
 			Log.printLine(CloudSim.clock() + ": " + getName() + ": Activity is unknown..");
 		}
