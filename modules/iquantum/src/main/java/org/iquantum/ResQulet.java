@@ -193,14 +193,6 @@ public class ResQulet {
 	 * @post $none
 	 */
 	private void init() {
-		// get number of PEs required to run this Qulet
-//		pesNumber = qulet.getNumberOfPes();
-//
-//		// if more than 1 Pe, then create an array
-//		if (pesNumber > 1) {
-//			machineArrayId = new int[pesNumber];
-//			peArrayId = new int[pesNumber];
-//		}
 
 		arrivalTime = iQuantum.clock();
 		qulet.setSubmissionTime(arrivalTime);
