@@ -103,7 +103,7 @@ public class ResQulet {
 	/**
 	 * Allocates a new ResQulet object upon the arrival of a Qulet object. Use this
 	 * constructor to store reserved Qulets, i.e. Qulets that done reservation before. The
-	 * arriving time is determined by {@link gridsim.iQuantum#clock()}.
+	 * arriving time is determined by {@link iQuantum#clock()}.
 	 * 
 	 * @param Qulet a Qulet object
 	 * @param startTime a reservation start time. Can also be interpreted as starting time to
@@ -111,7 +111,7 @@ public class ResQulet {
 	 * @param duration a reservation duration time. Can also be interpreted as how long to execute
 	 *            this Qulet.
 	 * @param reservID a reservation ID that owns this Qulet
-	 * @see gridsim.iQuantum#clock()
+	 * @see iQuantum#clock()
 	 * @pre Qulet != null
 	 * @pre startTime > 0
 	 * @pre duration > 0

@@ -9,7 +9,6 @@ package org.iquantum;
 
 import org.iquantum.schedulers.QuletScheduler;
 import java.util.List;
-import java.util.Map;
 
 
 public class QNode {
@@ -19,7 +18,6 @@ public class QNode {
     private double clops;
     private List<String> gateSets;
     private QubitTopology qubitTopology;
-    private Map<String, Double> errorRates;
 
     private QuletScheduler quletScheduler;
 
@@ -32,19 +30,62 @@ public class QNode {
      * @param clops circuit layer operations per second (CLOPS)
      * @param gateSets all gate sets supported by the quantum node
      * @param qubitTopology qubit topology of the quantum node
-     * @param errorRates error rates of the quantum node
      * @param quletScheduler qulet scheduler of the quantum node
      */
     public QNode(int id, int numQubits, int quantumVolume, double clops, List<String> gateSets,
-                 QubitTopology qubitTopology, Map<String, Double> errorRates, QuletScheduler quletScheduler) {
+                 QubitTopology qubitTopology, QuletScheduler quletScheduler) {
+        // Validate the parameters
+        validateParameters(numQubits, quantumVolume, clops, gateSets, qubitTopology, quletScheduler);
+
         this.id = id;
         this.numQubits = numQubits;
         this.quantumVolume = quantumVolume;
         this.clops = clops;
         this.gateSets = gateSets;
         this.qubitTopology = qubitTopology;
-        this.errorRates = errorRates;
         this.quletScheduler = quletScheduler;
+    }
+
+    /**
+     * Validates the parameters.
+     * @param numQubits number of qubits
+     * @param quantumVolume quantum volume
+     * @param clops circuit layer operations per second (CLOPS)
+     * @param gateSets all gate sets supported by the quantum node
+     * @param qubitTopology qubit topology of the quantum node
+     * @param errorRates error rates of the quantum node
+     * @param quletScheduler qulet scheduler of the quantum node
+     */
+    private static void validateParameters(int numQubits, int quantumVolume, double clops, List<String> gateSets,
+                                           QubitTopology qubitTopology, QuletScheduler quletScheduler) {
+
+        if (numQubits <= 0) {
+            throw new IllegalArgumentException("numQubits must be greater than zero");
+        }
+
+        if (quantumVolume <= 0) {
+            throw new IllegalArgumentException("quantumVolume must be greater than zero");
+        }
+
+        if (clops <= 0) {
+            throw new IllegalArgumentException("clops must be greater than zero");
+        }
+
+        if (gateSets == null || gateSets.isEmpty()) {
+            throw new IllegalArgumentException("gateSets must not be null or empty");
+        }
+
+        if (qubitTopology == null) {
+            throw new IllegalArgumentException("qubitTopology must not be null");
+        }
+
+        if (quletScheduler == null) {
+            throw new IllegalArgumentException("quletScheduler must not be null");
+        }
+
+        if (quantumVolume > Math.pow(2, numQubits)) {
+            throw new IllegalArgumentException("quantumVolume must be less than or equal to 2^numQubits");
+        }
     }
 
     public int getNumQubits() {
@@ -65,10 +106,6 @@ public class QNode {
 
     public QubitTopology getQubitTopology() {
         return qubitTopology;
-    }
-
-    public Map<String, Double> getErrorRates() {
-        return errorRates;
     }
 
     public QuletScheduler getQuletScheduler() {

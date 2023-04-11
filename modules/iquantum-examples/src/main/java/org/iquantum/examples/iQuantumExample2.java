@@ -1,15 +1,14 @@
 package org.iquantum.examples;
+
 import org.iquantum.*;
 import org.iquantum.core.iQuantum;
 import org.iquantum.schedulers.QuletSchedulerSpaceShared;
 import org.iquantum.utils.Log;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
 
-public class iQuantumExample1 {
+import java.text.DecimalFormat;
+import java.util.*;
+
+public class iQuantumExample2 {
     private static List<Qulet> quletList;
 
     private static  List<QNode> qNodeList;
@@ -31,6 +30,14 @@ public class iQuantumExample1 {
 
         // Step 4: Create a Qulet
         quletList = createQuletList(qDatacenter, qBroker);
+
+        Map<String, String> mapping = QubitMapping.findMapping(qDatacenter.getCharacteristics().getQNodeList().get(0).getQubitTopology(), quletList.get(0).getQubitTopology());
+
+        if (mapping != null) {
+            System.out.println("Mapping found: " + mapping);
+        } else {
+            System.out.println("No mapping found");
+        }
 
         // Step 5: Submit qulet to the QBroker
         qBroker.submitQuletList(quletList);

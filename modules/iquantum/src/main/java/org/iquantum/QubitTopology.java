@@ -36,8 +36,8 @@ public class QubitTopology {
     }
 
     public static class Node {
-        private int qubitIndex;
-        private List<Node> neighbors;
+        protected int qubitIndex;
+        protected List<Node> neighbors;
 
         public Node(int qubitIndex) {
             this.qubitIndex = qubitIndex;
