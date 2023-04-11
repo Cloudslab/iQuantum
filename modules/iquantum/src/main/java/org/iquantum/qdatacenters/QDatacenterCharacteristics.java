@@ -5,9 +5,11 @@
  *
  * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
  */
-package org.iquantum;
+package org.iquantum.qdatacenters;
 
 import org.iquantum.core.iQuantum;
+import org.iquantum.qnodes.QNode;
+
 import java.util.List;
 
 public class QDatacenterCharacteristics {

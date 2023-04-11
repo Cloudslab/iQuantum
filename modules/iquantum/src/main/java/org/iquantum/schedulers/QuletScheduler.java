@@ -8,8 +8,8 @@
 
 package org.iquantum.schedulers;
 
-import org.iquantum.Qulet;
-import org.iquantum.ResQulet;
+import org.iquantum.qulets.Qulet;
+import org.iquantum.qulets.ResQulet;
 
 import java.util.LinkedList;
 import java.util.List;

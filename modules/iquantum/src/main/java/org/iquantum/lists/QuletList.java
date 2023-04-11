@@ -7,7 +7,7 @@
  */
 package org.iquantum.lists;
 
-import org.iquantum.Qulet;
+import org.iquantum.qulets.Qulet;
 
 import java.util.Collections;
 import java.util.Comparator;

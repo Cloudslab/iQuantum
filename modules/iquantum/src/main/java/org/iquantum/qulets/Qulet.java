@@ -6,7 +6,8 @@
  * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
  */
 
-package org.iquantum;
+package org.iquantum.qulets;
+import org.iquantum.qubitTopologies.QubitTopology;
 import org.iquantum.core.iQuantum;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -144,6 +145,7 @@ public class Qulet {
      */
     public Qulet(final int quletId, final int numQubits, final int numLayers,
                  final int numShots, final List<String> gateSet, final QubitTopology qubitTopology) {
+        validateParameters(numQubits, numLayers, numShots, gateSet, qubitTopology);
         brokerId = -1;
         status = CREATED;
         this.quletId = quletId;
@@ -160,6 +162,39 @@ public class Qulet {
         index = -1;
 
     }
+
+    /**
+     * Validates the parameters of the Qulet.
+     * @param numQubits: the number of qubits in the Qulet
+     * @param numLayers: the number of circuit layers in the Qulet
+     * @param numShots: the number of shots the Qulet is to be executed
+     * @param gateSet: the list of all gate set in the Qulet
+     * @param qubitTopology: the topology of the qubits in the Qulet
+     */
+    private static void validateParameters(int numQubits, int numLayers, int numShots, List<String> gateSet,
+                                           QubitTopology qubitTopology) {
+
+        if (numQubits <= 0) {
+            throw new IllegalArgumentException("numQubits must be greater than zero");
+        }
+
+        if (numLayers <= 0) {
+            throw new IllegalArgumentException("numLayers must be greater than zero");
+        }
+
+        if (numShots <= 0) {
+            throw new IllegalArgumentException("numShots must be greater than zero");
+        }
+
+        if (gateSet == null || gateSet.isEmpty()) {
+            throw new IllegalArgumentException("gateSet must not be null or empty");
+        }
+
+        if (qubitTopology == null) {
+            throw new IllegalArgumentException("qubitTopology must not be null");
+        }
+    }
+
 
     /**
      * GETTERS AND SETTERS START------------------------------------------------

@@ -5,8 +5,10 @@
  *
  * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
  */
-package org.iquantum;
+package org.iquantum.qnodes;
 
+import org.iquantum.qdatacenters.QDatacenter;
+import org.iquantum.qubitTopologies.QubitTopology;
 import org.iquantum.schedulers.QuletScheduler;
 import java.util.List;
 

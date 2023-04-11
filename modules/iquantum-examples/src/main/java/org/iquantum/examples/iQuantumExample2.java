@@ -1,7 +1,15 @@
 package org.iquantum.examples;
 
-import org.iquantum.*;
+import org.iquantum.qbrokers.QBroker;
+import org.iquantum.qdatacenters.QDatacenter;
+import org.iquantum.qdatacenters.QDatacenterCharacteristics;
+import org.iquantum.qnodes.QNode;
+import org.iquantum.qubitTopologies.IBMQTopologies;
 import org.iquantum.core.iQuantum;
+import org.iquantum.qubitTopologies.QubitTopology;
+import org.iquantum.qubitTopologies.QubitTopologyExtended;
+import org.iquantum.qubitmapping.QubitMappingBackTracking;
+import org.iquantum.qulets.Qulet;
 import org.iquantum.schedulers.QuletSchedulerSpaceShared;
 import org.iquantum.utils.Log;
 
@@ -31,7 +39,7 @@ public class iQuantumExample2 {
         // Step 4: Create a Qulet
         quletList = createQuletList(qDatacenter, qBroker);
 
-        Map<String, String> mapping = QubitMapping.findMapping(qDatacenter.getCharacteristics().getQNodeList().get(0).getQubitTopology(), quletList.get(0).getQubitTopology());
+        Map<String, String> mapping = QubitMappingBackTracking.findMapping(qDatacenter.getCharacteristics().getQNodeList().get(1).getQubitTopology(), quletList.get(2).getQubitTopology());
 
         if (mapping != null) {
             System.out.println("Mapping found: " + mapping);
@@ -125,30 +133,17 @@ public class iQuantumExample2 {
     }
 
     private static QDatacenter createQDatacenter(String name) {
-        // Create 7-qubit quantum node (IBM Oslo)
-        List<int[]> edges_oslo = new ArrayList<>();
-        edges_oslo.add(new int[]{0, 1});
-        edges_oslo.add(new int[]{1, 0});
-        edges_oslo.add(new int[]{1, 2});
-        edges_oslo.add(new int[]{1, 3});
-        edges_oslo.add(new int[]{2, 1});
-        edges_oslo.add(new int[]{3, 1});
-        edges_oslo.add(new int[]{3, 5});
-        edges_oslo.add(new int[]{4, 5});
-        edges_oslo.add(new int[]{5, 3});
-        edges_oslo.add(new int[]{5, 4});
-        edges_oslo.add(new int[]{5, 6});
-        edges_oslo.add(new int[]{6, 5});
-        QubitTopology osloTopology = new QubitTopology(7, edges_oslo);
+        QubitTopologyExtended osloTopology = IBMQTopologies.IBMQ7Oslo();
+        QubitTopologyExtended manilaTopology = IBMQTopologies.IBMQ5Manila();
         ArrayList<String> gateSet1 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X"));
         ArrayList<String> gateSet2 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X"));
         QNode qNodeOslo = new QNode(0, 7,128,2600, gateSet1,
                 osloTopology, new QuletSchedulerSpaceShared());
-        QNode qNodePerth = new QNode(1, 7,128,2900, gateSet2,
-                osloTopology, new QuletSchedulerSpaceShared());
+        QNode qNodeManila = new QNode(1, 5,32,2900, gateSet2,
+                manilaTopology, new QuletSchedulerSpaceShared());
         qNodeList = new ArrayList<QNode>();
         qNodeList.add(qNodeOslo);
-        qNodeList.add(qNodePerth);
+        qNodeList.add(qNodeManila);
 
         double timeZone = 0.0;
         double costPerSec = 3.0;

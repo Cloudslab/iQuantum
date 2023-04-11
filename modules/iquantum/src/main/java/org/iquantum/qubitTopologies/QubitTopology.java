@@ -5,7 +5,7 @@
  *
  * Copyright (c) 2023, CLOUDS Lab, The University of Melbourne, Australia
  */
-package org.iquantum;
+package org.iquantum.qubitTopologies;
 
 import java.util.ArrayList;
 import java.util.List;

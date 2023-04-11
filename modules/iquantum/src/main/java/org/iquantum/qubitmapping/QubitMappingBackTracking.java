@@ -1,9 +1,11 @@
-package org.iquantum;
+package org.iquantum.qubitmapping;
+import org.iquantum.qubitTopologies.QubitTopology;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class QubitMapping {
+public class QubitMappingBackTracking {
     /**
      * Find a mapping from the circuit qubits to the system qubits, if possible and return index mapping
      * @param systemTopology
@@ -56,18 +58,18 @@ public class QubitMapping {
         }
 
         for (QubitTopology.Node circuitQubit : circuitTopology.getQubits()) {
-            if (!mapping.containsKey(circuitQubit.qubitIndex)) {
+            if (!mapping.containsKey(circuitQubit.getQubitIndex())) {
                 for (QubitTopology.Node systemQubit : systemTopology.getQubits()) {
-                    if (!visited.contains(systemQubit.qubitIndex) && isConnected(mapping, circuitQubit, systemQubit, circuitTopology, systemTopology)) {
-                        mapping.put(circuitQubit.qubitIndex, systemQubit.qubitIndex);
-                        visited.add(systemQubit.qubitIndex);
+                    if (!visited.contains(systemQubit.getQubitIndex()) && isConnected(mapping, circuitQubit, systemQubit, circuitTopology, systemTopology)) {
+                        mapping.put(circuitQubit.getQubitIndex(), systemQubit.getQubitIndex());
+                        visited.add(systemQubit.getQubitIndex());
 
                         if (findMappingHelper(systemTopology, circuitTopology, mapping, visited)) {
                             return true;
                         }
 
-                        mapping.remove(circuitQubit.qubitIndex);
-                        visited.remove(systemQubit.qubitIndex);
+                        mapping.remove(circuitQubit.getQubitIndex());
+                        visited.remove(systemQubit.getQubitIndex());
                     }
                 }
                 return false;
@@ -77,11 +79,11 @@ public class QubitMapping {
     }
 
     private static boolean isConnected(Map<Integer, Integer> mapping, QubitTopology.Node circuitQubit, QubitTopology.Node systemQubit, QubitTopology circuitTopology, QubitTopology systemTopology) {
-        for (QubitTopology.Node connectedCircuitQubit : circuitQubit.neighbors) {
-            Integer mappedSystemQubitIndex = mapping.get(connectedCircuitQubit.qubitIndex);
+        for (QubitTopology.Node connectedCircuitQubit : circuitQubit.getNeighbors()) {
+            Integer mappedSystemQubitIndex = mapping.get(connectedCircuitQubit.getQubitIndex());
             if (mappedSystemQubitIndex != null) {
                 QubitTopology.Node mappedSystemQubit = systemTopology.getQubits().get(mappedSystemQubitIndex);
-                if (!systemQubit.neighbors.contains(mappedSystemQubit)) {
+                if (!systemQubit.getNeighbors().contains(mappedSystemQubit)) {
                     return false;
                 }
             }

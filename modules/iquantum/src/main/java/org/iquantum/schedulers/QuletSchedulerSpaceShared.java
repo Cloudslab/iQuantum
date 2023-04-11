@@ -8,9 +8,8 @@
 
 package org.iquantum.schedulers;
 import org.iquantum.core.iQuantum;
-import org.iquantum.Qulet;
-import org.iquantum.ResQulet;
-import org.iquantum.utils.Log;
+import org.iquantum.qulets.Qulet;
+import org.iquantum.qulets.ResQulet;
 
 import java.util.ArrayList;
 import java.util.List;
