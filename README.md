@@ -1,5 +1,4 @@
-# iQuantum 
-## A Toolkit for Modeling and Simulation of Quantum Computing Environments
+# iQuantum: A Toolkit for Modeling and Simulation of Quantum Computing Environments
 
 As quantum computers become increasingly accessible through 
 cloud services and potentially edge networks, the demand for efficient resource 
@@ -10,25 +9,14 @@ scheduling algorithms. iQuantum addresses the challenges posed by the limited
 availability and accessibility of quantum resources, catalyzing research in 
 quantum software and systems.
 
-iQuantum offers a wide array of potential use cases and extensions, including:
-
-- **Quantum Job Scheduling Algorithms**: 
-By generating cloud workloads, iQuantum enables users to design and evaluate 
-adaptable job scheduling algorithms for quantum cloud environments. 
-This simulation capability allows researchers to investigate various 
-quantum computing scenarios and assess the effectiveness of different 
-scheduling strategies, ultimately enhancing system performance and efficiency.
-
-- **Qubit Mapping Algorithms**: Qubit mapping ensures the compatibility of quantum 
-circuits with the target quantum computer. iQuantum facilitates the design and 
-evaluation of qubit mapping strategies, which optimize the utilization of 
-quantum cloud resources and enable concurrent processing of multiple 
-quantum circuits in today's noisy quantum systems.
-
-The iQuantum project aims to boost research in quantum software and systems, 
-particularly focusing on resource management, job scheduling, and hybrid 
-quantum-classical task orchestration in quantum computing environments that 
+## Main Features
+The iQuantum project aims to boost research in quantum software and systems,
+particularly focusing on resource management, job scheduling, and hybrid
+quantum-classical task orchestration in quantum computing environments that
 integrate edge and cloud resources.
+- Modeling quantum computing environments with cloud-based resources: Quantum Datacenters (QDatacenter), Quantum Computers (QNode), Quantum Tasks (Qulet), and Quantum Broker (QBroker).
+- Modeling qulet scheduling algorithms for quantum computing environments.
+- Modeling qubit mapping algorithms for quantum computing environments.
 
 ## Installation
 The downloaded package contains all the source code and examples for iQuantum.
