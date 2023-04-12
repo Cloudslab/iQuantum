@@ -29,8 +29,9 @@ public class IBMQTopology {
      * @return File path of the latest CSV file or null if no file is found
      */
     private static String getFilePath(String node) {
-        String folderPath = "modules/iquantum/src/main/java/org/iquantum/qubitTopologies/ibmqData/";
+        String folderPath = "dataset/iquantum/IBMQTopologies/";
         Path fullPath = Paths.get(System.getProperty("user.dir"), folderPath);
+
         File folder = new File(fullPath.toString());
         File[] files = folder.listFiles(pathname -> pathname.getName().startsWith(node) && pathname.getName().endsWith(".csv"));
         if (files != null && files.length > 0) {
