@@ -3,11 +3,10 @@ package org.iquantum.examples;
 import org.iquantum.qbrokers.QBroker;
 import org.iquantum.qdatacenters.QDatacenter;
 import org.iquantum.qdatacenters.QDatacenterCharacteristics;
+import org.iquantum.qnodes.IBMQNode;
 import org.iquantum.qnodes.QNode;
-import org.iquantum.qubitTopologies.IBMQTopologies;
 import org.iquantum.core.iQuantum;
 import org.iquantum.qubitTopologies.QubitTopology;
-import org.iquantum.qubitTopologies.QubitTopologyExtended;
 import org.iquantum.qubitmapping.QubitMappingBackTracking;
 import org.iquantum.qulets.Qulet;
 import org.iquantum.schedulers.QuletSchedulerSpaceShared;
@@ -39,14 +38,6 @@ public class iQuantumExample2 {
         // Step 4: Create a Qulet
         quletList = createQuletList(qDatacenter, qBroker);
 
-        Map<String, String> mapping = QubitMappingBackTracking.findMapping(qDatacenter.getCharacteristics().getQNodeList().get(1).getQubitTopology(), quletList.get(2).getQubitTopology());
-
-        if (mapping != null) {
-            System.out.println("Mapping found: " + mapping);
-        } else {
-            System.out.println("No mapping found");
-        }
-
         // Step 5: Submit qulet to the QBroker
         qBroker.submitQuletList(quletList);
 
@@ -73,7 +64,11 @@ public class iQuantumExample2 {
         ql1Edges.add(new int[]{1, 3});
         ql1Edges.add(new int[]{2, 1});
         ql1Edges.add(new int[]{3, 1});
-        QubitTopology ql1Topology = new QubitTopology(4, ql1Edges);
+        ql1Edges.add(new int[]{3, 4});
+        ql1Edges.add(new int[]{4, 3});
+        ql1Edges.add(new int[]{4, 5});
+        ql1Edges.add(new int[]{5, 4});
+        QubitTopology ql1Topology = new QubitTopology(6, ql1Edges);
         int ql1Id = 0;
         ArrayList<String> ql1Gates = new ArrayList<>(Arrays.asList("CX", "RZ", "X"));
         Qulet qulet1 = new Qulet(ql1Id,4, 26, 3000, ql1Gates, ql1Topology);
@@ -133,17 +128,11 @@ public class iQuantumExample2 {
     }
 
     private static QDatacenter createQDatacenter(String name) {
-        QubitTopologyExtended osloTopology = IBMQTopologies.IBMQ7Oslo();
-        QubitTopologyExtended manilaTopology = IBMQTopologies.IBMQ5Manila();
-        ArrayList<String> gateSet1 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X"));
-        ArrayList<String> gateSet2 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X"));
-        QNode qNodeOslo = new QNode(0, 7,128,2600, gateSet1,
-                osloTopology, new QuletSchedulerSpaceShared());
-        QNode qNodeManila = new QNode(1, 5,32,2900, gateSet2,
-                manilaTopology, new QuletSchedulerSpaceShared());
-        qNodeList = new ArrayList<QNode>();
-        qNodeList.add(qNodeOslo);
-        qNodeList.add(qNodeManila);
+        QNode qNode1 = IBMQNode.createNode(0,"ibm_washington",new QuletSchedulerSpaceShared());
+        QNode qNode2 = IBMQNode.createNode(1,"ibm_hanoi",new QuletSchedulerSpaceShared());
+//        QubitTopology.printTopology(qNode1.getQubitTopology());
+        qNodeList = new ArrayList<>();
+        qNodeList.addAll(Arrays.asList(qNode1, qNode2));
 
         double timeZone = 0.0;
         double costPerSec = 3.0;

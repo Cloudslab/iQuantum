@@ -223,7 +223,7 @@ public class QBroker extends SimEntity {
              * number of qubits of QNode >= number of qubits of Qulet
              */
             if (!Log.isDisabled()) {
-                Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": Checking if QNode #", qNode.getId(), " has enough qubits to execute Qulet",
+                Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": Checking if QNode #", qNode.getId(), " has enough qubits/gates to execute Qulet",
                         qulet.getQuletId());
             }
             if(verifyConstraints(qNode, qulet, submittedQulets)) {
@@ -258,8 +258,21 @@ public class QBroker extends SimEntity {
             numQuletSubmitted++;
             submittedQulets.add(qulet);
             return false;
+        } else if (qNode.getQuletScheduler().quletMapping(qulet, qNode) == null) {
+            if (!Log.isDisabled()) {
+                Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": Cancel the execution of Qulet #", qulet.getQuletId(),
+                        ": Cannot map qubit topology of qulet to the QNode #", qNode.getId());
+            }
+            sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QULET_FAILED_QUBIT_MAP, qulet);
+            numQuletSubmitted++;
+            submittedQulets.add(qulet);
+            return false;
+        } else {
+            Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": QNode #", qNode.getId(), " has enough qubits and sufficient gates to execute Qulet",
+                    qulet.getQuletId());
+            Log.printConcatLine(CloudSim.clock(), ": ", getName(), ": Mapping qulet " + qulet.getQuletId() + " to QNode #", qNode.getId(), " successfully: ", qNode.getQuletScheduler().quletMapping(qulet, qNode));
+            return true;
         }
-        return true;
     }
 
     private static boolean isSubset(List<String> firstList, List<String> secondList) {

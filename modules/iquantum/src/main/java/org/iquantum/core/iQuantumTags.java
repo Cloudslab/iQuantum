@@ -72,4 +72,9 @@ public class iQuantumTags {
      * Denotes a Qulet is failed as a result of a gate insufficiency.
      */
     public static final int QULET_FAILED_GATES = BASE + 1006;
+
+    /**
+     * Denotes a Qulet is failed as a result of a time insufficiency.
+     */
+    public static final int QULET_FAILED_QUBIT_MAP = BASE + 1007;
 }

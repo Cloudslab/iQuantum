@@ -8,11 +8,13 @@
 
 package org.iquantum.schedulers;
 
+import org.iquantum.qnodes.QNode;
 import org.iquantum.qulets.Qulet;
 import org.iquantum.qulets.ResQulet;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -175,6 +177,9 @@ public abstract class QuletScheduler {
 	 * @post $none
 	 */
 	public abstract int runningQulets();
+
+	public abstract Map<String, String> quletMapping(Qulet qulet, QNode qNode);
+
 
 	/**
 	 * Returns one Qulet to migrate to another QNode.

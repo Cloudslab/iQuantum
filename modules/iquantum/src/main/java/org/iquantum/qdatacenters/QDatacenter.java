@@ -129,6 +129,13 @@ public class QDatacenter extends SimEntity {
                     throw new RuntimeException(e);
                 }
                 break;
+            case iQuantumTags.QULET_FAILED_QUBIT_MAP:
+                try {
+                    processQulet(ev, iQuantumTags.QULET_FAILED_QUBIT_MAP);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                break;
 
             // other unknown tags are processed by this method
             default:
@@ -148,6 +155,11 @@ public class QDatacenter extends SimEntity {
 
             case iQuantumTags.QULET_FAILED_GATES:
                 qulet.setQuletStatus(Qulet.FAILED_GATES_INSUFFICIENT);
+                sendNow(qulet.getBrokerId(), iQuantumTags.QULET_RETURN, qulet);
+                break;
+
+            case iQuantumTags.QULET_FAILED_QUBIT_MAP:
+                qulet.setQuletStatus(Qulet.FAILED_QUBIT_MAP);
                 sendNow(qulet.getBrokerId(), iQuantumTags.QULET_RETURN, qulet);
                 break;
 

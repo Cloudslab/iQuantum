@@ -135,6 +135,10 @@ public class Qulet {
     public static final int FAILED_GATES_INSUFFICIENT = 11;
 
     /**
+     * The Qulet has failed due to qubit map impossible.
+     */
+    public static final int FAILED_QUBIT_MAP = 12;
+    /**
      * Initializes a Qulet (Gate-based Quantum Task) object.
      * @param quletId: the id of the Qulet
      * @param numQubits: the number of qubits in the Qulet
@@ -487,7 +491,7 @@ public class Qulet {
         }
 
         // throws an exception if the new status is outside the range
-        if (newStatus < Qulet.CREATED || newStatus > Qulet.FAILED_GATES_INSUFFICIENT) {
+        if (newStatus < Qulet.CREATED || newStatus > Qulet.FAILED_QUBIT_MAP) {
             throw new Exception(
                     "Qulet.setQuletStatus() : Error - Invalid integer range for Qulet status.");
         }
@@ -558,6 +562,10 @@ public class Qulet {
 
             case Qulet.FAILED_GATES_INSUFFICIENT:
                 statusString = "FAILED (as the gate set of scheduled QNode is insufficient)";
+                break;
+
+            case Qulet.FAILED_QUBIT_MAP:
+                statusString = "FAILED (as the qubit mapping is not possible)";
                 break;
 
             default:

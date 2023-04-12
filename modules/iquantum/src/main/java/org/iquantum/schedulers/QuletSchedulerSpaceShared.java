@@ -8,11 +8,14 @@
 
 package org.iquantum.schedulers;
 import org.iquantum.core.iQuantum;
+import org.iquantum.qnodes.QNode;
+import org.iquantum.qubitmapping.QubitMappingBackTracking;
 import org.iquantum.qulets.Qulet;
 import org.iquantum.qulets.ResQulet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.iquantum.utils.DataFormat.roundDouble;
 
@@ -28,6 +31,11 @@ public class QuletSchedulerSpaceShared extends QuletScheduler {
 		super();
 		// Initialize the number of QPUs (single QPU by default)
 		currentQPUs = 1;
+	}
+
+	@Override
+	public Map<String, String> quletMapping(Qulet qulet, QNode qNode) {
+		return QubitMappingBackTracking.findMapping(qNode.getQubitTopology(), qulet.getQubitTopology());
 	}
 
 	@Override

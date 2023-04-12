@@ -6,34 +6,70 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IBMQTopologyCSVImport {
+public class IBMQTopology {
+    public static QubitTopologyExtended getQubitTopology(String node) {
+        String filePath = getFilePath(node);
+        if (filePath != null) {
+            return importFromCsv(filePath);
+        }
+        return null;
+    }
+
+    /**
+     * Get the latest CSV file for the given node.
+     * All CSV file names must start with the node name and end with ".csv", placed in ibmqData folder.
+     * @param node The node name, e.g. ibm_hanoi
+     * @return File path of the latest CSV file or null if no file is found
+     */
+    private static String getFilePath(String node) {
+        String folderPath = "modules/iquantum/src/main/java/org/iquantum/qubitTopologies/ibmqData/";
+        Path fullPath = Paths.get(System.getProperty("user.dir"), folderPath);
+        File folder = new File(fullPath.toString());
+        File[] files = folder.listFiles(pathname -> pathname.getName().startsWith(node) && pathname.getName().endsWith(".csv"));
+        if (files != null && files.length > 0) {
+            File latestFile = files[0];
+            for (int i = 1; i < files.length; i++) {
+                if (files[i].lastModified() > latestFile.lastModified()) {
+                    latestFile = files[i];
+                }
+            }
+            String filePath = latestFile.getPath();
+            System.out.println("Loaded latest Datasheet CSV Datasheet for " + node + " at " + filePath);
+            return filePath;
+        } else {
+            System.out.println("No CSV files found for " + node);
+        }
+        return null;
+    }
+
     public static QubitTopologyExtended importFromCsv(String filename) {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(filename));
-            CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader());
+            CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withNullString("-1"));
             List<int[]> edges = new ArrayList<>();
             Map<Integer, QubitTopologyExtended.QubitProperties> qubitProperties = new HashMap<>();
             Map<Integer, Map<Integer, QubitTopologyExtended.QubitEdge>> edgeProperties = new HashMap<>();
 
             for (CSVRecord csvRecord : csvParser) {
                 int qubitIndex = Integer.parseInt(csvRecord.get("Qubit"));
-                double t1Us = Double.parseDouble(csvRecord.get("T1 (us)"));
-                double t2Us = Double.parseDouble(csvRecord.get("T2 (us)"));
-                double frequencyGHz = Double.parseDouble(csvRecord.get("Frequency (GHz)"));
-                double anharmonicityGHz = Double.parseDouble(csvRecord.get("Anharmonicity (GHz)"));
-                double readoutAssignmentError = Double.parseDouble(csvRecord.get("Readout assignment error "));
-                double probMeas0Prep1 = Double.parseDouble(csvRecord.get("Prob meas0 prep1 "));
-                double probMeas1Prep0 = Double.parseDouble(csvRecord.get("Prob meas1 prep0 "));
-                double readoutLengthNs = Double.parseDouble(csvRecord.get("Readout length (ns)"));
-                double idError = Double.parseDouble(csvRecord.get("ID error "));
-                double sxError = Double.parseDouble(csvRecord.get("√x (sx) error "));
-                double pauliXError = Double.parseDouble(csvRecord.get("Pauli-X error "));
+                double t1Us = parseDoubleOrDefault(csvRecord.get("T1 (us)"), -1);
+                double t2Us = parseDoubleOrDefault(csvRecord.get("T2 (us)"), -1);
+                double frequencyGHz = parseDoubleOrDefault(csvRecord.get("Frequency (GHz)"), -1);
+                double anharmonicityGHz = parseDoubleOrDefault(csvRecord.get("Anharmonicity (GHz)"), -1);
+                double readoutAssignmentError = parseDoubleOrDefault(csvRecord.get("Readout assignment error "), -1);
+                double probMeas0Prep1 = parseDoubleOrDefault(csvRecord.get("Prob meas0 prep1 "), -1);
+                double probMeas1Prep0 = parseDoubleOrDefault(csvRecord.get("Prob meas1 prep0 "), -1);
+                double readoutLengthNs = parseDoubleOrDefault(csvRecord.get("Readout length (ns)"), -1);
+                double idError = parseDoubleOrDefault(csvRecord.get("ID error "), -1);
+                double sxError = parseDoubleOrDefault(csvRecord.get("√x (sx) error "), -1);
+                double pauliXError = parseDoubleOrDefault(csvRecord.get("Pauli-X error "), -1);
                 String cnotErrors = csvRecord.get("CNOT error ");
                 String gateTimes = csvRecord.get("Gate time (ns)");
 
@@ -87,5 +123,13 @@ public class IBMQTopologyCSVImport {
             System.out.println("Error while reading CSV file: " + e);
         }
         return null;
+    }
+
+    private static double parseDoubleOrDefault(String value, double defaultValue) {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
     }
 }
