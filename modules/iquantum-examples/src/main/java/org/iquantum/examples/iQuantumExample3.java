@@ -1,34 +1,31 @@
 /**
- * iQuantum Example 2
- * This example shows how to create a QDatacenter with two 7-qubit quantum nodes (IBM Oslo and IBM Nairobi),
- * a QBroker, and a list of 4 qulets for testing. Some qulets require more qubits than the quantum nodes.
- * The qulets are submitted to the QBroker and the simulation is started.
- * The results are printed when the simulation is over.
+ * iQuantum Example 3
+ * This example shows how to create a QDatacenter with two 27-qubit quantum nodes following the topology of
+ * IBM Hanoi and IBM Geneva automatically from the datasheet. Then, it creates a QBroker and four Qulets to
+ * be submitted to the QBroker. Finally, it starts the simulation and prints the results.
  */
+
 package org.iquantum.examples;
-import org.iquantum.core.iQuantum;
 import org.iquantum.qbrokers.QBroker;
 import org.iquantum.qdatacenters.QDatacenter;
 import org.iquantum.qdatacenters.QDatacenterCharacteristics;
+import org.iquantum.qnodes.IBMQNode;
 import org.iquantum.qnodes.QNode;
+import org.iquantum.core.iQuantum;
 import org.iquantum.qubitTopologies.QubitTopology;
 import org.iquantum.qulets.Qulet;
 import org.iquantum.schedulers.QuletSchedulerSpaceShared;
 import org.iquantum.utils.Log;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
-
-public class iQuantumExample2 {
+public class iQuantumExample3 {
     private static List<Qulet> quletList;
 
     private static  List<QNode> qNodeList;
 
     public static void main(String[] args) {
-        System.out.println("Start the iQuantum Example 2");
+        System.out.println("Start the iQuantum Example 3");
 
         // Step 1: Initialize the core simulation package. It should be called before creating any entities.
         int num_user = 1;
@@ -36,13 +33,13 @@ public class iQuantumExample2 {
         boolean trace_flag = true;  // trace events
         iQuantum.init(num_user, calendar, trace_flag);
 
-        // Step 2: Create a QDatacenter and two 7-qubit quantum nodes (IBM Oslo and IBM Nairobi)
+        // Step 2: Create a QDatacenter and two quantum nodes (IBM Hanoi and IBM Geneva)
         QDatacenter qDatacenter = createQDatacenter("QDatacenter_0");
 
         // Step 3: Create a QBroker
         QBroker qBroker = createQBroker();
 
-        // Step 4: Create a list of 4 qulets for testing
+        // Step 4: Create a Qulet
         quletList = createQuletList(qDatacenter, qBroker);
 
         // Step 5: Submit qulet to the QBroker
@@ -58,15 +55,9 @@ public class iQuantumExample2 {
         List<Qulet> newList = qBroker.getQuletReceivedList();
         printQuletList(newList);
 
-        Log.printLine("iQuantum Example 2 finished!");
+        Log.printLine("iQuantum Example 3 finished!");
     }
 
-    /**
-     * Create a list of 4 Qulets and set the QBroker and QNode for each Qulet
-     * @param qDatacenter: QDatacenter where the QNode is located
-     * @param qBroker: QBroker that will receive the Qulets
-     * @return A list of 4 Qulets
-     */
     private static List<Qulet> createQuletList(QDatacenter qDatacenter, QBroker qBroker) {
         List<Qulet> quletList = new ArrayList<>();
         // Create Qulet 1
@@ -77,12 +68,16 @@ public class iQuantumExample2 {
         ql1Edges.add(new int[]{1, 3});
         ql1Edges.add(new int[]{2, 1});
         ql1Edges.add(new int[]{3, 1});
-        QubitTopology ql1Topology = new QubitTopology(4, ql1Edges);
-        ArrayList<String> qlGates = new ArrayList<>(Arrays.asList("CX", "RZ", "X"));
-        Qulet qulet1 = new Qulet(0,4, 52, 3000, qlGates, ql1Topology);
-        // Set QBroker for Qulet 1
+        ql1Edges.add(new int[]{3, 4});
+        ql1Edges.add(new int[]{4, 3});
+        ql1Edges.add(new int[]{4, 5});
+        ql1Edges.add(new int[]{5, 4});
+        QubitTopology ql1Topology = new QubitTopology(6, ql1Edges);
+        ArrayList<String> ql1Gates = new ArrayList<>(Arrays.asList("CX", "RZ", "X"));
+        Qulet qulet1 = new Qulet(0,4, 26, 3000, ql1Gates, ql1Topology);
+        // Set QBroker for Qulet
         qulet1.setBrokerId(qBroker.getId());
-        // Set QNode for Qulet 1
+        // Set QNode for Qulet
         qulet1.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(0).getId());
 
         // Create Qulet 2
@@ -92,21 +87,22 @@ public class iQuantumExample2 {
         ql2Edges.add(new int[]{1, 2});
         ql2Edges.add(new int[]{2, 1});
         QubitTopology ql2Topology = new QubitTopology(3, ql2Edges);
-        Qulet qulet2 = new Qulet(1,10, 58, 1000, qlGates, ql2Topology);
+        ArrayList<String> ql2Gates = new ArrayList<>(Arrays.asList("CX", "RZ", "X", "H"));
+        Qulet qulet2 = new Qulet(1,3, 29, 1000, ql2Gates, ql2Topology);
         // Set QBroker for Qulet 2
         qulet2.setBrokerId(qBroker.getId());
         // Set QNode for Qulet 2
         qulet2.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(1).getId());
 
         // Create Qulet 3
-        Qulet qulet3 = new Qulet(2,3, 58, 4000, qlGates, ql2Topology);
+        Qulet qulet3 = new Qulet(2,3, 58, 4000, ql1Gates, ql2Topology);
         // Set QBroker for Qulet 3
         qulet3.setBrokerId(qBroker.getId());
         // Set QNode for Qulet 3
         qulet3.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(1).getId());
 
         // Create Qulet 4
-        Qulet qulet4 = new Qulet(3,8, 78, 2000, qlGates, ql2Topology);
+        Qulet qulet4 = new Qulet(3,8, 78, 2000, ql1Gates, ql2Topology);
         // Set QBroker for Qulet 4
         qulet4.setBrokerId(qBroker.getId());
         // Set QNode for Qulet 4
@@ -137,41 +133,21 @@ public class iQuantumExample2 {
     }
 
     /**
-     * Create a QDatacenter with two 7-qubit quantum nodes (follow the topology of IBM Oslo and IBM Perth)
-     * @param name: name of the QDatacenter
+     * Create a QDatacenter with two quantum nodes (IBM Hanoi and IBM Geneva)
+     * @param name name of the QDatacenter
      * @return QDatacenter
      */
     private static QDatacenter createQDatacenter(String name) {
-        // Create 7-qubit quantum node (IBM Oslo)
-        // Manually create the topology of the quantum node (Automatically create the topology in Example 3)
-        List<int[]> edges_oslo = new ArrayList<>();
-        edges_oslo.add(new int[]{0, 1});
-        edges_oslo.add(new int[]{1, 0});
-        edges_oslo.add(new int[]{1, 2});
-        edges_oslo.add(new int[]{1, 3});
-        edges_oslo.add(new int[]{2, 1});
-        edges_oslo.add(new int[]{3, 1});
-        edges_oslo.add(new int[]{3, 5});
-        edges_oslo.add(new int[]{4, 5});
-        edges_oslo.add(new int[]{5, 3});
-        edges_oslo.add(new int[]{5, 4});
-        edges_oslo.add(new int[]{5, 6});
-        edges_oslo.add(new int[]{6, 5});
-        QubitTopology osloTopology = new QubitTopology(7, edges_oslo);
-        ArrayList<String> gateSet1 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X"));
-        ArrayList<String> gateSet2 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X"));
-        QNode qNodeOslo = new QNode(0, 7,128,2600, gateSet1,
-                osloTopology, new QuletSchedulerSpaceShared());
-        QNode qNodePerth = new QNode(1, 7,128,2900, gateSet2,
-                osloTopology, new QuletSchedulerSpaceShared());
-        qNodeList = new ArrayList<QNode>();
-        qNodeList.add(qNodeOslo);
-        qNodeList.add(qNodePerth);
-
+        // Automatically create two quantum nodes (IBM Hanoi and IBM Geneva) from the dataset
+        QNode qNode1 = IBMQNode.createNode(0,"ibm_hanoi",new QuletSchedulerSpaceShared());
+        QNode qNode2 = IBMQNode.createNode(1,"ibm_geneva",new QuletSchedulerSpaceShared());
+        QubitTopology.printTopology(qNode1.getQubitTopology());
+        qNodeList = new ArrayList<>();
+        qNodeList.addAll(Arrays.asList(qNode1, qNode2));
         double timeZone = 0.0;
         double costPerSec = 3.0;
 
-        // Create a QDatacenter with two 7-qubit quantum nodes (IBM Oslo and IBM Perth)
+        // Create a QDatacenter with two 7-qubit quantum nodes (IBM Hanoi and IBM Geneva)
         QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qNodeList, timeZone, costPerSec);
         QDatacenter qDatacenter = new QDatacenter(name, characteristics);
         return qDatacenter;
@@ -179,7 +155,7 @@ public class iQuantumExample2 {
 
     /**
      * Print the list of Qulets after the simulation
-     * @param list: list of Qulets
+     * @param list list of Qulets
      */
     private static void printQuletList(List<Qulet> list) {
         int size = list.size();
