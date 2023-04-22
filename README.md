@@ -11,17 +11,21 @@ quantum software and systems.
 
 ## Main Features
 The iQuantum project aims to boost research in quantum software and systems,
-particularly focusing on resource management, job scheduling, and hybrid
-quantum-classical task orchestration in quantum computing environments that
-integrate edge and cloud resources.
-- Modeling quantum computing environments with cloud-based resources: Quantum Datacenters (QDatacenter), Quantum Computers (QNode), Quantum Tasks (Qulet), and Quantum Broker (QBroker).
+particularly focusing on resource management, job scheduling, qubit mapping, and
+task orchestration in quantum computing environments that
+integrate cloud-based resources.
+- Modeling quantum computing environments with cloud-based resources: Quantum Datacenters (QDatacenter), 
+Quantum Computers (QNode), Quantum Tasks (Qulet), and Quantum Broker (QBroker).
 - Modeling qulet scheduling algorithms for quantum computing environments.
 - Modeling qubit mapping algorithms for quantum computing environments.
 
 ## Installation
 The downloaded package contains all the source code and examples for iQuantum.
 The installation and execution process is similar to CloudSim 6.0. 
-More details will be updated soon.
+
+## Examples
+The package contains several examples that demonstrate the use of iQuantum.
+The examples are located in the `org.iquantum.examples` package.
 
 ## Contributing
 Pull requests are welcome. 
