@@ -32,7 +32,7 @@ Pull requests are welcome.
 For major changes, please open an issue first to discuss what you would like to change.
 
 ## References
-[1] Hoa T. Nguyen, M. Usman, and R. Buyya, "iQuantum: A Case for Modeling and Simulation of Quantum Computing Environments," 2023. [Online]. Available: arXiv:2303.15729 [quant-ph].
+[1] Hoa T. Nguyen, M. Usman, and R. Buyya, "iQuantum: A Case for Modeling and Simulation of Quantum Computing Environments," 2023. [Online]. Available: [arXiv:2303.15729](https://arxiv.org/abs/2303.15729) [quant-ph].
 
 ## License
 [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)
