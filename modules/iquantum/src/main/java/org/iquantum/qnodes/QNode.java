@@ -20,7 +20,6 @@ public class QNode {
     private double clops;
     private List<String> gateSets;
     private QubitTopology qubitTopology;
-
     private QuletScheduler quletScheduler;
 
     private QDatacenter qDatacenter;

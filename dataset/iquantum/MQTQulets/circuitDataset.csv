@@ -1,0 +1,5 @@
+index,n_qubits,qc_depth,single_qubit_gates,multi_qubit_gates,qubit_topology,qasm_file
+0,27,9,"{'measure': 6, 'rz': 2, 'sx': 1}",{'cx': 5},"(18, 21); (21, 18); (21, 23); (23, 21); (23, 24); (24, 23); (24, 25); (25, 24); (25, 26); (26, 25)",ghz_mapped_ibm_montreal_qiskit_opt3_6.qasm
+1,27,15,"{'rz': 15, 'sx': 9, 'measure': 4}",{'cx': 7},"(10, 12); (12, 10); (12, 13); (12, 15); (13, 12); (15, 12); (15, 18); (18, 15)",dj_mapped_ibm_montreal_qiskit_opt3_5.qasm
+2,27,29,"{'rz': 21, 'sx': 13, 'measure': 5, 'x': 1}",{'cx': 15},"(11, 14); (12, 13); (12, 15); (13, 12); (13, 14); (14, 11); (14, 13); (14, 16); (15, 12); (15, 18); (16, 14); (17, 18); (18, 15); (18, 17); (18, 21); (21, 18)",dj_mapped_ibm_montreal_qiskit_opt3_6.qasm
+3,27,8,"{'measure': 5, 'rz': 2, 'sx': 1}",{'cx': 4},"(21, 23); (23, 21); (23, 24); (24, 23); (24, 25); (25, 24); (25, 26); (26, 25)",ghz_mapped_ibm_montreal_qiskit_opt3_5.qasm

@@ -14,8 +14,8 @@ public class IBMQNode {
         int quantumVolume = 0;
         int clops = 0;
         ArrayList<String> basicGateset;
-        // Predefined common basic gate sets
-        ArrayList<String> basicGateset_1 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X"));
+        // Predefined common basic gate sets: rz, sx, x, measure, cx
+        ArrayList<String> basicGateset_1 = new ArrayList<>(Arrays.asList("cx", "id", "rz", "sx", "x", "measure"));
         ArrayList<String> basicGateset_2 = new ArrayList<>(Arrays.asList("ECR", "ID", "RZ", "SX", "X"));
         switch (node) {
             case "ibm_washington":
