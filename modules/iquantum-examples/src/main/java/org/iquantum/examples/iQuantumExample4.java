@@ -73,8 +73,8 @@ public class iQuantumExample4 {
         ql1Edges.add(new int[]{4, 5});
         ql1Edges.add(new int[]{5, 4});
         QubitTopology ql1Topology = new QubitTopology(6, ql1Edges);
-        ArrayList<String> ql1Gates = new ArrayList<>(Arrays.asList("CX", "RZ", "X"));
-        Qulet qulet1 = new Qulet(0,4, 26, 3000, ql1Gates, ql1Topology);
+        ArrayList<String> ql1Gates = new ArrayList<>(Arrays.asList("cx", "rz", "x"));
+        Qulet qulet1 = new Qulet(1,4, 26, 3000, ql1Gates, ql1Topology);
         // Set QBroker for Qulet
         qulet1.setBrokerId(qBroker.getId());
         // Set QNode for Qulet
@@ -87,22 +87,22 @@ public class iQuantumExample4 {
         ql2Edges.add(new int[]{1, 2});
         ql2Edges.add(new int[]{2, 1});
         QubitTopology ql2Topology = new QubitTopology(3, ql2Edges);
-        ArrayList<String> ql2Gates = new ArrayList<>(Arrays.asList("CX", "RZ", "X", "H"));
-        Qulet qulet2 = new Qulet(1,3, 29, 1000, ql2Gates, ql2Topology);
+        ArrayList<String> ql2Gates = new ArrayList<>(Arrays.asList("cx", "rz", "x","sx"));
+        Qulet qulet2 = new Qulet(2,3, 29, 1000, ql2Gates, ql2Topology);
         // Set QBroker for Qulet 2
         qulet2.setBrokerId(qBroker.getId());
         // Set QNode for Qulet 2
         qulet2.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(1).getId());
 
         // Create Qulet 3
-        Qulet qulet3 = new Qulet(2,3, 58, 4000, ql1Gates, ql2Topology);
+        Qulet qulet3 = new Qulet(3,3, 58, 4000, ql1Gates, ql2Topology);
         // Set QBroker for Qulet 3
         qulet3.setBrokerId(qBroker.getId());
         // Set QNode for Qulet 3
         qulet3.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(1).getId());
 
         // Create Qulet 4
-        Qulet qulet4 = new Qulet(3,8, 78, 2000, ql1Gates, ql2Topology);
+        Qulet qulet4 = new Qulet(4,8, 78, 2000, ql1Gates, ql2Topology);
         // Set QBroker for Qulet 4
         qulet4.setBrokerId(qBroker.getId());
         // Set QNode for Qulet 4
@@ -140,7 +140,7 @@ public class iQuantumExample4 {
     private static QDatacenter createQDatacenter(String name) {
         // Automatically create two quantum nodes (IBM Hanoi and IBM Geneva) from the dataset
         QNode qNode1 = IBMQNode.createNode(0,"ibm_hanoi",new QuletSchedulerSpaceShared());
-        QNode qNode2 = IBMQNode.createNode(1,"ibm_geneva",new QuletSchedulerSpaceShared());
+        QNode qNode2 = IBMQNode.createNode(1,"ibm_washington",new QuletSchedulerSpaceShared());
         QubitTopology.printTopology(qNode1.getQubitTopology());
         qNodeList = new ArrayList<>();
         qNodeList.addAll(Arrays.asList(qNode1, qNode2));
