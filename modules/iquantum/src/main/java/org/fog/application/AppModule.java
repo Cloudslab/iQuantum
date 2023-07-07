@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.math3.util.Pair;
-import org.cloudbus.cloudsim.CloudletScheduler;
-import org.cloudbus.cloudsim.power.PowerVm;
+import org.iquantum.policies.cctasks.CloudletScheduler;
+import org.iquantum.power.PowerVm;
 import org.fog.application.selectivity.SelectivityModel;
 import org.fog.scheduler.TupleScheduler;
 import org.fog.utils.FogUtils;

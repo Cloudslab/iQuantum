@@ -1,14 +1,13 @@
 package org.fog.test.perfeval;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Log;
-import org.cloudbus.cloudsim.Pe;
-import org.cloudbus.cloudsim.Storage;
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.power.PowerHost;
-import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
-import org.cloudbus.cloudsim.sdn.overbooking.BwProvisionerOverbooking;
-import org.cloudbus.cloudsim.sdn.overbooking.PeProvisionerOverbooking;
+import org.iquantum.backends.classical.Host;
+import org.iquantum.backends.classical.Pe;
+import org.iquantum.backends.classical.Storage;
+import org.iquantum.core.iQuantum;
+import org.iquantum.power.PowerHost;
+import org.iquantum.provisioners.RamProvisionerSimple;
+import org.iquantum.sdn.overbooking.BwProvisionerOverbooking;
+import org.iquantum.sdn.overbooking.PeProvisionerOverbooking;
 import org.fog.application.AppEdge;
 import org.fog.application.AppLoop;
 import org.fog.application.Application;
@@ -20,7 +19,6 @@ import org.fog.mobilitydata.DataParser;
 import org.fog.mobilitydata.RandomMobilityGenerator;
 import org.fog.mobilitydata.References;
 import org.fog.placement.LocationHandler;
-import org.fog.placement.MicroservicesController;
 import org.fog.placement.MicroservicesMobilityClusteringController;
 import org.fog.placement.PlacementLogicFactory;
 import org.fog.policy.AppModuleAllocationPolicy;
@@ -33,7 +31,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.*;
-
+import org.iquantum.utils.Log;
 /**
  * Simulation setup for Microservices Application
  * This test covers featured such as,
@@ -86,11 +84,11 @@ public class CardiovascularHealthMonitoringApplication {
             Calendar calendar = Calendar.getInstance();
             boolean trace_flag = false; // mean trace events
 
-            CloudSim.init(num_user, calendar, trace_flag);
+            iQuantum.init(num_user, calendar, trace_flag);
 
             String appId = "Cardiovascular Health Monitoring Application CHM)"; // identifier of the application
 
-            FogBroker broker = new FogBroker("broker");
+            FogBrokerC broker = new FogBrokerC("broker");
 
             Application application = createApplication(appId, broker.getId());
             application.setUserId(broker.getId());
@@ -134,9 +132,9 @@ public class CardiovascularHealthMonitoringApplication {
 
             TimeKeeper.getInstance().setSimulationStartTime(Calendar.getInstance().getTimeInMillis());
 
-            CloudSim.startSimulation();
+            iQuantum.startSimulation();
 
-            CloudSim.stopSimulation();
+            iQuantum.stopSimulation();
 
             Log.printLine("CHM app finished!");
         } catch (Exception e) {
@@ -264,7 +262,7 @@ public class CardiovascularHealthMonitoringApplication {
         LinkedList<Storage> storageList = new LinkedList<Storage>(); // we are not adding SAN
         // devices by now
 
-        FogDeviceCharacteristics characteristics = new FogDeviceCharacteristics(
+        FogDeviceCharacteristicsC characteristics = new FogDeviceCharacteristicsC(
                 arch, os, vmm, host, time_zone, cost, costPerMem,
                 costPerStorage, costPerBw);
 

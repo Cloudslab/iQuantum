@@ -28,8 +28,8 @@
     <orderEntry type="library" name="Maven: org.apache.commons:commons-csv:1.10.0" level="project" />
     <orderEntry type="module" module-name="cloudsim" />
     <orderEntry type="module" module-name="cloudsim" />
-    <orderEntry type="module" module-name="cloudsim-examples" />
-    <orderEntry type="module" module-name="cloudsim-examples" />
+    <orderEntry type="library" name="Maven: org.cloudbus.cloudsim:cloudsim-examples:4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.cloudbus.cloudsim:cloudsim-examples:sources:4.0" level="project" />
     <orderEntry type="module" module-name="documentation" />
   </component>
 </module>

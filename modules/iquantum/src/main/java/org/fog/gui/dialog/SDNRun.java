@@ -22,7 +22,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
-import org.cloudbus.cloudsim.sdn.graph.example.GraphicSDNExample;
+import org.iquantum.sdn.graph.example.GraphicSDNExample;
 
 public class SDNRun extends JDialog {
 	private static final long serialVersionUID = -8313194085507492462L;

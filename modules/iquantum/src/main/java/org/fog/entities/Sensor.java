@@ -2,10 +2,10 @@ package org.fog.entities;
 
 import java.util.ArrayList;
 
-import org.cloudbus.cloudsim.UtilizationModelFull;
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.core.SimEntity;
-import org.cloudbus.cloudsim.core.SimEvent;
+import org.iquantum.models.UtilizationModelFull;
+import org.iquantum.core.iQuantum;
+import org.iquantum.core.SimEntity;
+import org.iquantum.core.SimEvent;
 import org.fog.application.AppEdge;
 import org.fog.application.AppLoop;
 import org.fog.application.Application;
@@ -111,7 +111,7 @@ public class Sensor extends SimEntity{
 				if(!TimeKeeper.getInstance().getLoopIdToTupleIds().containsKey(loop.getLoopId()))
 					TimeKeeper.getInstance().getLoopIdToTupleIds().put(loop.getLoopId(), new ArrayList<Integer>());
 				TimeKeeper.getInstance().getLoopIdToTupleIds().get(loop.getLoopId()).add(tupleId);
-				TimeKeeper.getInstance().getEmitTimes().put(tupleId, CloudSim.clock());
+				TimeKeeper.getInstance().getEmitTimes().put(tupleId, iQuantum.clock());
 				return tupleId;
 			}
 		}
@@ -120,7 +120,7 @@ public class Sensor extends SimEntity{
 	
 	@Override
 	public void startEntity() {
-		send(gatewayDeviceId, CloudSim.getMinTimeBetweenEvents(), FogEvents.SENSOR_JOINED, geoLocation);
+		send(gatewayDeviceId, iQuantum.getMinTimeBetweenEvents(), FogEvents.SENSOR_JOINED, geoLocation);
 		send(getId(), getTransmitDistribution().getNextValue() + transmissionStartDelay, FogEvents.EMIT_TUPLE);
 	}
 

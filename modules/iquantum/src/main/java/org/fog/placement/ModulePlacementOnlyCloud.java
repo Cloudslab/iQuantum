@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.cloudbus.cloudsim.core.CloudSim;
+import org.iquantum.core.iQuantum;
 import org.fog.application.AppEdge;
 import org.fog.application.AppModule;
 import org.fog.application.Application;
@@ -27,13 +27,13 @@ public class ModulePlacementOnlyCloud extends ModulePlacement{
 		this.setModuleToDeviceMap(new HashMap<String, List<Integer>>());
 		this.setDeviceToModuleMap(new HashMap<Integer, List<AppModule>>());
 		this.setModuleInstanceCountMap(new HashMap<Integer, Map<String, Integer>>());
-		this.cloudId = CloudSim.getEntityId("cloud");
+		this.cloudId = iQuantum.getEntityId("cloud");
 		mapModules();
 		computeModuleInstanceCounts();
 	}
 	
 	private void computeModuleInstanceCounts(){
-		FogDevice cloud = getDeviceById(CloudSim.getEntityId("cloud"));
+		FogDevice cloud = getDeviceById(iQuantum.getEntityId("cloud"));
 		getModuleInstanceCountMap().put(cloud.getId(), new HashMap<String, Integer>());
 		
 		for(Sensor sensor : getSensors()){

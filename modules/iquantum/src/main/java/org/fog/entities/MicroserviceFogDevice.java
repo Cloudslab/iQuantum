@@ -1,11 +1,11 @@
 package org.fog.entities;
 
 import org.apache.commons.math3.util.Pair;
-import org.cloudbus.cloudsim.Storage;
-import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmAllocationPolicy;
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.core.SimEvent;
+import org.iquantum.backends.classical.Storage;
+import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.policies.vm.VmAllocationPolicy;
+import org.iquantum.core.iQuantum;
+import org.iquantum.core.SimEvent;
 import org.fog.application.AppEdge;
 import org.fog.application.AppModule;
 import org.fog.application.Application;
@@ -51,7 +51,7 @@ public class MicroserviceFogDevice extends FogDevice {
 
     protected List<PlacementRequest> placementRequests = new ArrayList<>();
 
-    public MicroserviceFogDevice(String name, FogDeviceCharacteristics characteristics, VmAllocationPolicy vmAllocationPolicy, List<Storage> storageList, double schedulingInterval, double uplinkBandwidth, double downlinkBandwidth, double clusterLinkBandwidth, double uplinkLatency, double ratePerMips, String deviceType) throws Exception {
+    public MicroserviceFogDevice(String name, FogDeviceCharacteristicsC characteristics, VmAllocationPolicy vmAllocationPolicy, List<Storage> storageList, double schedulingInterval, double uplinkBandwidth, double downlinkBandwidth, double clusterLinkBandwidth, double uplinkLatency, double ratePerMips, String deviceType) throws Exception {
         super(name, characteristics, vmAllocationPolicy, storageList, schedulingInterval, uplinkBandwidth, downlinkBandwidth, uplinkLatency, ratePerMips);
         setClusterLinkBandwidth(clusterLinkBandwidth);
         setDeviceType(deviceType);
@@ -157,13 +157,13 @@ public class MicroserviceFogDevice extends FogDevice {
         Tuple tuple = (Tuple) ev.getData();
 
         Logger.debug(getName(), "Received tuple " + tuple.getCloudletId() + "with tupleType = " + tuple.getTupleType() + "\t| Source : " +
-                CloudSim.getEntityName(ev.getSource()) + "|Dest : " + CloudSim.getEntityName(ev.getDestination()));
+                iQuantum.getEntityName(ev.getSource()) + "|Dest : " + iQuantum.getEntityName(ev.getDestination()));
 
         if (deviceType.equals(MicroserviceFogDevice.CLOUD)) {
             updateCloudTraffic();
         }
 
-        send(ev.getSource(), CloudSim.getMinTimeBetweenEvents(), FogEvents.TUPLE_ACK);
+        send(ev.getSource(), iQuantum.getMinTimeBetweenEvents(), FogEvents.TUPLE_ACK);
 
         if (FogUtils.appIdToGeoCoverageMap.containsKey(tuple.getAppId())) {
         }
@@ -175,7 +175,7 @@ public class MicroserviceFogDevice extends FogDevice {
 
         if (getHost().getVmList().size() > 0) {
             final AppModule operator = (AppModule) getHost().getVmList().get(0);
-            if (CloudSim.clock() > 0) {
+            if (iQuantum.clock() > 0) {
                 getHost().getVmScheduler().deallocatePesForVm(operator);
                 getHost().getVmScheduler().allocatePesForVm(operator, new ArrayList<Double>() {
                     protected static final long serialVersionUID = 1L;
@@ -338,10 +338,10 @@ public class MicroserviceFogDevice extends FogDevice {
         int fogDeviceCount = 0;
         StringBuilder placementString = new StringBuilder();
         for (int deviceID : perDevice.keySet()) {
-            MicroserviceFogDevice f = (MicroserviceFogDevice) CloudSim.getEntity(deviceID);
+            MicroserviceFogDevice f = (MicroserviceFogDevice) iQuantum.getEntity(deviceID);
             if (!f.getDeviceType().equals(MicroserviceFogDevice.CLOUD))
                 fogDeviceCount++;
-            placementString.append(CloudSim.getEntity(deviceID).getName() + " : ");
+            placementString.append(iQuantum.getEntity(deviceID).getName() + " : ");
             for (Application app : perDevice.get(deviceID).keySet()) {
                 if (MicroservicePlacementConfig.SIMULATION_MODE == "STATIC") {
                     //ACTIVE_APP_UPDATE
@@ -449,7 +449,7 @@ public class MicroserviceFogDevice extends FogDevice {
                     module.setBeingInstantiated(false);
                 }
                 initializePeriodicTuples(module);
-                module.updateVmProcessing(CloudSim.clock(), getVmAllocationPolicy().getHost(module).getVmScheduler()
+                module.updateVmProcessing(iQuantum.clock(), getVmAllocationPolicy().getHost(module).getVmScheduler()
                         .getAllocatedMipsForVm(module));
 
                 System.out.println("Module " + module.getName() + "created on " + getName() + " under Launch module");
@@ -468,7 +468,7 @@ public class MicroserviceFogDevice extends FogDevice {
         JSONObject object = (JSONObject) ev.getData();
         AppModule appModule = (AppModule) object.get("module");
         Application app = (Application) object.get("application");
-        System.out.println(CloudSim.clock() + getName() + " is receiving " + appModule.getName());
+        System.out.println(iQuantum.clock() + getName() + " is receiving " + appModule.getName());
 
         sendNow(getId(), FogEvents.APP_SUBMIT, app);
         sendNow(getId(), FogEvents.LAUNCH_MODULE, appModule);

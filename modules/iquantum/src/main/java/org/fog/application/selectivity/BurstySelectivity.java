@@ -1,6 +1,6 @@
 package org.fog.application.selectivity;
 
-import org.cloudbus.cloudsim.core.CloudSim;
+import org.iquantum.core.iQuantum;
 
 /**
  * Generates an output tuple for every input tuple according to a bursty model.
@@ -37,7 +37,7 @@ public class BurstySelectivity implements SelectivityModel{
 	 */
 	@Override
 	public boolean canSelect() {
-		double time = CloudSim.clock() + getFirstHighTime();
+		double time = iQuantum.clock() + getFirstHighTime();
 		double burstPeriod = getBurstHighPeriod()+getBurstLowPeriod();
 		double burstStartTime = burstPeriod*((int)(time/burstPeriod));
 		if(time <= burstStartTime + getBurstHighPeriod())

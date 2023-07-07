@@ -3,10 +3,10 @@ package org.fog.entities;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cloudbus.cloudsim.Cloudlet;
-import org.cloudbus.cloudsim.UtilizationModel;
+import org.iquantum.tasks.CTask;
+import org.iquantum.models.UtilizationModel;
 
-public class Tuple extends Cloudlet{
+public class Tuple extends CTask {
 
 	public static final int UP = 1;
 	public static final int DOWN = 2;

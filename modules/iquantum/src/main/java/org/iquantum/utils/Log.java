@@ -1,6 +1,6 @@
 /*
- * Title:        CloudSim Toolkit
- * Description:  CloudSim (Cloud Simulation) Toolkit for Modeling and Simulation of Clouds
+ * Title:        iQuantum Toolkit
+ * Description:  iQuantum (Cloud Simulation) Toolkit for Modeling and Simulation of Clouds
  * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
  *
  * Copyright (c) 2009-2012, The University of Melbourne, Australia
@@ -14,7 +14,7 @@ import java.io.OutputStream;
  * substitute the output stream by any OutputStream subclass.
  *
  * @author Anton Beloglazov
- * @since CloudSim Toolkit 2.0
+ * @since iQuantum Toolkit 2.0
  * @todo To add a method to print formatted text, such as the
  * {@link String#format(java.lang.String, java.lang.Object...)} method.
  */

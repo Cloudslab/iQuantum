@@ -1,8 +1,8 @@
 package org.fog.placement;
 
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.core.SimEntity;
-import org.cloudbus.cloudsim.core.SimEvent;
+import org.iquantum.core.iQuantum;
+import org.iquantum.core.SimEntity;
+import org.iquantum.core.SimEvent;
 import org.fog.application.AppEdge;
 import org.fog.application.AppModule;
 import org.fog.application.Application;
@@ -158,7 +158,7 @@ public class ClusteringController extends SimEntity {
                 manageResources();
                 break;
             case FogEvents.STOP_SIMULATION:
-                CloudSim.stopSimulation();
+                iQuantum.stopSimulation();
                 printTimeDetails();
                 printPowerDetails();
                 printCostDetails();
@@ -171,11 +171,11 @@ public class ClusteringController extends SimEntity {
     }
 
     public void clusteringSubmit(List Levels) {
-        System.out.println(CloudSim.clock() + " Start sending Clustering Request to Fog Devices in level: " + Levels);
+        System.out.println(iQuantum.clock() + " Start sending Clustering Request to Fog Devices in level: " + Levels);
         for (int i = 0; i < Levels.size(); i++) {
             int clusterLevel = (int) Levels.get(i);
             for (FogDevice fogDevice : fogDevices) {
-                System.out.println(CloudSim.clock() + " fog Device: " + fogDevice.getName() + " with id: " + fogDevice.getId() + " is at level: " + fogDevice.getLevel());
+                System.out.println(iQuantum.clock() + " fog Device: " + fogDevice.getName() + " with id: " + fogDevice.getId() + " is at level: " + fogDevice.getLevel());
                 if ((int) fogDevice.getLevel() == clusterLevel) {
                     JSONObject jsonMessage = new JSONObject();
                     jsonMessage.put("locationsInfo", getLocator());
@@ -205,8 +205,8 @@ public class ClusteringController extends SimEntity {
         // TODO Auto-generated method stub
         FogDevice fogDevice = (FogDevice) ev.getData();
         FogDevice prevParent = getFogDeviceById(parentReference.get(fogDevice.getId()));
-        FogDevice newParent = getFogDeviceById(locator.determineParent(fogDevice.getId(), CloudSim.clock()));
-        System.out.println(CloudSim.clock() + " Starting Mobility Management for " + fogDevice.getName());
+        FogDevice newParent = getFogDeviceById(locator.determineParent(fogDevice.getId(), iQuantum.clock()));
+        System.out.println(iQuantum.clock() + " Starting Mobility Management for " + fogDevice.getName());
         parentReference.put(fogDevice.getId(), newParent.getId());
         List<String> migratingModules = new ArrayList<String>();
         if (prevParent.getId() != newParent.getId()) {
@@ -427,7 +427,7 @@ public class ClusteringController extends SimEntity {
     }
 
     private void processAppSubmit(Application application) {
-        System.out.println(CloudSim.clock() + " Submitted application " + application.getAppId());
+        System.out.println(iQuantum.clock() + " Submitted application " + application.getAppId());
         FogUtils.appIdToGeoCoverageMap.put(application.getAppId(), application.getGeoCoverage());
         getApplications().put(application.getAppId(), application);
 

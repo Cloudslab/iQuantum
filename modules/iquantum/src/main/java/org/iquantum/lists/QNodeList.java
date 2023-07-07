@@ -7,7 +7,7 @@
  */
 package org.iquantum.lists;
 
-import org.iquantum.qnodes.QNode;
+import org.iquantum.backends.quantum.QNode;
 
 import java.util.List;
 

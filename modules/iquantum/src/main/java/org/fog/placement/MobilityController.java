@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.core.SimEntity;
-import org.cloudbus.cloudsim.core.SimEvent;
+import org.iquantum.core.iQuantum;
+import org.iquantum.core.SimEntity;
+import org.iquantum.core.SimEvent;
 import org.fog.application.AppEdge;
 import org.fog.application.AppModule;
 import org.fog.application.Application;
@@ -146,7 +146,7 @@ public class MobilityController extends SimEntity{
 			manageResources();
 			break;
 		case FogEvents.STOP_SIMULATION:
-			CloudSim.stopSimulation();
+			iQuantum.stopSimulation();
 			printTimeDetails();
 			printPowerDetails();
 			printCostDetails();
@@ -176,8 +176,8 @@ public class MobilityController extends SimEntity{
 		// TODO Auto-generated method stub
 		FogDevice fogDevice = (FogDevice) ev.getData();
 		FogDevice prevParent = getFogDeviceById(parentReference.get(fogDevice.getId()));
-		FogDevice newParent = getFogDeviceById(locator.determineParent(fogDevice.getId(),CloudSim.clock()));
-		System.out.println(CloudSim.clock()+" Starting Mobility Management for "+fogDevice.getName());
+		FogDevice newParent = getFogDeviceById(locator.determineParent(fogDevice.getId(),iQuantum.clock()));
+		System.out.println(iQuantum.clock()+" Starting Mobility Management for "+fogDevice.getName());
 		parentReference.put(fogDevice.getId(),newParent.getId());
 		List<String>migratingModules = new ArrayList<String>();
 		if(prevParent.getId()!=newParent.getId()) {
@@ -386,7 +386,7 @@ public class MobilityController extends SimEntity{
 	}
 	
 	private void processAppSubmit(Application application){
-		System.out.println(CloudSim.clock()+" Submitted application "+ application.getAppId());
+		System.out.println(iQuantum.clock()+" Submitted application "+ application.getAppId());
 		FogUtils.appIdToGeoCoverageMap.put(application.getAppId(), application.getGeoCoverage());
 		getApplications().put(application.getAppId(), application);
 		

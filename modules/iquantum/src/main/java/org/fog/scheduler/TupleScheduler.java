@@ -1,7 +1,7 @@
 package org.fog.scheduler;
 
-import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
-import org.cloudbus.cloudsim.ResCloudlet;
+import org.iquantum.policies.cctasks.CloudletSchedulerTimeShared;
+import org.iquantum.tasks.ResCloudlet;
 
 public class TupleScheduler extends CloudletSchedulerTimeShared{
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.math3.util.Pair;
-import org.cloudbus.cloudsim.core.CloudSim;
+import org.iquantum.core.iQuantum;
 import org.fog.application.AppEdge;
 import org.fog.application.AppModule;
 import org.fog.application.Application;
@@ -64,7 +64,7 @@ public class ModulePlacementMobileEdgewards extends ModulePlacement{
 		for(String deviceName : getModuleMapping().getModuleMapping().keySet()){
 			System.out.println("*****MapModules "+deviceName);
 			for(String moduleName : getModuleMapping().getModuleMapping().get(deviceName)){
-				int deviceId = CloudSim.getEntityId(deviceName);
+				int deviceId = iQuantum.getEntityId(deviceName);
 				getCurrentModuleMap().get(deviceId).add(moduleName);
 				getCurrentModuleLoadMap().get(deviceId).put(moduleName, 0.0);
 				getCurrentModuleInstanceNum().get(deviceId).put(moduleName, 0);
@@ -286,7 +286,7 @@ public class ModulePlacementMobileEdgewards extends ModulePlacement{
 	 * @param deviceId
 	 */
 	private List<String> shiftModuleNorth(String moduleName, double cpuLoad, Integer deviceId, List<String> operatorsToPlace) {
-		System.out.println(CloudSim.getEntityName(deviceId)+" is shifting "+moduleName+" north.");
+		System.out.println(iQuantum.getEntityName(deviceId)+" is shifting "+moduleName+" north.");
 		List<String> modulesToShift = findModulesToShift(moduleName, deviceId);
 		
 		Map<String, Integer> moduleToNumInstances = new HashMap<String, Integer>(); // Map of number of instances of modules that need to be shifted
@@ -460,7 +460,7 @@ public class ModulePlacementMobileEdgewards extends ModulePlacement{
 	
 	@SuppressWarnings("serial")
 	protected List<List<Integer>> getPaths(final int fogDeviceId){
-		FogDevice device = (FogDevice)CloudSim.getEntity(fogDeviceId); 
+		FogDevice device = (FogDevice)iQuantum.getEntity(fogDeviceId); 
 		if(device.getChildrenIds().size() == 0){		
 			final List<Integer> path =  (new ArrayList<Integer>(){{add(fogDeviceId);}});
 			List<List<Integer>> paths = (new ArrayList<List<Integer>>(){{add(path);}});

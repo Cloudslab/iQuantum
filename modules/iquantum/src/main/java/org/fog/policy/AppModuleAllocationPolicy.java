@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmAllocationPolicy;
-import org.fog.application.AppModule;
+import org.iquantum.backends.classical.Host;
+import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.policies.vm.VmAllocationPolicy;
 
 public class AppModuleAllocationPolicy extends VmAllocationPolicy{
 

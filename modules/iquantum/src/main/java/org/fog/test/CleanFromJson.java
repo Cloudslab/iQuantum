@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.cloudbus.cloudsim.Log;
-import org.cloudbus.cloudsim.core.CloudSim;
+import org.iquantum.core.iQuantum;
 import org.fog.application.AppEdge;
 import org.fog.application.AppLoop;
 import org.fog.application.Application;
 import org.fog.application.selectivity.FractionalSelectivity;
-import org.fog.entities.FogBroker;
+import org.fog.entities.FogBrokerC;
 import org.fog.entities.PhysicalTopology;
 import org.fog.entities.Tuple;
 import org.fog.placement.Controller;
 import org.fog.placement.ModuleMapping;
 import org.fog.placement.ModulePlacementEdgewards;
 import org.fog.utils.JsonToTopology;
-
+import org.iquantum.utils.Log;
 /**
  * Simulation setup for EEG Beam Tractor Game extracting physical topology 
  * @author Harshit Gupta
@@ -35,11 +34,11 @@ public class CleanFromJson {
 			Calendar calendar = Calendar.getInstance();
 			boolean trace_flag = false; // mean trace events
 
-			CloudSim.init(num_user, calendar, trace_flag);
+			iQuantum.init(num_user, calendar, trace_flag);
 
 			String appId = "vr_game";
 			
-			FogBroker broker = new FogBroker("broker");
+			FogBrokerC broker = new FogBrokerC("broker");
 			
 			Application application = createApplication(appId, broker.getId());
 			application.setUserId(broker.getId());
@@ -56,9 +55,9 @@ public class CleanFromJson {
 					physicalTopology.getSensors(), physicalTopology.getActuators(), 
 					application, ModuleMapping.createModuleMapping()));
 			
-			CloudSim.startSimulation();
+			iQuantum.startSimulation();
 
-			CloudSim.stopSimulation();
+			iQuantum.stopSimulation();
 
 			Log.printLine("VRGame finished!");
 		} catch (Exception e) {

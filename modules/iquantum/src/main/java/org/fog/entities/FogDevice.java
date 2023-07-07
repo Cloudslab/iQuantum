@@ -1,16 +1,21 @@
 package org.fog.entities;
 
 import org.apache.commons.math3.util.Pair;
-import org.cloudbus.cloudsim.*;
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.core.CloudSimTags;
-import org.cloudbus.cloudsim.core.SimEvent;
-import org.cloudbus.cloudsim.power.PowerDatacenter;
-import org.cloudbus.cloudsim.power.PowerHost;
-import org.cloudbus.cloudsim.power.models.PowerModel;
-import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
-import org.cloudbus.cloudsim.sdn.overbooking.BwProvisionerOverbooking;
-import org.cloudbus.cloudsim.sdn.overbooking.PeProvisionerOverbooking;
+import org.iquantum.*;
+import org.iquantum.core.iQuantum;
+import org.iquantum.core.iQuantumTags;
+import org.iquantum.core.SimEvent;
+import org.iquantum.backends.classical.Host;
+import org.iquantum.backends.classical.Pe;
+import org.iquantum.backends.classical.Storage;
+import org.iquantum.power.PowerCDatacenter;
+import org.iquantum.power.PowerHost;
+import org.iquantum.power.models.PowerModel;
+import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.policies.vm.VmAllocationPolicy;
+import org.iquantum.provisioners.RamProvisionerSimple;
+import org.iquantum.sdn.overbooking.BwProvisionerOverbooking;
+import org.iquantum.sdn.overbooking.PeProvisionerOverbooking;
 import org.fog.application.AppEdge;
 import org.fog.application.AppLoop;
 import org.fog.application.AppModule;
@@ -19,11 +24,12 @@ import org.fog.mobilitydata.Clustering;
 import org.fog.policy.AppModuleAllocationPolicy;
 import org.fog.scheduler.StreamOperatorScheduler;
 import org.fog.utils.*;
+import org.iquantum.tasks.CTask;
 import org.json.simple.JSONObject;
-
+import org.iquantum.utils.Log;
 import java.util.*;
 
-public class FogDevice extends PowerDatacenter {
+public class FogDevice extends PowerCDatacenter {
     protected Queue<Tuple> northTupleQueue;
     protected Queue<Pair<Tuple, Integer>> southTupleQueue;
 
@@ -92,7 +98,7 @@ public class FogDevice extends PowerDatacenter {
 
     public FogDevice(
             String name,
-            FogDeviceCharacteristics characteristics,
+            FogDeviceCharacteristicsC characteristics,
             VmAllocationPolicy vmAllocationPolicy,
             List<Storage> storageList,
             double schedulingInterval,
@@ -185,7 +191,7 @@ public class FogDevice extends PowerDatacenter {
         double costPerStorage = Config.FOG_DEVICE_COST_PER_STORAGE;
         double costPerBw = Config.FOG_DEVICE_COST_PER_BW;
 
-        FogDeviceCharacteristics characteristics = new FogDeviceCharacteristics(
+        FogDeviceCharacteristicsC characteristics = new FogDeviceCharacteristicsC(
                 arch, os, vmm, host, time_zone, cost, costPerMem,
                 costPerStorage, costPerBw);
 
@@ -385,7 +391,7 @@ public class FogDevice extends PowerDatacenter {
          * Since tuples sent through a DOWN application edge are anyways broadcasted, only UP tuples are replicated
          */
         for (int i = 0; i < ((edge.getDirection() == Tuple.UP) ? instanceCount : 1); i++) {
-            //System.out.println(CloudSim.clock()+" : Sending periodic tuple "+edge.getTupleType());
+            //System.out.println(iQuantum.clock()+" : Sending periodic tuple "+edge.getTupleType());
             Tuple tuple = applicationMap.get(module.getAppId()).createTuple(edge, getId(), module.getId());
             updateTimingsOnSending(tuple);
             sendToSelf(tuple);
@@ -420,7 +426,7 @@ public class FogDevice extends PowerDatacenter {
      * @return the double
      */
     protected double updateCloudetProcessingWithoutSchedulingFutureEventsForce() {
-        double currentTime = CloudSim.clock();
+        double currentTime = iQuantum.clock();
         double minTime = Double.MAX_VALUE;
         double timeDiff = currentTime - getLastProcessTime();
         double timeFrameDatacenterEnergy = 0.0;
@@ -506,7 +512,7 @@ public class FogDevice extends PowerDatacenter {
             Host host = list.get(i);
             for (Vm vm : host.getVmList()) {
                 while (vm.getCloudletScheduler().isFinishedCloudlets()) {
-                    Cloudlet cl = vm.getCloudletScheduler().getNextFinishedCloudlet();
+                    CTask cl = vm.getCloudletScheduler().getNextFinishedCloudlet();
                     if (cl != null) {
 
                         cloudletCompleted = true;
@@ -521,7 +527,7 @@ public class FogDevice extends PowerDatacenter {
                             updateTimingsOnSending(resTuple);
                             sendToSelf(resTuple);
                         }
-                        sendNow(cl.getUserId(), CloudSimTags.CLOUDLET_RETURN, cl);
+                        sendNow(cl.getUserId(), iQuantumTags.CLOUDLET_RETURN, cl);
                     }
                 }
             }
@@ -542,7 +548,7 @@ public class FogDevice extends PowerDatacenter {
                 if (!TimeKeeper.getInstance().getLoopIdToTupleIds().containsKey(loop.getLoopId()))
                     TimeKeeper.getInstance().getLoopIdToTupleIds().put(loop.getLoopId(), new ArrayList<Integer>());
                 TimeKeeper.getInstance().getLoopIdToTupleIds().get(loop.getLoopId()).add(tupleId);
-                TimeKeeper.getInstance().getEmitTimes().put(tupleId, CloudSim.clock());
+                TimeKeeper.getInstance().getEmitTimes().put(tupleId, iQuantum.clock());
 
                 //Logger.debug(getName(), "\tSENDING\t"+tuple.getActualTupleId()+"\tSrc:"+srcModule+"\tDest:"+destModule);
 
@@ -554,7 +560,7 @@ public class FogDevice extends PowerDatacenter {
         for (Integer childId : getChildrenIds()) {
             if (targetDeviceId == childId)
                 return childId;
-            if (((FogDevice) CloudSim.getEntity(childId)).getChildIdWithRouteTo(targetDeviceId) != -1)
+            if (((FogDevice) iQuantum.getEntity(childId)).getChildIdWithRouteTo(targetDeviceId) != -1)
                 return childId;
         }
         return -1;
@@ -562,7 +568,7 @@ public class FogDevice extends PowerDatacenter {
 
     protected int getChildIdForTuple(Tuple tuple) {
         if (tuple.getDirection() == Tuple.ACTUATOR) {
-            int gatewayId = ((Actuator) CloudSim.getEntity(tuple.getActuatorId())).getGatewayDeviceId();
+            int gatewayId = ((Actuator) iQuantum.getEntity(tuple.getActuatorId())).getGatewayDeviceId();
             return getChildIdWithRouteTo(gatewayId);
         }
         return -1;
@@ -598,12 +604,12 @@ public class FogDevice extends PowerDatacenter {
         double totalMipsAllocated = 0;
         for (final Vm vm : getHost().getVmList()) {
             AppModule operator = (AppModule) vm;
-            operator.updateVmProcessing(CloudSim.clock(), getVmAllocationPolicy().getHost(operator).getVmScheduler()
+            operator.updateVmProcessing(iQuantum.clock(), getVmAllocationPolicy().getHost(operator).getVmScheduler()
                     .getAllocatedMipsForVm(operator));
             totalMipsAllocated += getHost().getTotalAllocatedMipsForVm(vm);
         }
 
-        double timeNow = CloudSim.clock();
+        double timeNow = iQuantum.clock();
         double currentEnergyConsumption = getEnergyConsumption();
         double newEnergyConsumption = currentEnergyConsumption + (timeNow - lastUtilizationUpdateTime) * getHost().getPowerModel().getPower(lastUtilization);
         setEnergyConsumption(newEnergyConsumption);
@@ -629,7 +635,7 @@ public class FogDevice extends PowerDatacenter {
     }
 
     public void addChild(int childId) {
-        if (CloudSim.getEntityName(childId).toLowerCase().contains("sensor"))
+        if (iQuantum.getEntityName(childId).toLowerCase().contains("sensor"))
             return;
         if (!getChildrenIds().contains(childId) && childId != getId())
             getChildrenIds().add(childId);
@@ -639,7 +645,7 @@ public class FogDevice extends PowerDatacenter {
 
 
     protected void updateCloudTraffic() {
-        int time = (int) CloudSim.clock() / 1000;
+        int time = (int) iQuantum.clock() / 1000;
         if (!cloudTrafficMap.containsKey(time))
             cloudTrafficMap.put(time, 0);
         cloudTrafficMap.put(time, cloudTrafficMap.get(time) + 1);
@@ -660,7 +666,7 @@ public class FogDevice extends PowerDatacenter {
         for (Pair<Integer, Double> actuatorAssociation : getAssociatedActuatorIds()) {
             int actuatorId = actuatorAssociation.getFirst();
             double delay = actuatorAssociation.getSecond();
-            String actuatorType = ((Actuator) CloudSim.getEntity(actuatorId)).getActuatorType();
+            String actuatorType = ((Actuator) iQuantum.getEntity(actuatorId)).getActuatorType();
             if (tuple.getDestModuleName().equals(actuatorType)) {
                 send(actuatorId, delay, FogEvents.TUPLE_ARRIVAL, tuple);
                 return;
@@ -684,13 +690,13 @@ public class FogDevice extends PowerDatacenter {
 			System.out.println(++numClients);
 		}*/
         Logger.debug(getName(), "Received tuple " + tuple.getCloudletId() + "with tupleType = " + tuple.getTupleType() + "\t| Source : " +
-                CloudSim.getEntityName(ev.getSource()) + "|Dest : " + CloudSim.getEntityName(ev.getDestination()));
+                iQuantum.getEntityName(ev.getSource()) + "|Dest : " + iQuantum.getEntityName(ev.getDestination()));
 		
-		/*if(CloudSim.getEntityName(ev.getSource()).equals("drone_0")||CloudSim.getEntityName(ev.getDestination()).equals("drone_0"))
-			System.out.println(CloudSim.clock()+" "+getName()+" Received tuple "+tuple.getCloudletId()+" with tupleType = "+tuple.getTupleType()+"\t| Source : "+
-		CloudSim.getEntityName(ev.getSource())+"|Dest : "+CloudSim.getEntityName(ev.getDestination()));*/
+		/*if(iQuantum.getEntityName(ev.getSource()).equals("drone_0")||iQuantum.getEntityName(ev.getDestination()).equals("drone_0"))
+			System.out.println(iQuantum.clock()+" "+getName()+" Received tuple "+tuple.getCloudletId()+" with tupleType = "+tuple.getTupleType()+"\t| Source : "+
+		iQuantum.getEntityName(ev.getSource())+"|Dest : "+iQuantum.getEntityName(ev.getDestination()));*/
 
-        send(ev.getSource(), CloudSim.getMinTimeBetweenEvents(), FogEvents.TUPLE_ACK);
+        send(ev.getSource(), iQuantum.getMinTimeBetweenEvents(), FogEvents.TUPLE_ACK);
 
         if (FogUtils.appIdToGeoCoverageMap.containsKey(tuple.getAppId())) {
         }
@@ -702,7 +708,7 @@ public class FogDevice extends PowerDatacenter {
 
         if (getHost().getVmList().size() > 0) {
             final AppModule operator = (AppModule) getHost().getVmList().get(0);
-            if (CloudSim.clock() > 0) {
+            if (iQuantum.clock() > 0) {
                 getHost().getVmScheduler().deallocatePesForVm(operator);
                 getHost().getVmScheduler().allocatePesForVm(operator, new ArrayList<Double>() {
                     protected static final long serialVersionUID = 1L;
@@ -773,7 +779,7 @@ public class FogDevice extends PowerDatacenter {
                 }
                 double currentAverage = TimeKeeper.getInstance().getLoopIdToCurrentAverage().get(loop.getLoopId());
                 int currentCount = TimeKeeper.getInstance().getLoopIdToCurrentNum().get(loop.getLoopId());
-                double delay = CloudSim.clock() - TimeKeeper.getInstance().getEmitTimes().get(tuple.getActualTupleId());
+                double delay = iQuantum.clock() - TimeKeeper.getInstance().getEmitTimes().get(tuple.getActualTupleId());
                 TimeKeeper.getInstance().getEmitTimes().remove(tuple.getActualTupleId());
                 double newAverage = (currentAverage * currentCount + delay) / (currentCount + 1);
                 TimeKeeper.getInstance().getLoopIdToCurrentAverage().put(loop.getLoopId(), newAverage);
@@ -784,7 +790,7 @@ public class FogDevice extends PowerDatacenter {
     }
 
     protected void processSensorJoining(SimEvent ev) {
-        send(ev.getSource(), CloudSim.getMinTimeBetweenEvents(), FogEvents.TUPLE_ACK);
+        send(ev.getSource(), iQuantum.getMinTimeBetweenEvents(), FogEvents.TUPLE_ACK);
     }
 
     protected void executeTuple(SimEvent ev, String moduleName) {
@@ -830,7 +836,7 @@ public class FogDevice extends PowerDatacenter {
 
         initializePeriodicTuples(module);
 
-        module.updateVmProcessing(CloudSim.clock(), getVmAllocationPolicy().getHost(module).getVmScheduler()
+        module.updateVmProcessing(iQuantum.clock(), getVmAllocationPolicy().getHost(module).getVmScheduler()
                 .getAllocatedMipsForVm(module));
 
     }
@@ -913,7 +919,7 @@ public class FogDevice extends PowerDatacenter {
 
 
     protected void sendToSelf(Tuple tuple) {
-        send(getId(), CloudSim.getMinTimeBetweenEvents(), FogEvents.TUPLE_ARRIVAL, tuple);
+        send(getId(), iQuantum.getMinTimeBetweenEvents(), FogEvents.TUPLE_ARRIVAL, tuple);
     }
 
     public PowerHost getHost() {

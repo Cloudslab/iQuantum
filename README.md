@@ -16,7 +16,7 @@ task orchestration in quantum computing environments that
 integrate cloud-based resources.
 - Modeling quantum computing environments with cloud-based resources: Quantum Datacenters (QDatacenter), 
 Quantum Computers (QNode), Quantum Tasks (Qulet), and Quantum Broker (QBroker).
-- Modeling qulet scheduling algorithms for quantum computing environments.
+- Modeling QTask scheduling algorithms for quantum computing environments.
 - Modeling qubit mapping algorithms for quantum computing environments.
 
 ## Installation

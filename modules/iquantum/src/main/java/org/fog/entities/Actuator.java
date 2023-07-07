@@ -1,8 +1,8 @@
 package org.fog.entities;
 
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.core.SimEntity;
-import org.cloudbus.cloudsim.core.SimEvent;
+import org.iquantum.core.iQuantum;
+import org.iquantum.core.SimEntity;
+import org.iquantum.core.SimEvent;
 import org.fog.application.AppLoop;
 import org.fog.application.Application;
 import org.fog.utils.FogEvents;
@@ -70,7 +70,7 @@ public class Actuator extends SimEntity{
 				}
 				double currentAverage = TimeKeeper.getInstance().getLoopIdToCurrentAverage().get(loop.getLoopId());
 				int currentCount = TimeKeeper.getInstance().getLoopIdToCurrentNum().get(loop.getLoopId());
-				double delay = CloudSim.clock()- TimeKeeper.getInstance().getEmitTimes().get(tuple.getActualTupleId());
+				double delay = iQuantum.clock()- TimeKeeper.getInstance().getEmitTimes().get(tuple.getActualTupleId());
 				TimeKeeper.getInstance().getEmitTimes().remove(tuple.getActualTupleId());
 				double newAverage = (currentAverage*currentCount + delay)/(currentCount+1);
 				TimeKeeper.getInstance().getLoopIdToCurrentAverage().put(loop.getLoopId(), newAverage);

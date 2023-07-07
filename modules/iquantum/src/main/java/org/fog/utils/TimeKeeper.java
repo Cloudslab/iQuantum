@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.math3.util.Pair;
-import org.cloudbus.cloudsim.core.CloudSim;
+import org.iquantum.core.iQuantum;
 import org.fog.entities.Tuple;
 
 public class TimeKeeper {
@@ -42,13 +42,13 @@ public class TimeKeeper {
 	}
 	
 	public void tupleStartedExecution(Tuple tuple){
-		tupleIdToCpuStartTime.put(tuple.getCloudletId(), CloudSim.clock());
+		tupleIdToCpuStartTime.put(tuple.getCloudletId(), iQuantum.clock());
 	}
 	
 	public void tupleEndedExecution(Tuple tuple){
 		if(!tupleIdToCpuStartTime.containsKey(tuple.getCloudletId()))
 			return;
-		double executionTime = CloudSim.clock() - tupleIdToCpuStartTime.get(tuple.getCloudletId());
+		double executionTime = iQuantum.clock() - tupleIdToCpuStartTime.get(tuple.getCloudletId());
 		if(!tupleTypeToAverageCpuTime.containsKey(tuple.getTupleType())){
 			tupleTypeToAverageCpuTime.put(tuple.getTupleType(), executionTime);
 			tupleTypeToExecutedTupleCount.put(tuple.getTupleType(), 1);
