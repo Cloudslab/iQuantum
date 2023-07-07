@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.cloudbus.cloudsim</groupId>
-  <artifactId>cloudsim-package</artifactId>
+  <groupId>org.iquantum</groupId>
+  <artifactId>iquantum-package</artifactId>
   <version>1.0</version>
   <packaging>pom</packaging>
-  <name>cloudsim-package</name>
-  <description>CloudSim: A Framework For Modeling And Simulation Of Cloud Computing Infrastructures And Services</description>
-  <url>http://www.cloudbus.org/cloudsim/</url>
+  <name>iquantum-package</name>
+  <description>iQuantum: A Toolkit for Modeling and Simulation of Quantum Computing Environments</description>
+  <url>http://www.cloudbus.org/iquantum/</url>
   
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -56,12 +56,7 @@
   		</dependency>
   		<dependency>
   			<groupId>${project.groupId}</groupId>
-  			<artifactId>cloudsim</artifactId>
-  			<version>${project.version}</version>
-  		</dependency>
-  		<dependency>
-  			<groupId>${project.groupId}</groupId>
-  			<artifactId>cloudsim-examples</artifactId>
+  			<artifactId>iquantum</artifactId>
   			<version>${project.version}</version>
   		</dependency>
 
