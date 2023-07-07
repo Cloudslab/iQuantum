@@ -1,8 +1,8 @@
 package org.fog.placement;
 
 import org.apache.commons.math3.util.Pair;
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.core.SimEvent;
+import org.iquantum.core.iQuantum;
+import org.iquantum.core.SimEvent;
 import org.fog.application.AppEdge;
 import org.fog.application.AppModule;
 import org.fog.application.Application;
@@ -95,7 +95,7 @@ public class MicroservicesMobilityClusteringController extends MicroservicesCont
                 processMobility(ev);
                 break;
             case FogEvents.STOP_SIMULATION:
-                CloudSim.stopSimulation();
+                iQuantum.stopSimulation();
                 printTimeDetails();
                 printPowerDetails();
                 printCostDetails();
@@ -167,8 +167,8 @@ public class MicroservicesMobilityClusteringController extends MicroservicesCont
         // TODO Auto-generated method stub
         FogDevice fogDevice = (FogDevice) ev.getData();
         FogDevice prevParent = getFogDeviceById(parentReference.get(fogDevice.getId()));
-        FogDevice newParent = getFogDeviceById(locator.determineParent(fogDevice.getId(), CloudSim.clock()));
-        System.out.println(CloudSim.clock() + " Starting Mobility Management for " + fogDevice.getName());
+        FogDevice newParent = getFogDeviceById(locator.determineParent(fogDevice.getId(), iQuantum.clock()));
+        System.out.println(iQuantum.clock() + " Starting Mobility Management for " + fogDevice.getName());
         parentReference.put(fogDevice.getId(), newParent.getId());
         Map<String, Integer> migratingModules = new HashMap<>(); // migrating module _> it's device (can be preParent or  device the same cluster
         setNewOrchestratorNode(fogDevice,newParent);
@@ -416,11 +416,11 @@ public class MicroservicesMobilityClusteringController extends MicroservicesCont
 
 
     public void clusteringSubmit(List Levels) {
-        System.out.println(CloudSim.clock() + " Start sending Clustering Request to Fog Devices in level: " + Levels);
+        System.out.println(iQuantum.clock() + " Start sending Clustering Request to Fog Devices in level: " + Levels);
         for (int i = 0; i < Levels.size(); i++) {
             int clusterLevel = (int) Levels.get(i);
             for (FogDevice fogDevice : fogDevices) {
-                System.out.println(CloudSim.clock() + " fog Device: " + fogDevice.getName() + " with id: " + fogDevice.getId() + " is at level: " + fogDevice.getLevel());
+                System.out.println(iQuantum.clock() + " fog Device: " + fogDevice.getName() + " with id: " + fogDevice.getId() + " is at level: " + fogDevice.getLevel());
                 if ((int) fogDevice.getLevel() == clusterLevel) {
                     JSONObject jsonMessage = new JSONObject();
                     jsonMessage.put("locationsInfo", getLocator());

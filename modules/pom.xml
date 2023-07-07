@@ -12,7 +12,6 @@
   
   <modules>
     <module>iquantum</module>
-    <module>cloudsim-examples</module>
     <module>iquantum-examples</module>
   </modules>
 

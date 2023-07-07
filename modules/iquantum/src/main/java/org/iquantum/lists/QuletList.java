@@ -7,7 +7,7 @@
  */
 package org.iquantum.lists;
 
-import org.iquantum.qulets.Qulet;
+import org.iquantum.tasks.QTask;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,13 +15,13 @@ import java.util.List;
 
 public class QuletList {
     /**
-     * Gets a {@link Qulet} with a given id.
+     * Gets a {@link QTask} with a given id.
      *
      * @param quletList the list of existing Qulets
      * @param id the Qulet id
      * @return a Qulet with the given ID or $null if not found
      */
-    public static <T extends Qulet> T getById(List<T> quletList, int id) {
+    public static <T extends QTask> T getById(List<T> quletList, int id) {
         for (T qulet : quletList) {
             if (qulet.getQuletId() == id) {
                 return qulet;
@@ -37,7 +37,7 @@ public class QuletList {
      * @param id the Qulet id
      * @return the position of the Qulet with the given id or -1 if not found
      */
-    public static <T extends Qulet> int getPositionById(List<T> quletList, int id) {
+    public static <T extends QTask> int getPositionById(List<T> quletList, int id) {
         int i = 0 ;
         for (T qulet : quletList) {
             if (qulet.getQuletId() == id) {
@@ -55,7 +55,7 @@ public class QuletList {
      * @pre $none
      * @post $none
      */
-    public static <T extends Qulet> void sort(List<T> QuletList) {
+    public static <T extends QTask> void sort(List<T> QuletList) {
         Collections.sort(QuletList, new Comparator<T>() {
 
             /**

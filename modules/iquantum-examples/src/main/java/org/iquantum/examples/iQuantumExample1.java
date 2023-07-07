@@ -7,13 +7,13 @@
 package org.iquantum.examples;
 
 import org.iquantum.core.iQuantum;
-import org.iquantum.qbrokers.QBroker;
-import org.iquantum.qdatacenters.QDatacenter;
-import org.iquantum.qdatacenters.QDatacenterCharacteristics;
-import org.iquantum.qnodes.QNode;
-import org.iquantum.qubitTopologies.QubitTopology;
-import org.iquantum.qulets.Qulet;
-import org.iquantum.schedulers.QuletSchedulerSpaceShared;
+import org.iquantum.brokers.QBroker;
+import org.iquantum.datacenters.QDatacenter;
+import org.iquantum.datacenters.QDatacenterCharacteristics;
+import org.iquantum.backends.quantum.QNode;
+import org.iquantum.tasks.QTask;
+import org.iquantum.tasks.qubittopologies.QubitTopology;
+import org.iquantum.policies.qctasks.QuletSchedulerSpaceShared;
 import org.iquantum.utils.Log;
 
 import java.text.DecimalFormat;
@@ -24,7 +24,7 @@ import java.util.List;
 
 
 public class iQuantumExample1 {
-    private static List<Qulet> quletList;
+    private static List<QTask> QTaskList;
 
     private static  List<QNode> qNodeList;
 
@@ -44,10 +44,10 @@ public class iQuantumExample1 {
         QBroker qBroker = createQBroker();
 
         // Step 4: Create a list of 1 qulets for testing
-        quletList = createQuletList(qDatacenter, qBroker);
+        QTaskList = createQuletList(qDatacenter, qBroker);
 
         // Step 5: Submit qulet to the QBroker
-        qBroker.submitQuletList(quletList);
+        qBroker.submitQuletList(QTaskList);
 
         // Step 6: Start the simulation
         iQuantum.startSimulation();
@@ -56,7 +56,7 @@ public class iQuantumExample1 {
         iQuantum.stopSimulation();
 
         // Step 8: Print the results when simulation is over
-        List<Qulet> newList = qBroker.getQuletReceivedList();
+        List<QTask> newList = qBroker.getQuletReceivedList();
         printQuletList(newList);
 
         Log.printLine("iQuantum Example 1 finished!");
@@ -68,8 +68,8 @@ public class iQuantumExample1 {
      * @param qBroker: QBroker that will receive the Qulet
      * @return A list of 1 Qulet
      */
-    private static List<Qulet> createQuletList(QDatacenter qDatacenter, QBroker qBroker) {
-        List<Qulet> quletList = new ArrayList<>();
+    private static List<QTask> createQuletList(QDatacenter qDatacenter, QBroker qBroker) {
+        List<QTask> QTaskList = new ArrayList<>();
         // Create Qulet 1
         List<int[]> ql1Edges = new ArrayList<>();
         ql1Edges.add(new int[]{0, 1});
@@ -80,15 +80,15 @@ public class iQuantumExample1 {
         ql1Edges.add(new int[]{3, 1});
         ArrayList<String> qlGates = new ArrayList<>(Arrays.asList("CX", "RZ", "X"));
         QubitTopology ql1Topology = new QubitTopology(4, ql1Edges);
-        Qulet qulet1 = new Qulet(0,4, 25, 4096, qlGates, ql1Topology);
+        QTask QTask1 = new QTask(0,4, 25, 4096, qlGates, ql1Topology);
         // Set QBroker for Qulet 1
-        qulet1.setBrokerId(qBroker.getId());
+        QTask1.setBrokerId(qBroker.getId());
         // Set QNode for Qulet 1
-        qulet1.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(0).getId());
+        QTask1.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(0).getId());
         // Add all Qulets to the list
-        quletList.add(qulet1);
+        QTaskList.add(QTask1);
 
-        return quletList;
+        return QTaskList;
     }
 
     /**
@@ -146,9 +146,9 @@ public class iQuantumExample1 {
      * Print the list of Qulets after the simulation
      * @param list: list of Qulets
      */
-    private static void printQuletList(List<Qulet> list) {
+    private static void printQuletList(List<QTask> list) {
         int size = list.size();
-        Qulet qulet;
+        QTask QTask;
 
         String indent = "   ";
         Log.printLine();
@@ -159,18 +159,18 @@ public class iQuantumExample1 {
 
         DecimalFormat dft = new DecimalFormat("###.##");
         for (int i = 0; i < size; i++) {
-            qulet = list.get(i);
-            Log.print(indent + qulet.getQuletId() + indent + indent);
-            if (qulet.getQuletStatus() == Qulet.SUCCESS) {
+            QTask = list.get(i);
+            Log.print(indent + QTask.getQuletId() + indent + indent);
+            if (QTask.getQuletStatus() == QTask.SUCCESS) {
                 Log.print("SUCCESS");
-                Log.printLine(indent + indent + qulet.getResourceId()
-                        + indent + indent + indent + qulet.getQNodeId()
-                        + indent + indent + indent + dft.format(qulet.getActualQPUTime())
-                        + indent + indent + indent + indent + dft.format(qulet.getExecStartTime())
-                        + indent + indent + indent + dft.format(qulet.getFinishTime()));
+                Log.printLine(indent + indent + QTask.getResourceId()
+                        + indent + indent + indent + QTask.getQNodeId()
+                        + indent + indent + indent + dft.format(QTask.getActualQPUTime())
+                        + indent + indent + indent + indent + dft.format(QTask.getExecStartTime())
+                        + indent + indent + indent + dft.format(QTask.getFinishTime()));
             }
             else {
-                Log.printLine(qulet.getQuletStatusString());
+                Log.printLine(QTask.getQuletStatusString());
             }
         }
     }

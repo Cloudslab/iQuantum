@@ -1,9 +1,9 @@
 package org.fog.placement;
 
 import org.apache.commons.math3.util.Pair;
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.core.SimEntity;
-import org.cloudbus.cloudsim.core.SimEvent;
+import org.iquantum.core.iQuantum;
+import org.iquantum.core.SimEntity;
+import org.iquantum.core.SimEvent;
 import org.fog.application.AppLoop;
 import org.fog.application.AppModule;
 import org.fog.application.Application;
@@ -213,7 +213,7 @@ public class MicroservicesController extends SimEntity {
                 manageResources();
                 break;
             case FogEvents.STOP_SIMULATION:
-                CloudSim.stopSimulation();
+                iQuantum.stopSimulation();
                 printTimeDetails();
                 printPowerDetails();
                 printCostDetails();
@@ -344,7 +344,7 @@ public class MicroservicesController extends SimEntity {
     protected void connectWithLatencies() {
         for (FogDevice fogDevice : fogDevices) {
             if (fogDevice.getParentId() >= 0) {
-                FogDevice parent = (FogDevice) CloudSim.getEntity(fogDevice.getParentId());
+                FogDevice parent = (FogDevice) iQuantum.getEntity(fogDevice.getParentId());
                 if (parent == null)
                     continue;
                 double latency = fogDevice.getUplinkLatency();

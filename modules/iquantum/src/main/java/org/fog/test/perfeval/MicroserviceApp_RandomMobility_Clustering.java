@@ -1,15 +1,14 @@
 package org.fog.test.perfeval;
 
 import org.apache.commons.math3.util.Pair;
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Log;
-import org.cloudbus.cloudsim.Pe;
-import org.cloudbus.cloudsim.Storage;
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.power.PowerHost;
-import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
-import org.cloudbus.cloudsim.sdn.overbooking.BwProvisionerOverbooking;
-import org.cloudbus.cloudsim.sdn.overbooking.PeProvisionerOverbooking;
+import org.iquantum.backends.classical.Host;
+import org.iquantum.backends.classical.Pe;
+import org.iquantum.backends.classical.Storage;
+import org.iquantum.core.iQuantum;
+import org.iquantum.power.PowerHost;
+import org.iquantum.provisioners.RamProvisionerSimple;
+import org.iquantum.sdn.overbooking.BwProvisionerOverbooking;
+import org.iquantum.sdn.overbooking.PeProvisionerOverbooking;
 import org.fog.application.AppEdge;
 import org.fog.application.AppLoop;
 import org.fog.application.Application;
@@ -30,7 +29,7 @@ import org.fog.utils.FogUtils;
 import org.fog.utils.TimeKeeper;
 import org.fog.utils.distribution.DeterministicDistribution;
 import org.json.simple.parser.ParseException;
-
+import org.iquantum.utils.Log;
 import java.io.IOException;
 import java.util.*;
 
@@ -78,9 +77,9 @@ public class MicroserviceApp_RandomMobility_Clustering {
             Calendar calendar = Calendar.getInstance();
             boolean trace_flag = false; // mean trace events
 
-            CloudSim.init(num_user, calendar, trace_flag);
+            iQuantum.init(num_user, calendar, trace_flag);
 
-            FogBroker broker = new FogBroker("broker");
+            FogBrokerC broker = new FogBrokerC("broker");
 
             /**
              * Microservices-based application creation - a single application is selected for this
@@ -137,9 +136,9 @@ public class MicroserviceApp_RandomMobility_Clustering {
 
             TimeKeeper.getInstance().setSimulationStartTime(Calendar.getInstance().getTimeInMillis());
 
-            CloudSim.startSimulation();
+            iQuantum.startSimulation();
 
-            CloudSim.stopSimulation();
+            iQuantum.stopSimulation();
 
             Log.printLine("VRGame finished!");
         } catch (Exception e) {
@@ -268,7 +267,7 @@ public class MicroserviceApp_RandomMobility_Clustering {
         LinkedList<Storage> storageList = new LinkedList<Storage>(); // we are not adding SAN
         // devices by now
 
-        FogDeviceCharacteristics characteristics = new FogDeviceCharacteristics(
+        FogDeviceCharacteristicsC characteristics = new FogDeviceCharacteristicsC(
                 arch, os, vmm, host, time_zone, cost, costPerMem,
                 costPerStorage, costPerBw);
 

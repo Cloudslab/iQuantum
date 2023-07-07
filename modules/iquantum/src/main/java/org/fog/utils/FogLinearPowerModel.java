@@ -1,6 +1,6 @@
 package org.fog.utils;
 
-import org.cloudbus.cloudsim.power.models.PowerModel;
+import org.iquantum.power.models.PowerModel;
 
 /**
  * The Class PowerModelLinear.
@@ -16,7 +16,7 @@ import org.cloudbus.cloudsim.power.models.PowerModel;
  * @author Anton Beloglazov
  * 
  * @author Anton Beloglazov
- * @since CloudSim Toolkit 2.0
+ * @since iQuantum Toolkit 2.0
  */
 public class FogLinearPowerModel implements PowerModel {
 
@@ -43,7 +43,7 @@ public class FogLinearPowerModel implements PowerModel {
 
 	/*
 	 * (non-Javadoc)
-	 * @see cloudsim.power.PowerModel#getPower(double)
+	 * @see iQuantum.power.PowerModel#getPower(double)
 	 */
 	@Override
 	public double getPower(double utilization) throws IllegalArgumentException {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.cloudbus.cloudsim.core.CloudSim;
+import org.iquantum.core.iQuantum;
 import org.fog.application.AppModule;
 import org.fog.application.Application;
 import org.fog.entities.FogDevice;
@@ -33,11 +33,11 @@ public abstract class ModulePlacement {
 	}
 
 	protected int getParentDevice(int fogDeviceId){
-		return ((FogDevice)CloudSim.getEntity(fogDeviceId)).getParentId();
+		return ((FogDevice)iQuantum.getEntity(fogDeviceId)).getParentId();
 	}
 
 	protected FogDevice getFogDeviceById(int fogDeviceId){
-		return (FogDevice)CloudSim.getEntity(fogDeviceId);
+		return (FogDevice)iQuantum.getEntity(fogDeviceId);
 	}
 
 	protected boolean createModuleInstanceOnDevice(AppModule _module, final FogDevice device, int instanceCount){

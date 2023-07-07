@@ -2,7 +2,7 @@ package org.fog.utils;
 
 import java.text.DecimalFormat;
 
-import org.cloudbus.cloudsim.core.CloudSim;
+import org.iquantum.core.iQuantum;
 
 public class Logger {
 	
@@ -22,13 +22,13 @@ public class Logger {
 		if(!ENABLED)
 			return;
 		if(Logger.LOG_LEVEL <= Logger.DEBUG)
-			System.out.println(df.format(CloudSim.clock())+" : "+name+" : "+message);
+			System.out.println(df.format(iQuantum.clock())+" : "+name+" : "+message);
 	}
 	public static void error(String name, String message){
 		if(!ENABLED)
 			return;
 		if(Logger.LOG_LEVEL <= Logger.ERROR)
-			System.out.println(df.format(CloudSim.clock())+" : "+name+" : "+message);
+			System.out.println(df.format(iQuantum.clock())+" : "+name+" : "+message);
 	}
 	
 }

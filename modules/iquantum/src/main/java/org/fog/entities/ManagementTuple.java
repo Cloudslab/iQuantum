@@ -1,7 +1,7 @@
 package org.fog.entities;
 
 import org.apache.commons.math3.util.Pair;
-import org.cloudbus.cloudsim.UtilizationModelFull;
+import org.iquantum.models.UtilizationModelFull;
 import org.fog.application.Application;
 import org.fog.utils.ModuleLaunchConfig;
 

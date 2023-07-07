@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Pe;
-import org.cloudbus.cloudsim.Storage;
-import org.cloudbus.cloudsim.power.PowerHost;
-import org.cloudbus.cloudsim.power.models.PowerModelLinear;
-import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
-import org.cloudbus.cloudsim.sdn.overbooking.BwProvisionerOverbooking;
-import org.cloudbus.cloudsim.sdn.overbooking.PeProvisionerOverbooking;
+import org.iquantum.backends.classical.Host;
+import org.iquantum.backends.classical.Pe;
+import org.iquantum.backends.classical.Storage;
+import org.iquantum.power.PowerHost;
+import org.iquantum.power.models.PowerModelLinear;
+import org.iquantum.provisioners.RamProvisionerSimple;
+import org.iquantum.sdn.overbooking.BwProvisionerOverbooking;
+import org.iquantum.sdn.overbooking.PeProvisionerOverbooking;
 import org.fog.entities.FogDevice;
-import org.fog.entities.FogDeviceCharacteristics;
+import org.fog.entities.FogDeviceCharacteristicsC;
 import org.fog.policy.AppModuleAllocationPolicy;
 import org.fog.scheduler.StreamOperatorScheduler;
 
@@ -54,7 +54,7 @@ public class FogEntityFactory {
 		LinkedList<Storage> storageList = new LinkedList<Storage>(); // we are not adding SAN
 													// devices by now
 
-		FogDeviceCharacteristics characteristics = new FogDeviceCharacteristics(
+		FogDeviceCharacteristicsC characteristics = new FogDeviceCharacteristicsC(
 				arch, os, vmm, host, time_zone, cost, costPerMem,
 				costPerStorage, costPerBw);
 

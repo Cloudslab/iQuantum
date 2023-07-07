@@ -235,7 +235,7 @@ public class FogGui extends JFrame {
         btnRun = new JButton(run);
         btnRun.setToolTipText("Start simulation");
         JButton btnExit = new JButton(exit);
-        btnExit.setToolTipText("Exit CloudSim");
+        btnExit.setToolTipText("Exit iQuantum");
         toolbar.setAlignmentX(0);
         
         
@@ -418,7 +418,7 @@ public class FogGui extends JFrame {
         
         JMenuItem fileExit = new JMenuItem("Exit");
         fileExit.setMnemonic(KeyEvent.VK_C);
-        fileExit.setToolTipText("Exit CloudSim");
+        fileExit.setToolTipText("Exit iQuantum");
         fileExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,
             ActionEvent.CTRL_MASK));
 

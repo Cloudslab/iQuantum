@@ -32,7 +32,7 @@ class About extends JDialog {
 
         add(Box.createRigidArea(new Dimension(0, 10)));
 
-        JLabel name = new JLabel("CloudSim SDN, 1.00");
+        JLabel name = new JLabel("iQuantum SDN, 1.00");
         name.setFont(new Font("Serif", Font.BOLD, 15));
         name.setAlignmentX(0.5f);
         add(name);
@@ -51,7 +51,7 @@ class About extends JDialog {
 
         setModalityType(ModalityType.APPLICATION_MODAL);
 
-        setTitle("About CloudSim");
+        setTitle("About iQuantum");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setSize(350, 300);

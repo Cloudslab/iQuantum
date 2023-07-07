@@ -1,14 +1,13 @@
 package org.fog.test.perfeval;
 
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Log;
-import org.cloudbus.cloudsim.Pe;
-import org.cloudbus.cloudsim.Storage;
-import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.power.PowerHost;
-import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
-import org.cloudbus.cloudsim.sdn.overbooking.BwProvisionerOverbooking;
-import org.cloudbus.cloudsim.sdn.overbooking.PeProvisionerOverbooking;
+import org.iquantum.backends.classical.Host;
+import org.iquantum.backends.classical.Pe;
+import org.iquantum.backends.classical.Storage;
+import org.iquantum.core.iQuantum;
+import org.iquantum.power.PowerHost;
+import org.iquantum.provisioners.RamProvisionerSimple;
+import org.iquantum.sdn.overbooking.BwProvisionerOverbooking;
+import org.iquantum.sdn.overbooking.PeProvisionerOverbooking;
 import org.fog.application.AppEdge;
 import org.fog.application.AppLoop;
 import org.fog.application.Application;
@@ -29,7 +28,7 @@ import org.fog.utils.distribution.DeterministicDistribution;
 
 import java.io.IOException;
 import java.util.*;
-
+import org.iquantum.utils.Log;
 /**
  * Simulation setup for IoT Drone
  *
@@ -58,11 +57,11 @@ public class TranslationServiceFog {
             Calendar calendar = Calendar.getInstance();
             boolean trace_flag = false; // mean trace events
 
-            CloudSim.init(num_user, calendar, trace_flag);
+            iQuantum.init(num_user, calendar, trace_flag);
 
             String appId = "Translation_Service"; // identifier of the application
 
-            FogBroker broker = new FogBroker("broker");
+            FogBrokerC broker = new FogBrokerC("broker");
 
             Application application = createApplication(appId, broker.getId());
             application.setUserId(broker.getId());
@@ -90,9 +89,9 @@ public class TranslationServiceFog {
 
             TimeKeeper.getInstance().setSimulationStartTime(Calendar.getInstance().getTimeInMillis());
 
-            CloudSim.startSimulation();
+            iQuantum.startSimulation();
 
-            CloudSim.stopSimulation();
+            iQuantum.stopSimulation();
 
             Log.printLine("Translation Service finished!");
         } catch (Exception e) {
@@ -231,7 +230,7 @@ public class TranslationServiceFog {
         LinkedList<Storage> storageList = new LinkedList<Storage>(); // we are not adding SAN
         // devices by now
 
-        FogDeviceCharacteristics characteristics = new FogDeviceCharacteristics(
+        FogDeviceCharacteristicsC characteristics = new FogDeviceCharacteristicsC(
                 arch, os, vmm, host, time_zone, cost, costPerMem,
                 costPerStorage, costPerBw);
 
