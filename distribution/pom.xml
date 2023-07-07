@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>cloudsim-package</artifactId>
-    <groupId>org.cloudbus.cloudsim</groupId>
-    <version>4.0</version>
+    <artifactId>iquantum-package</artifactId>
+    <groupId>org.iquantum</groupId>
+    <version>1.0</version>
   </parent>
   <artifactId>distribution</artifactId>
   <packaging>pom</packaging>
@@ -11,7 +11,7 @@
  
   
   <build>
-    <finalName>cloudsim-${project.version}</finalName>
+    <finalName>iquantum-${project.version}</finalName>
   	<plugins>
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
@@ -37,33 +37,33 @@
   <dependencies>
   	<dependency>
   		<groupId>${project.groupId}</groupId>
-		<artifactId>cloudsim</artifactId>
+		<artifactId>iquantum</artifactId>
 		<version>${project.version}</version>
 		<type>jar</type>
   	</dependency>
   	<dependency>
   		<groupId>${project.groupId}</groupId>
-		<artifactId>cloudsim</artifactId>
+		<artifactId>iquantum</artifactId>
 		<version>${project.version}</version>
 		<type>jar</type>
 		<classifier>sources</classifier>
   	</dependency> 	
   	<dependency>
   		<groupId>${project.groupId}</groupId>
-		<artifactId>cloudsim</artifactId>
+		<artifactId>iquantum</artifactId>
 		<version>${project.version}</version>
 		<type>jar</type>
 		<classifier>javadoc</classifier>
   	</dependency>  	  	  	
   	<dependency>
   		<groupId>${project.groupId}</groupId>
-		<artifactId>cloudsim-examples</artifactId>
+		<artifactId>iquantum-examples</artifactId>
 		<version>${project.version}</version>
 		<type>jar</type>
   	</dependency>
   	<dependency>
   		<groupId>${project.groupId}</groupId>
-		<artifactId>cloudsim-examples</artifactId>
+		<artifactId>iquantum-examples</artifactId>
 		<version>${project.version}</version>
 		<type>jar</type>
 		<classifier>sources</classifier>

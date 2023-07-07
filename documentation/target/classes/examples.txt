@@ -29,19 +29,19 @@ You can find the source code of the examples in <PATH TO CLOUDSIM PACKAGE>/examp
 Compiling and running examples
 ------------------------------
 
-To compile and run an example (let's say org.iquantum.examples.CloudSimExample1) you need to do the following steps:
+To compile and run an example (let's say org.iquantum.examples.cloudsim.CloudSimExample1) you need to do the following steps:
 
 In Windows:
 
 1. cd <PATH TO CLOUDSIM PACKAGE>
 2. javac -classpath jars\cloudsim-<VERSION>.jar;examples examples\org\cloudbus\cloudsim\examples\CloudSimExample1.java
-3. java -classpath jars\cloudsim-<VERSION>.jar;examples org.iquantum.examples.CloudSimExample1
+3. java -classpath jars\cloudsim-<VERSION>.jar;examples org.iquantum.examples.cloudsim.CloudSimExample1
 
 In Unix/Linux:
 
 1. cd <PATH TO CLOUDSIM PACKAGE>
 2. javac -classpath jars/cloudsim-<VERSION>.jar:examples examples/org/cloudbus/cloudsim/examples/CloudSimExample1.java
-3. java -classpath jars/cloudsim-<VERSION>.jar:examples org.iquantum.examples.CloudSimExample1
+3. java -classpath jars/cloudsim-<VERSION>.jar:examples org.iquantum.examples.cloudsim.CloudSimExample1
 
 
 Compiling and running examples from the power package

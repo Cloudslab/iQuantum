@@ -4,7 +4,6 @@ package org.iquantum.backends.classical.container.core;
 import org.iquantum.backends.classical.Storage;
 import org.iquantum.backends.classical.container.resourceAllocators.ContainerAllocationPolicy;
 import org.iquantum.backends.classical.container.resourceAllocators.ContainerVmAllocationPolicy;
-import org.iquantum.*;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;
 import org.iquantum.core.SimEntity;

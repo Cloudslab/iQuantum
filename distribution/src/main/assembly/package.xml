@@ -8,10 +8,10 @@
 		<dependencySet>
 			<outputDirectory>jars</outputDirectory>
 			<includes>
-				<include>${project.groupId}:cloudsim:jar</include>
-				<include>${project.groupId}:cloudsim:jar:sources</include>
-				<include>${project.groupId}:cloudsim-examples:jar</include>
-				<include>${project.groupId}:cloudsim-examples:jar:sources</include>
+				<include>${project.groupId}:iquantum:jar</include>
+				<include>${project.groupId}:iquantum:jar:sources</include>
+				<include>${project.groupId}:iquantum-examples:jar</include>
+				<include>${project.groupId}:iquantum-examples:jar:sources</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
@@ -23,7 +23,7 @@
 				</excludes>
 			</unpackOptions>
 			<includes>
-				<include>${project.groupId}:cloudsim:jar:sources</include>
+				<include>${project.groupId}:iquantum:jar:sources</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
@@ -35,7 +35,7 @@
 				</excludes>
 			</unpackOptions>			
 			<includes>
-				<include>${project.groupId}:cloudsim-examples:jar:sources</include>
+				<include>${project.groupId}:iquantum-examples:jar:sources</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
@@ -59,7 +59,7 @@
 				</excludes>
 			</unpackOptions>			
 			<includes>
-				<include>${project.groupId}:cloudsim:jar:javadoc</include>
+				<include>${project.groupId}:iquantum:jar:javadoc</include>
 			</includes>
 		</dependencySet>
 	</dependencySets>
