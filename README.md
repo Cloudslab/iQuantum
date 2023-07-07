@@ -1,3 +1,5 @@
+[![iQuantum Maven Build](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml/badge.svg)](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml)
+
 # iQuantum: A Toolkit for Modeling and Simulation of Quantum Computing Environments
 
 As quantum computers become increasingly accessible through 
