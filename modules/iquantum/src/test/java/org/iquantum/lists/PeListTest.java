@@ -19,7 +19,7 @@ import java.util.List;
 
 
 import org.iquantum.backends.classical.Pe;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.lists.PeList;
 import org.iquantum.provisioners.PeProvisionerSimple;
 import org.junit.Assert;

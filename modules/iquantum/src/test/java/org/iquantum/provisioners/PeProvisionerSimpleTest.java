@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.provisioners.PeProvisionerSimple;
 import org.junit.Before;
 import org.junit.Test;
