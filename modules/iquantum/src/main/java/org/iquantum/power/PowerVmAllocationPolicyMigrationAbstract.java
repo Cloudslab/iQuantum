@@ -18,7 +18,7 @@ import java.util.Set;
 
 import org.iquantum.backends.classical.Host;
 import org.iquantum.backends.classical.HostDynamicWorkload;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.core.iQuantum;
 import org.iquantum.power.lists.PowerVmList;
 import org.iquantum.utils.ExecutionTimeMeasurer;

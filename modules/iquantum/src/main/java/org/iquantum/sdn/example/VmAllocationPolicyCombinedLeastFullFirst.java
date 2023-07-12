@@ -3,7 +3,7 @@ package org.iquantum.sdn.example;
 import java.util.List;
 
 import org.iquantum.backends.classical.Host;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 public class VmAllocationPolicyCombinedLeastFullFirst extends VmAllocationPolicyCombinedMostFullFirst{
 

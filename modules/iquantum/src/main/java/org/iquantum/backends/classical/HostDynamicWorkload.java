@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.iquantum.core.iQuantum;
-import org.iquantum.backends.classical.vm.Vm;
 import org.iquantum.lists.PeList;
 import org.iquantum.policies.vm.VmScheduler;
 import org.iquantum.provisioners.BwProvisioner;
@@ -24,7 +23,7 @@ import org.iquantum.utils.Log;
  * A host supporting dynamic workloads and performance degradation.
  * 
  * @author Anton Beloglazov
- * @since iQuantum Toolkit 2.0
+ * @since CloudSim Toolkit 2.0
  */
 public class HostDynamicWorkload extends Host {
 

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iquantum.backends.classical.Host;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.policies.vm.VmAllocationPolicy;
 
 public class AppModuleAllocationPolicy extends VmAllocationPolicy{

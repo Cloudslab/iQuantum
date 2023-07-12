@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iquantum.backends.classical.Pe;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.policies.vm.VmScheduler;
 import org.iquantum.core.iQuantum;
 
@@ -50,7 +50,7 @@ public class VmSchedulerSpaceSharedEnergy extends VmScheduler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.iquantum.policies.vm.VmScheduler#allocatePesForVm(org.iquantum.backends.classical.vm.Vm,
+	 * @see org.iquantum.policies.vm.VmScheduler#allocatePesForVm(org.iquantum.backends.classical.Vm,
 	 * java.util.List)
 	 */
 	@Override
@@ -88,7 +88,7 @@ public class VmSchedulerSpaceSharedEnergy extends VmScheduler {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.iquantum.policies.vm.VmScheduler#deallocatePesForVm(org.iquantum.backends.classical.vm.Vm)
+	 * @see org.iquantum.policies.vm.VmScheduler#deallocatePesForVm(org.iquantum.backends.classical.Vm)
 	 */
 	@Override
 	public void deallocatePesForVm(Vm vm) {

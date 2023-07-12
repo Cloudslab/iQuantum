@@ -1,9 +1,9 @@
 /*
  * Title:        iQuantum Toolkit
- * Description:  iQuantum (Cloud Simulation) Toolkit for Modeling and Simulation of Clouds
+ * Description:  iQuantum: A Toolkit for Modeling and Simulation of Quantum Computing Environments
  * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
  *
- * Copyright (c) 2009-2012, The University of Melbourne, Australia
+ * Copyright (c) 2009-2023, The University of Melbourne, Australia
  */
 
 package org.iquantum.core;
@@ -16,15 +16,17 @@ import java.util.List;
 
 /**
  * A Cloud Information Service (CIS) is an entity that provides cloud resource registration,
- * indexing and discovery services. The Cloud hostList tell their readiness to process Cloudlets by
+ * indexing and discovery services. The Cloud hostList tell their readiness to process Cloudlets and QTasks by
  * registering themselves with this entity. Other entities such as the resource broker can contact
  * this class for resource discovery service, which returns a list of registered resource IDs. In
  * summary, it acts like a yellow page service. This class will be created by iQuantum upon
  * initialisation of the simulation. Hence, do not need to worry about creating an object of this
  * class.
+ * Note: This class is originally implemented by CloudSim and modified for iQuantum.
  * 
  * @author Manzur Murshed
  * @author Rajkumar Buyya
+ * @author Hoa Nguyen (modified for iQuantum)
  * @since iQuantum Toolkit 1.0
  */
 public class CloudInformationService extends SimEntity {
@@ -48,6 +50,9 @@ public class CloudInformationService extends SimEntity {
 	/** List of all regional CIS. */
 	private final List<Integer> gisList;
 
+	/** List of all quantum resource entities. */
+	private final List<Integer> qresList;
+
 	/**
 	 * Instantiates a new CloudInformationService object.
 	 * 
@@ -66,6 +71,7 @@ public class CloudInformationService extends SimEntity {
 		resList = new LinkedList<Integer>();
 		arList = new LinkedList<Integer>();
 		gisList = new LinkedList<Integer>();
+		qresList = new LinkedList<Integer>();
 	}
 
         /**
@@ -107,7 +113,6 @@ public class CloudInformationService extends SimEntity {
 
 			// A Broker is requesting for a list of all hostList.
 			case iQuantumTags.RESOURCE_LIST:
-
 				// Get ID of an entity that send this event
 				id = ((Integer) ev.getData()).intValue();
 
@@ -123,6 +128,19 @@ public class CloudInformationService extends SimEntity {
 
 				// Send the resource AR list back to the sender
 				super.send(id, 0L, ev.getTag(), arList);
+				break;
+
+			// Registering Quantum Resources
+			case iQuantumTags.QREGISTER_RESOURCE:
+				qresList.add((Integer) ev.getData());
+				break;
+
+			case iQuantumTags.QRESOURCE_LIST:
+				// Get ID of an entity that send this event
+				id = ((Integer) ev.getData()).intValue();
+
+				// Send the quantum resource list back to the sender
+				super.send(id, 0L, ev.getTag(), qresList);
 				break;
 
 			default:
@@ -145,6 +163,14 @@ public class CloudInformationService extends SimEntity {
 	 */
 	public List<Integer> getList() {
 		return resList;
+	}
+
+	/**
+	 * Gets the list of all QuantumResource IDs.
+	 * @return
+	 */
+	public List<Integer> getQList() {
+		return qresList;
 	}
 
 	/**
@@ -304,10 +330,12 @@ public class CloudInformationService extends SimEntity {
 
 		signalShutdown(resList);
 		signalShutdown(gisList);
+		signalShutdown(qresList);
 
 		// reset the values
 		resList.clear();
 		gisList.clear();
+		qresList.clear();
 	}
 
 	/**

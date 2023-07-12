@@ -1,6 +1,6 @@
 /*
- * Title:        iQuantum Toolkit
- * Description:  iQuantum (Cloud Simulation) Toolkit for Modeling and Simulation of Clouds
+ * Title:        CloudSim Toolkit
+ * Description:  CloudSim (Cloud Simulation) Toolkit for Modeling and Simulation of Clouds
  * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
  *
  * Copyright (c) 2009-2012, The University of Melbourne, Australia
@@ -18,7 +18,7 @@ import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;
 import org.iquantum.core.SimEntity;
 import org.iquantum.core.SimEvent;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.datacenters.CDatacenterCharacteristics;
 import org.iquantum.lists.CloudletList;
 import org.iquantum.lists.VmList;
@@ -26,12 +26,12 @@ import org.iquantum.tasks.CTask;
 import org.iquantum.utils.Log;
 
 /**
- * DatacentreBroker represents a broker acting on behalf of a user. It hides VM management, as vm
+ * CBroker represents a classical broker acting on behalf of a user. It hides VM management, as vm
  * creation, submission of cloudlets to VMs and destruction of VMs.
  * 
  * @author Rodrigo N. Calheiros
  * @author Anton Beloglazov
- * @since iQuantum Toolkit 1.0
+ * @since CloudSim Toolkit 1.0
  */
 public class CBroker extends SimEntity {
 
@@ -278,11 +278,11 @@ public class CBroker extends SimEntity {
 	protected void processCloudletReturn(SimEvent ev) {
 		CTask CTask = (CTask) ev.getData();
 		getCloudletReceivedList().add(CTask);
-		Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Cloudlet ", CTask.getCloudletId(),
+		Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": CTask ", CTask.getCloudletId(),
 				" received");
 		cloudletsSubmitted--;
 		if (getCloudletList().size() == 0 && cloudletsSubmitted == 0) { // all cloudlets executed
-			Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": All Cloudlets executed. Finishing...");
+			Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": All CTasks executed. Finishing...");
 			clearDatacenters();
 			finishExecution();
 		} else { // some cloudlets haven't finished yet

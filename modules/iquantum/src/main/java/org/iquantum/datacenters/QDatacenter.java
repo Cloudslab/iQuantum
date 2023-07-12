@@ -14,7 +14,7 @@ import org.iquantum.core.iQuantum;
 import org.iquantum.core.SimEntity;
 import org.iquantum.core.SimEvent;
 import org.iquantum.core.iQuantumTags;
-import org.iquantum.policies.qctasks.QuletScheduler;
+import org.iquantum.policies.qtasks.QTaskScheduler;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class QDatacenter extends SimEntity {
     /** The characteristics. */
     private QDatacenterCharacteristics characteristics;
 
-    /** The last time qulets was processed in the Quantum Datacenter. */
+    /** The last time qtasks was processed in the Quantum Datacenter. */
     private double lastProcessTime;
 
     private String regionalCISName;
@@ -81,7 +81,7 @@ public class QDatacenter extends SimEntity {
         }
 
         // Send the registration request to the CIS to register the QDatacenter
-        sendNow(cisId, iQuantumTags.REGISTER_RESOURCE, getId());
+        sendNow(cisId, iQuantumTags.QREGISTER_RESOURCE, getId());
         registerOtherEntity();
     }
 
@@ -93,45 +93,45 @@ public class QDatacenter extends SimEntity {
         int srcId = -1;
 
         switch (ev.getTag()) {
-            case iQuantumTags.RESOURCE_CHARACTERISTICS:
+            case iQuantumTags.QRESOURCE_CHARACTERISTICS:
                 srcId = ((Integer) ev.getData()).intValue();
                 sendNow(srcId, ev.getTag(), getCharacteristics());
                 break;
 
-            case iQuantumTags.QULET_SUBMIT_READY:
+            case iQuantumTags.QTASK_SUBMIT_READY:
                 int[] data = new int[2];
                 data[0] = getId();
                 srcId = ((Integer) ev.getData()).intValue();
                 send(srcId, iQuantum.getMinTimeBetweenEvents(), ev.getTag(), data);
                 break;
 
-            case iQuantumTags.QULET_SUBMIT:
-                processQuletSubmit(ev,false);
+            case iQuantumTags.QTASK_SUBMIT:
+                processQTaskSubmit(ev,false);
                 break;
 
-            case iQuantumTags.UPDATE_QULET_PROCESSING:
-                updateQuletProcessing();
-                checkQuletCompletion();
+            case iQuantumTags.UPDATE_QTASK_PROCESSING:
+                updateQTaskProcessing();
+                checkQTaskCompletion();
                 break;
 
-            case iQuantumTags.QULET_FAILED_QUBIT:
+            case iQuantumTags.QTASK_FAILED_QUBIT:
                 try {
-                    processQulet(ev, iQuantumTags.QULET_FAILED_QUBIT);
+                    processQTask(ev, iQuantumTags.QTASK_FAILED_QUBIT);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
 
-            case iQuantumTags.QULET_FAILED_GATES:
+            case iQuantumTags.QTASK_FAILED_GATES:
                 try {
-                    processQulet(ev, iQuantumTags.QULET_FAILED_GATES);
+                    processQTask(ev, iQuantumTags.QTASK_FAILED_GATES);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
-            case iQuantumTags.QULET_FAILED_QUBIT_MAP:
+            case iQuantumTags.QTASK_FAILED_QUBIT_MAP:
                 try {
-                    processQulet(ev, iQuantumTags.QULET_FAILED_QUBIT_MAP);
+                    processQTask(ev, iQuantumTags.QTASK_FAILED_QUBIT_MAP);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -145,22 +145,22 @@ public class QDatacenter extends SimEntity {
 
     }
 
-    private void processQulet(SimEvent ev, int type) throws Exception {
+    private void processQTask(SimEvent ev, int type) throws Exception {
         QTask QTask = (QTask) ev.getData();
         switch (type) {
-            case iQuantumTags.QULET_FAILED_QUBIT:
-                QTask.setQuletStatus(QTask.FAILED_QUBITS_INSUFFICIENT);
-                sendNow(QTask.getBrokerId(), iQuantumTags.QULET_RETURN, QTask);
+            case iQuantumTags.QTASK_FAILED_QUBIT:
+                QTask.setQTaskStatus(QTask.FAILED_QUBITS_INSUFFICIENT);
+                sendNow(QTask.getBrokerId(), iQuantumTags.QTASK_RETURN, QTask);
                 break;
 
-            case iQuantumTags.QULET_FAILED_GATES:
-                QTask.setQuletStatus(QTask.FAILED_GATES_INSUFFICIENT);
-                sendNow(QTask.getBrokerId(), iQuantumTags.QULET_RETURN, QTask);
+            case iQuantumTags.QTASK_FAILED_GATES:
+                QTask.setQTaskStatus(QTask.FAILED_GATES_INSUFFICIENT);
+                sendNow(QTask.getBrokerId(), iQuantumTags.QTASK_RETURN, QTask);
                 break;
 
-            case iQuantumTags.QULET_FAILED_QUBIT_MAP:
-                QTask.setQuletStatus(QTask.FAILED_QUBIT_MAP);
-                sendNow(QTask.getBrokerId(), iQuantumTags.QULET_RETURN, QTask);
+            case iQuantumTags.QTASK_FAILED_QUBIT_MAP:
+                QTask.setQTaskStatus(QTask.FAILED_QUBIT_MAP);
+                sendNow(QTask.getBrokerId(), iQuantumTags.QTASK_RETURN, QTask);
                 break;
 
             default:
@@ -168,14 +168,14 @@ public class QDatacenter extends SimEntity {
         }
     }
 
-    private void checkQuletCompletion() {
+    private void checkQTaskCompletion() {
         List<? extends QNode> qNodeList = getCharacteristics().getQNodeList();
         for (QNode qNode : qNodeList) {
-            QuletScheduler scheduler = qNode.getQuletScheduler();
-            while (scheduler.isFinishedQulets()) {
-                QTask QTask = scheduler.getNextFinishedQulet();
+            QTaskScheduler scheduler = qNode.getQTaskScheduler();
+            while (scheduler.isFinishedQTasks()) {
+                QTask QTask = scheduler.getNextFinishedQTask();
                 if (QTask != null) {
-                    sendNow(QTask.getBrokerId(), iQuantumTags.QULET_RETURN, QTask);
+                    sendNow(QTask.getBrokerId(), iQuantumTags.QTASK_RETURN, QTask);
                 }
             }
         }
@@ -187,32 +187,32 @@ public class QDatacenter extends SimEntity {
         }
     }
 
-    protected void processQuletSubmit(SimEvent ev, boolean ack) {
-        updateQuletProcessing();
+    protected void processQTaskSubmit(SimEvent ev, boolean ack) {
+        updateQTaskProcessing();
         try {
             QTask QTask = (QTask) ev.getData();
             int qBrokerId = QTask.getBrokerId();
 
-            // checks whether this qulet has finished or not
+            // checks whether this qtask has finished or not
             if (QTask.isFinished()) {
                 String name = iQuantum.getEntityName(QTask.getBrokerId());
-                Log.printConcatLine(getName(), ": Warning - Qulet #", QTask.getQuletId(), " owned by ", name,
+                Log.printConcatLine(getName(), ": Warning - QTask #", QTask.getQTaskId(), " owned by ", name,
                         " is already completed/finished.");
                 Log.printLine("Therefore, it is not being executed again");
                 Log.printLine();
 
-                // NOTE: If a Qulet has finished, then it won't be processed.
+                // NOTE: If a QTask has finished, then it won't be processed.
                 // So, if ack is required, this method sends back a result.
                 // If ack is not required, this method don't send back a result.
                 // Hence, this might cause iQuantum to be hanged since waiting
-                // for this Qulet back.
-                sendNow(qBrokerId, iQuantumTags.QULET_RETURN, QTask);
+                // for this QTask back.
+                sendNow(qBrokerId, iQuantumTags.QTASK_RETURN, QTask);
                 return;
             }
 
             QTask.setResourceParameter(getId(),getCharacteristics().getCostPerSecond());
 
-            // Process the Qulet
+            // Process the QTask
             int qNodeId = QTask.getQNodeId();
 
 
@@ -221,22 +221,22 @@ public class QDatacenter extends SimEntity {
             // Temporary ignore the transfer time (will be considered in the future)
             double transferTime = 0.0;
 
-            QuletScheduler scheduler = qNode.getQuletScheduler();
-            double estimatedCompletionTime = scheduler.quletSubmit(QTask, transferTime);
+            QTaskScheduler scheduler = qNode.getQTaskScheduler();
+            double estimatedCompletionTime = scheduler.qtaskSubmit(QTask, transferTime);
 
             if(estimatedCompletionTime > 0.0 && !Double.isInfinite(estimatedCompletionTime)) {
                 estimatedCompletionTime += transferTime;
-                send(getId(), estimatedCompletionTime, iQuantumTags.UPDATE_QULET_PROCESSING);
+                send(getId(), estimatedCompletionTime, iQuantumTags.UPDATE_QTASK_PROCESSING);
             }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        checkQuletCompletion();
+        checkQTaskCompletion();
 
     }
 
-    private void updateQuletProcessing() {
+    private void updateQTaskProcessing() {
         // if some time passed since last processing
         // R: for term is to allow loop at simulation start. Otherwise, one initial
         // simulation step is skipped and schedulers are not properly initialized
@@ -246,14 +246,14 @@ public class QDatacenter extends SimEntity {
             // for each host...
             for (int i = 0; i < list.size(); i++) {
                 QNode qNode = list.get(i);
-                double time = qNode.updateQuletProcessing(iQuantum.clock());
-                // what time do we expect that the next qulet will finish?
+                double time = qNode.updateQTaskProcessing(iQuantum.clock());
+                // what time do we expect that the next qtask will finish?
                 if (time < smallerTime) {
                     smallerTime = time;
                 }
             }
             if (smallerTime != Double.MAX_VALUE) {
-                schedule(getId(), (smallerTime - iQuantum.clock()), iQuantumTags.UPDATE_QULET_PROCESSING);
+                schedule(getId(), (smallerTime - iQuantum.clock()), iQuantumTags.UPDATE_QTASK_PROCESSING);
             }
             setLastProcessTime(iQuantum.clock());
         }

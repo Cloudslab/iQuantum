@@ -7,7 +7,7 @@ import java.util.List;
 import org.iquantum.backends.classical.Host;
 import org.iquantum.utils.Log;
 import org.iquantum.backends.classical.Pe;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.policies.vm.VmScheduler;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;

@@ -10,7 +10,7 @@ package org.iquantum.sdn;
 
 import org.iquantum.tasks.CTask;
 import org.iquantum.models.UtilizationModelFull;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.core.iQuantumTags;
 
 /**

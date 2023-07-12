@@ -1,0 +1,26 @@
+-classpath
+'/Users/biboo/.m2/repository/org/iquantum/iquantum/1.0/iquantum-1.0.jar:/Users/biboo/.m2/repository/com/opencsv/opencsv/3.7/opencsv-3.7.jar:/Users/biboo/.m2/repository/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2.jar:/Users/biboo/.m2/repository/com/google/guava/guava/30.1-jre/guava-30.1-jre.jar:/Users/biboo/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/biboo/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/biboo/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/biboo/.m2/repository/org/checkerframework/checker-qual/3.5.0/checker-qual-3.5.0.jar:/Users/biboo/.m2/repository/com/google/errorprone/error_prone_annotations/2.3.4/error_prone_annotations-2.3.4.jar:/Users/biboo/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/Users/biboo/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar:/Users/biboo/.m2/repository/org/apache/commons/commons-csv/1.10.0/commons-csv-1.10.0.jar:/Users/biboo/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Users/biboo/Projects/iquantum/iQuantum/modules/iquantum-examples/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2023 <a href="http://cloudbus.org/">The Cloud Computing and Distributed Systems (CLOUDS) Laboratory, The University of Melbourne</a>. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/biboo/Projects/iquantum/iQuantum/modules/iquantum-examples/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'iquantum-examples 1.0 API'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' '/Users/biboo/Projects/iquantum/iQuantum/modules/iquantum-examples/target/javadoc-bundle-options'
+-linkoffline
+'http://www.cloudbus.org/iquantum/modules/iquantum/apidocs' '/Users/biboo/Projects/iquantum/iQuantum/modules/iquantum/target/site/apidocs'
+-use
+-version
+-windowtitle
+'iquantum-examples 1.0 API'

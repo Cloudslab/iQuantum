@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iquantum.tasks.CTask;
-import org.iquantum.policies.cctasks.CloudletScheduler;
+import org.iquantum.policies.ctasks.CloudletScheduler;
 import org.iquantum.tasks.ResCloudlet;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;

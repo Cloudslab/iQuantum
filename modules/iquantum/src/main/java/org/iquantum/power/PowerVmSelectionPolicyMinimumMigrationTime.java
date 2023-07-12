@@ -10,7 +10,7 @@ package org.iquantum.power;
 
 import java.util.List;
 
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * A VM selection policy that selects for migration the VM with Minimum Migration Time (MMT).

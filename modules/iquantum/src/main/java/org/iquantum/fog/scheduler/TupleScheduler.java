@@ -1,6 +1,6 @@
 package org.iquantum.fog.scheduler;
 
-import org.iquantum.policies.cctasks.CloudletSchedulerTimeShared;
+import org.iquantum.policies.ctasks.CloudletSchedulerTimeShared;
 import org.iquantum.tasks.ResCloudlet;
 
 public class TupleScheduler extends CloudletSchedulerTimeShared{

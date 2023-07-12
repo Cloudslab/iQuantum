@@ -11,8 +11,8 @@ package org.iquantum.power;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.iquantum.policies.cctasks.CloudletScheduler;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.policies.ctasks.CloudletScheduler;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.core.iQuantum;
 import org.iquantum.utils.MathUtil;
 

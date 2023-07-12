@@ -8,7 +8,7 @@
 
 package org.iquantum.provisioners;
 
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * BwProvisioner is an abstract class that represents the provisioning policy used by a host

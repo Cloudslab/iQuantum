@@ -14,7 +14,7 @@ import java.util.Map;
 
 import org.iquantum.backends.classical.Host;
 import org.iquantum.utils.Log;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.policies.vm.VmAllocationPolicy;
 import org.iquantum.core.iQuantum;
 import org.iquantum.sdn.power.PowerUtilizationMaxHostInterface;
@@ -321,7 +321,7 @@ public class VmAllocationPolicyCombinedMostFullFirst extends VmAllocationPolicy 
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.iquantum.backends.classical.vm.VmAllocationPolicy#allocateHostForVm(org.iquantum.backends.classical.vm.Vm,
+	 * @see org.iquantum.backends.classical.vm.VmAllocationPolicy#allocateHostForVm(org.iquantum.backends.classical.Vm,
 	 * org.iquantum.backends.classical.Host)
 	 */
 	@Override

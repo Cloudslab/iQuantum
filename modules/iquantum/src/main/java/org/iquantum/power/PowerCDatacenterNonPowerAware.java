@@ -13,7 +13,7 @@ import java.util.Map;
 
 import org.iquantum.datacenters.CDatacenterCharacteristics;
 import org.iquantum.backends.classical.Storage;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.policies.vm.VmAllocationPolicy;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;

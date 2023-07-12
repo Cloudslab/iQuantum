@@ -8,7 +8,7 @@
 
 package org.iquantum.provisioners;
 
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 import java.util.HashMap;
 import java.util.Map;

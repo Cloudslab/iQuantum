@@ -7,9 +7,8 @@ import java.util.Map;
 
 import org.apache.commons.math3.util.Pair;
 import org.iquantum.fog.application.selectivity.SelectivityModel;
-import org.iquantum.policies.cctasks.CloudletScheduler;
+import org.iquantum.policies.ctasks.CloudletScheduler;
 import org.iquantum.power.PowerVm;
-import org.iquantum.fog.application.selectivity.SelectivityModel;
 import org.iquantum.fog.scheduler.TupleScheduler;
 import org.iquantum.fog.utils.FogUtils;
 

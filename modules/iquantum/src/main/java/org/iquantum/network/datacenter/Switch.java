@@ -17,7 +17,7 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;
 import org.iquantum.core.SimEntity;

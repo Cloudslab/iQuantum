@@ -17,7 +17,7 @@ import java.util.Map;
 import org.iquantum.datacenters.CDatacenterCharacteristics;
 import org.iquantum.distributions.UniformDistr;
 import org.iquantum.tasks.CTask;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;
 import org.iquantum.core.SimEntity;

@@ -2,7 +2,7 @@ package org.iquantum.fog.entities;
 
 import org.apache.commons.math3.util.Pair;
 import org.iquantum.backends.classical.Storage;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.fog.application.AppEdge;
 import org.iquantum.fog.application.AppModule;
 import org.iquantum.fog.application.Application;
@@ -13,10 +13,6 @@ import org.iquantum.fog.utils.NetworkUsageMonitor;
 import org.iquantum.policies.vm.VmAllocationPolicy;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.SimEvent;
-import org.iquantum.fog.application.AppEdge;
-import org.iquantum.fog.application.Application;
-import org.iquantum.fog.placement.MicroservicePlacementLogic;
-import org.iquantum.fog.placement.PlacementLogicOutput;
 import org.iquantum.fog.utils.*;
 import org.json.simple.JSONObject;
 

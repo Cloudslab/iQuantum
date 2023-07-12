@@ -9,7 +9,7 @@
 package org.iquantum.provisioners;
 
 import org.iquantum.datacenters.CDatacenterCharacteristics;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 import java.util.List;
 

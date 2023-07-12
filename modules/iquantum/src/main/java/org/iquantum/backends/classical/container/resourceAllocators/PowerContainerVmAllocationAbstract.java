@@ -28,7 +28,7 @@ public abstract  class PowerContainerVmAllocationAbstract extends ContainerVmAll
 
         /*
          * (non-Javadoc)
-         * @see org.iquantum.policies.vm.VmAllocationPolicy#allocateHostForVm(org.iquantum.backends.classical.vm.Vm)
+         * @see org.iquantum.policies.vm.VmAllocationPolicy#allocateHostForVm(org.iquantum.backends.classical.Vm)
          */
         @Override
         public boolean allocateHostForVm(ContainerVm containerVm) {
@@ -37,7 +37,7 @@ public abstract  class PowerContainerVmAllocationAbstract extends ContainerVmAll
 
         /*
          * (non-Javadoc)
-         * @see org.iquantum.policies.vm.VmAllocationPolicy#allocateHostForVm(org.iquantum.backends.classical.vm.Vm,
+         * @see org.iquantum.policies.vm.VmAllocationPolicy#allocateHostForVm(org.iquantum.backends.classical.Vm,
          * org.iquantum.backends.classical.Host)
          */
         @Override
@@ -76,7 +76,7 @@ public abstract  class PowerContainerVmAllocationAbstract extends ContainerVmAll
 
         /*
          * (non-Javadoc)
-         * @see org.iquantum.policies.vm.VmAllocationPolicy#deallocateHostForVm(org.iquantum.backends.classical.vm.Vm)
+         * @see org.iquantum.policies.vm.VmAllocationPolicy#deallocateHostForVm(org.iquantum.backends.classical.Vm)
          */
         @Override
         public void deallocateHostForVm(ContainerVm containerVm) {
@@ -88,7 +88,7 @@ public abstract  class PowerContainerVmAllocationAbstract extends ContainerVmAll
 
         /*
          * (non-Javadoc)
-         * @see org.iquantum.policies.vm.VmAllocationPolicy#getHost(org.iquantum.backends.classical.vm.Vm)
+         * @see org.iquantum.policies.vm.VmAllocationPolicy#getHost(org.iquantum.backends.classical.Vm)
          */
         @Override
         public ContainerHost getHost(ContainerVm vm) {

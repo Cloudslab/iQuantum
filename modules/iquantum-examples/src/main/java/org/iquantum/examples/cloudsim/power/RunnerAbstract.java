@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.iquantum.tasks.CTask;
 import org.iquantum.brokers.CBroker;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.policies.vm.VmAllocationPolicy;
 import org.iquantum.core.iQuantum;
 import org.iquantum.power.PowerCDatacenter;

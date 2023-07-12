@@ -11,7 +11,7 @@ package org.iquantum.power;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * An abstract VM selection policy used to select VMs from a list of migratable VMs.

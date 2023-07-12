@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iquantum.backends.classical.Host;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * A simple VM allocation policy that does <b>not</b> perform any optimization on VM allocation.

@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.utils.MathUtil;
 
 /**

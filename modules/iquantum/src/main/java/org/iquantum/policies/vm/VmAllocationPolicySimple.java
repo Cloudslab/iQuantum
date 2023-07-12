@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.iquantum.backends.classical.Host;
 import org.iquantum.core.iQuantum;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.utils.Log;
 /**
  * VmAllocationPolicySimple is an VmAllocationPolicy that chooses, as the host for a VM, the host

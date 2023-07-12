@@ -1,5 +1,5 @@
 package org.iquantum.policies.qubitMapping;
-import org.iquantum.tasks.qubittopologies.QubitTopology;
+import org.iquantum.backends.quantum.qubittopologies.QubitTopology;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,7 +36,7 @@ public class QubitMappingBackTracking {
         if (findMappingHelper(qnodeTopology, quletTopology, mapping, visited)) {
             Map<String, String> formattedMapping = new HashMap<>();
             for (Map.Entry<Integer, Integer> entry : mapping.entrySet()) {
-                formattedMapping.put("Qulet q" + entry.getKey(), "QNode q" + entry.getValue());
+                formattedMapping.put("QTask q" + entry.getKey(), "QNode q" + entry.getValue());
             }
             return formattedMapping;
         } else {

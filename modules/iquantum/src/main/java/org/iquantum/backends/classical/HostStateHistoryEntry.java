@@ -12,7 +12,7 @@ package org.iquantum.backends.classical;
  * Stores historic data about a host.
  * 
  * @author Anton Beloglazov
- * @since iQuantum Toolkit 2.1.2
+ * @since CloudSim Toolkit 2.1.2
  */
 public class HostStateHistoryEntry {
 

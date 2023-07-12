@@ -14,7 +14,7 @@ import org.iquantum.utils.Log;
 import org.iquantum.core.*;
 import org.iquantum.core.iQuantumTags;
 import org.iquantum.lists.QNodeList;
-import org.iquantum.lists.QuletList;
+import org.iquantum.lists.QTaskList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,17 +26,17 @@ public class QBroker extends SimEntity {
     /** The list of QNodes submitted to be managed by the broker.. */
     protected List<? extends QNode> qNodeList;
 
-    /** The list of Qulet submitted to the broker. */
-    protected List<? extends QTask> quletList;
+    /** The list of QTask submitted to the broker. */
+    protected List<? extends QTask> qtaskList;
 
-    /** The list of submitted Qulets that are waiting to be executed. */
-    protected List<? extends QTask> quletSubmittedList;
+    /** The list of submitted QTasks that are waiting to be executed. */
+    protected List<? extends QTask> qtaskSubmittedList;
 
-    /** The list of received Qulets. */
-    protected List<? extends QTask> quletReceivedList;
+    /** The list of received QTasks. */
+    protected List<? extends QTask> qtaskReceivedList;
 
-    /** The number of submitted Qulets. */
-    protected int numQuletSubmitted;
+    /** The number of submitted QTasks. */
+    protected int numQTaskSubmitted;
 
     /** The id list of available quantum datacenters. */
     protected List<Integer> qDatacenterIdList;
@@ -49,23 +49,23 @@ public class QBroker extends SimEntity {
 
     public QBroker(String name) throws Exception {
         super(name);
-        numQuletSubmitted = 0;
+        numQTaskSubmitted = 0;
 
         setQNodeList(new ArrayList<QNode>());
-        setQuletList(new ArrayList<QTask>());
-        setQuletSubmittedList(new ArrayList<QTask>());
-        setQuletReceivedList(new ArrayList<QTask>());
+        setQTaskList(new ArrayList<QTask>());
+        setQTaskSubmittedList(new ArrayList<QTask>());
+        setQTaskReceivedList(new ArrayList<QTask>());
 
         setQDatacenterIdList(new ArrayList<Integer>());
         setQDatacenterCharacteristicsList(new HashMap<Integer, QDatacenterCharacteristics>());
     }
 
-    public void submitQuletList(List<? extends QTask> quletList) {
-        getQuletList().addAll(quletList);
+    public void submitQTaskList(List<? extends QTask> qtaskList) {
+        getQTaskList().addAll(qtaskList);
     }
 
-    public void bindCloudletToQNode(int quletId, int qNodeId) {
-        QuletList.getById(getQuletList(), quletId).setQNodeId(qNodeId);
+    public void bindCloudletToQNode(int qtaskId, int qNodeId) {
+        QTaskList.getById(getQTaskList(), qtaskId).setQNodeId(qNodeId);
     }
 
 
@@ -79,28 +79,28 @@ public class QBroker extends SimEntity {
         return (List<T>) qNodeList;
     }
 
-    protected <T extends QTask> void setQuletList(List<T> quletList) {
-        this.quletList = quletList;
+    protected <T extends QTask> void setQTaskList(List<T> qtaskList) {
+        this.qtaskList = qtaskList;
     }
 
-    public <T extends QTask> List<T> getQuletList() {
-        return (List<T>) quletList;
+    public <T extends QTask> List<T> getQTaskList() {
+        return (List<T>) qtaskList;
     }
 
-    protected <T extends QTask> void setQuletSubmittedList(List<T> quletSubmittedList) {
-        this.quletSubmittedList = quletSubmittedList;
+    protected <T extends QTask> void setQTaskSubmittedList(List<T> qtaskSubmittedList) {
+        this.qtaskSubmittedList = qtaskSubmittedList;
     }
 
-    public <T extends QTask> List<T> getQuletSubmittedList() {
-        return (List<T>) quletSubmittedList;
+    public <T extends QTask> List<T> getQTaskSubmittedList() {
+        return (List<T>) qtaskSubmittedList;
     }
 
-    protected <T extends QTask> void setQuletReceivedList(List<T> quletReceivedList) {
-        this.quletReceivedList = quletReceivedList;
+    protected <T extends QTask> void setQTaskReceivedList(List<T> qtaskReceivedList) {
+        this.qtaskReceivedList = qtaskReceivedList;
     }
 
-    public <T extends QTask> List<T> getQuletReceivedList() {
-        return (List<T>) quletReceivedList;
+    public <T extends QTask> List<T> getQTaskReceivedList() {
+        return (List<T>) qtaskReceivedList;
     }
 
     protected void setQDatacenterIdList(List<Integer> qDatacenterIdList) {
@@ -127,28 +127,28 @@ public class QBroker extends SimEntity {
     @Override
     public void startEntity() {
         Log.printConcatLine(getName(), " is starting...");
-        schedule(getId(), 0, iQuantumTags.RESOURCE_CHARACTERISTICS_REQUEST);
+        schedule(getId(), 0, iQuantumTags.QRESOURCE_CHARACTERISTICS_REQUEST);
     }
 
     @Override
     public void processEvent(SimEvent ev) {
         switch (ev.getTag()) {
             // Resource characteristics request
-            case iQuantumTags.RESOURCE_CHARACTERISTICS_REQUEST:
+            case iQuantumTags.QRESOURCE_CHARACTERISTICS_REQUEST:
                 processQResourceCharacteristicsRequest(ev);
                 break;
 
             // Resource characteristics request, but not create VM like classical datacenter
-            case iQuantumTags.RESOURCE_CHARACTERISTICS:
+            case iQuantumTags.QRESOURCE_CHARACTERISTICS:
                 processQDatacenterCharacteristics(ev);
                 break;
-            // Qulet submit
-            case iQuantumTags.QULET_SUBMIT_READY:
-                processQuletSubmit(ev);
+            // QTask submit
+            case iQuantumTags.QTASK_SUBMIT_READY:
+                processQTaskSubmit(ev);
                 break;
-            // Qulet return event
-            case iQuantumTags.QULET_RETURN:
-                processQuletReturn(ev);
+            // QTask return event
+            case iQuantumTags.QTASK_RETURN:
+                processQTaskReturn(ev);
                 break;
             // if the simulation finishes
             case iQuantumTags.END_OF_SIMULATION:
@@ -163,14 +163,14 @@ public class QBroker extends SimEntity {
     }
 
     private void processQResourceCharacteristicsRequest(SimEvent ev) {
-        setDatacenterIdsList(iQuantum.getCloudResourceList());
+        setDatacenterIdsList(iQuantum.getQuantumResourceList());
         setDatacenterCharacteristicsList(new HashMap<Integer, QDatacenterCharacteristics>());
 
-        Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Cloud Resource List received with ",
+        Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Quantum Resource List received with ",
                 getDatacenterIdsList().size(), " resource(s)");
 
         for (Integer datacenterId : getDatacenterIdsList()) {
-            sendNow(datacenterId, iQuantumTags.RESOURCE_CHARACTERISTICS, getId());
+            sendNow(datacenterId, iQuantumTags.QRESOURCE_CHARACTERISTICS, getId());
         }
     }
 
@@ -188,89 +188,89 @@ public class QBroker extends SimEntity {
     }
 
     /**
-     * Process Qulet Submit and Scheduling
+     * Process QTask Submit and Scheduling
      * @param ev
      */
-    private void processQuletSubmit(SimEvent ev) {
+    private void processQTaskSubmit(SimEvent ev) {
         int[] data = (int[]) ev.getData();
         int qDatacenter = data[0];
         int qNodeId = 0;
         List<QTask> submittedQTasks = new ArrayList<QTask>();
-        Log.printConcatLine(iQuantum.clock(), ": ", getName(), " : Started scheduling all Qulets to QDatacenter #", qDatacenter);
+        Log.printConcatLine(iQuantum.clock(), ": ", getName(), " : Started scheduling all QTasks to QDatacenter #", qDatacenter);
 
         List<? extends QNode> qNodeList = getQDatacenterCharacteristicsList().get(qDatacenter).getQNodeList();
         setQNodeList(qNodeList);
 
-        for (QTask QTask : getQuletList()) {
+        for (QTask QTask : getQTaskList()) {
             QNode qNode;
             if (QTask.getQNodeId() == -1) {
-                // Submit qulet to a the first available QNode
+                // Submit qtask to a the first available QNode
                 // TODO: Implement a better (default) scheduling algorithm
                 qNode = getQNodeList().get(qNodeId);
             } else {
-                // Submit qulet to a specific QNode
+                // Submit qtask to a specific QNode
                 qNode = QNodeList.getById(getQNodeList(), QTask.getQNodeId());
                 if (qNode == null) {
                     if(!Log.isDisabled()) {
-                        Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Postponing execution of Qulet ", QTask.getQuletId(),
+                        Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Postponing execution of QTask ", QTask.getQTaskId(),
                                 ": QNode is not available");
                     }
                     continue;
                 }
             }
             // TODO: Check the constraints
-            /** QNode must have enough resources to execute the Qulet
-             * number of qubits of QNode >= number of qubits of Qulet
+            /** QNode must have enough resources to execute the QTask
+             * number of qubits of QNode >= number of qubits of QTask
              */
             if (!Log.isDisabled()) {
-                Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Checking if QNode #", qNode.getId(), " has enough qubits/gates to execute Qulet",
-                        QTask.getQuletId());
+                Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Checking if QNode #", qNode.getId(), " has enough qubits/gates to execute QTask",
+                        QTask.getQTaskId());
             }
             if(verifyConstraints(qNode, QTask, submittedQTasks)) {
                 if (!Log.isDisabled()) {
-                    Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Sending Qulet ",
-                            QTask.getQuletId(), " to QNode #", qNode.getId());
+                    Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Sending QTask ",
+                            QTask.getQTaskId(), " to QNode #", qNode.getId());
                 }
-                sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QULET_SUBMIT, QTask);
-                numQuletSubmitted++;
+                sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QTASK_SUBMIT, QTask);
+                numQTaskSubmitted++;
                 submittedQTasks.add(QTask);
             }
         }
-        getQuletList().removeAll(submittedQTasks);
+        getQTaskList().removeAll(submittedQTasks);
     }
 
     private boolean verifyConstraints(QNode qNode, QTask QTask, List<QTask> submittedQTasks){
         if(qNode.getNumQubits() < QTask.getNumQubits()) {
             if (!Log.isDisabled()) {
-                Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Cancel the execution of Qulet #", QTask.getQuletId(),
+                Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Cancel the execution of QTask #", QTask.getQTaskId(),
                         ": QNode #", qNode.getId(), " does not have enough qubits (", qNode.getNumQubits(), " < ", QTask.getNumQubits(), ")");
             }
-            sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QULET_FAILED_QUBIT, QTask);
-            numQuletSubmitted++;
+            sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QTASK_FAILED_QUBIT, QTask);
+            numQTaskSubmitted++;
             submittedQTasks.add(QTask);
             return false;
         } else if (!isSubset(QTask.getGateSet(),qNode.getGateSets())) {
             if (!Log.isDisabled()) {
-                Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Cancel the execution of Qulet #", QTask.getQuletId(),
-                        ": QNode #", qNode.getId(), " does not support all gates of qulet");
+                Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Cancel the execution of QTask #", QTask.getQTaskId(),
+                        ": QNode #", qNode.getId(), " does not support all gates of qtask");
             }
-            sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QULET_FAILED_GATES, QTask);
-            numQuletSubmitted++;
+            sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QTASK_FAILED_GATES, QTask);
+            numQTaskSubmitted++;
             submittedQTasks.add(QTask);
             return false;
-        } else if (qNode.getQuletScheduler().quletMapping(QTask, qNode) == null) {
+        } else if (qNode.getQTaskScheduler().qtaskMapping(QTask, qNode) == null) {
             if (!Log.isDisabled()) {
-                Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Cancel the execution of Qulet #", QTask.getQuletId(),
-                        ": Cannot map qubit topology of qulet to the QNode #", qNode.getId());
+                Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Cancel the execution of QTask #", QTask.getQTaskId(),
+                        ": Cannot map qubit topology of qtask to the QNode #", qNode.getId());
             }
-            sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QULET_FAILED_QUBIT_MAP, QTask);
-            numQuletSubmitted++;
+            sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QTASK_FAILED_QUBIT_MAP, QTask);
+            numQTaskSubmitted++;
             submittedQTasks.add(QTask);
             return false;
         } else {
-            Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": QNode #", qNode.getId(), " has enough qubits and sufficient gates to execute Qulet",
-                    QTask.getQuletId());
-            Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Mapping qulet " + QTask.getQuletId() + " to QNode #", qNode.getId(), " successfully: ", qNode.getQuletScheduler().quletMapping(QTask, qNode));
+            Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": QNode #", qNode.getId(), " has enough qubits and sufficient gates to execute QTask",
+                    QTask.getQTaskId());
+            Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Mapping qtask " + QTask.getQTaskId() + " to QNode #", qNode.getId(), " successfully: ", qNode.getQTaskScheduler().qtaskMapping(QTask, qNode));
             return true;
         }
     }
@@ -300,17 +300,17 @@ public class QBroker extends SimEntity {
         // Do not create VMs like classical DatacenterBroker
 
         for (Integer datacenterId : getDatacenterIdsList()) {
-            sendNow(datacenterId, iQuantumTags.QULET_SUBMIT_READY, getId());
+            sendNow(datacenterId, iQuantumTags.QTASK_SUBMIT_READY, getId());
         }
     }
 
-    private void processQuletReturn(SimEvent ev) {
+    private void processQTaskReturn(SimEvent ev) {
         QTask QTask = (QTask) ev.getData();
-        getQuletReceivedList().add(QTask);
-        Log.printConcatLine(iQuantum.clock(), ": ",getName(), ": Qulet ", QTask.getQuletId(), " result received");
-        numQuletSubmitted--;
-        if (getQuletList().size() == 0 && numQuletSubmitted == 0) { // all Qulets executed
-            Log.printConcatLine(iQuantum.clock(), ": ",getName(), ": All Qulets executed. Finishing...");
+        getQTaskReceivedList().add(QTask);
+        Log.printConcatLine(iQuantum.clock(), ": ",getName(), ": QTask ", QTask.getQTaskId(), " result received");
+        numQTaskSubmitted--;
+        if (getQTaskList().size() == 0 && numQTaskSubmitted == 0) { // all QTasks executed
+            Log.printConcatLine(iQuantum.clock(), ": ",getName(), ": All QTasks executed. Finishing...");
         }
     }
 

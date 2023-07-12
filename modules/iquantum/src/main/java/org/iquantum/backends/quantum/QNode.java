@@ -8,8 +8,8 @@
 package org.iquantum.backends.quantum;
 
 import org.iquantum.datacenters.QDatacenter;
-import org.iquantum.tasks.qubittopologies.QubitTopology;
-import org.iquantum.policies.qctasks.QuletScheduler;
+import org.iquantum.backends.quantum.qubittopologies.QubitTopology;
+import org.iquantum.policies.qtasks.QTaskScheduler;
 import java.util.List;
 
 
@@ -20,7 +20,7 @@ public class QNode {
     private double clops;
     private List<String> gateSets;
     private QubitTopology qubitTopology;
-    private QuletScheduler quletScheduler;
+    private QTaskScheduler QTaskScheduler;
 
     private QDatacenter qDatacenter;
 
@@ -31,12 +31,12 @@ public class QNode {
      * @param clops circuit layer operations per second (CLOPS)
      * @param gateSets all gate sets supported by the quantum node
      * @param qubitTopology qubit topology of the quantum node
-     * @param quletScheduler qulet scheduler of the quantum node
+     * @param QTaskScheduler qtask scheduler of the quantum node
      */
     public QNode(int id, int numQubits, int quantumVolume, double clops, List<String> gateSets,
-                 QubitTopology qubitTopology, QuletScheduler quletScheduler) {
+                 QubitTopology qubitTopology, QTaskScheduler QTaskScheduler) {
         // Validate the parameters
-        validateParameters(numQubits, quantumVolume, clops, gateSets, qubitTopology, quletScheduler);
+        validateParameters(numQubits, quantumVolume, clops, gateSets, qubitTopology, QTaskScheduler);
 
         this.id = id;
         this.numQubits = numQubits;
@@ -44,8 +44,9 @@ public class QNode {
         this.clops = clops;
         this.gateSets = gateSets;
         this.qubitTopology = qubitTopology;
-        this.quletScheduler = quletScheduler;
+        this.QTaskScheduler = QTaskScheduler;
     }
+
 
     /**
      * Validates the parameters.
@@ -54,11 +55,10 @@ public class QNode {
      * @param clops circuit layer operations per second (CLOPS)
      * @param gateSets all gate sets supported by the quantum node
      * @param qubitTopology qubit topology of the quantum node
-     * @param errorRates error rates of the quantum node
-     * @param quletScheduler qulet scheduler of the quantum node
+     * @param QTaskScheduler qtask scheduler of the quantum node
      */
     private static void validateParameters(int numQubits, int quantumVolume, double clops, List<String> gateSets,
-                                           QubitTopology qubitTopology, QuletScheduler quletScheduler) {
+                                           QubitTopology qubitTopology, QTaskScheduler QTaskScheduler) {
 
         if (numQubits <= 0) {
             throw new IllegalArgumentException("numQubits must be greater than zero");
@@ -80,8 +80,8 @@ public class QNode {
             throw new IllegalArgumentException("qubitTopology must not be null");
         }
 
-        if (quletScheduler == null) {
-            throw new IllegalArgumentException("quletScheduler must not be null");
+        if (QTaskScheduler == null) {
+            throw new IllegalArgumentException("qTaskScheduler must not be null");
         }
 
         if (quantumVolume > Math.pow(2, numQubits)) {
@@ -109,12 +109,12 @@ public class QNode {
         return qubitTopology;
     }
 
-    public QuletScheduler getQuletScheduler() {
-        return quletScheduler;
+    public QTaskScheduler getQTaskScheduler() {
+        return QTaskScheduler;
     }
 
-    public void setQuletScheduler(QuletScheduler quletScheduler) {
-        this.quletScheduler = quletScheduler;
+    public void setQTaskScheduler(QTaskScheduler QTaskScheduler) {
+        this.QTaskScheduler = QTaskScheduler;
     }
 
     public int getId() {
@@ -129,9 +129,9 @@ public class QNode {
         return qDatacenter;
     }
 
-    public double updateQuletProcessing(double currentTime) {
+    public double updateQTaskProcessing(double currentTime) {
         double smallerTime = Double.MAX_VALUE;
-        double time = getQuletScheduler().updateQNodeProcessing(currentTime, getCLOPS());
+        double time = getQTaskScheduler().updateQNodeProcessing(currentTime, getCLOPS());
         if (time > 0.0 && time < smallerTime) {
             smallerTime = time;
         }

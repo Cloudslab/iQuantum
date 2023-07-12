@@ -11,13 +11,13 @@ import org.iquantum.utils.Log;
 import java.util.List;
 
 import org.iquantum.backends.classical.Pe;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * PeList is a collection of operations on lists of PEs.
  * 
  * @author Anton Beloglazov
- * @since iQuantum Toolkit 2.0
+ * @since CloudSim Toolkit 2.0
  */
 public class PeList {
 

@@ -10,8 +10,7 @@ package org.iquantum.tasks;
 
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.Consts;
-import org.iquantum.policies.cctasks.CloudletSchedulerTimeShared;
-import org.iquantum.tasks.CTask;
+import org.iquantum.policies.ctasks.CloudletSchedulerTimeShared;
 
 
 /**

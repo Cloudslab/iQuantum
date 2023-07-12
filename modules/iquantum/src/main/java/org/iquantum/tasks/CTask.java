@@ -16,13 +16,12 @@ import org.iquantum.models.UtilizationModel;
 import org.iquantum.core.iQuantum;
 
 /**
- * Cloudlet is an extension to the cloudlet. It stores, despite all the
+ * Cloudlet (CTask) stores, despite all the
  * information encapsulated in the Cloudlet, the ID of the VM running it.
  *
  * @author Rodrigo N. Calheiros
  * @author Anton Beloglazov
- * @since iQuantum Toolkit 1.0
- * @todo The documentation is wrong. Cloudlet isn't extending any class.
+ * @since CloudSim Toolkit 1.0
  */
 public class CTask {
 
@@ -63,7 +62,7 @@ public class CTask {
      * The output file size of this Cloudlet after execution (unit: in byte).
      *
      * @todo See
-     * <a href="https://groups.google.com/forum/#!topic/iQuantum/MyZ7OnrXuuI">this
+     * <a href="https://groups.google.com/forum/#!topic/cloudsim/MyZ7OnrXuuI">this
      * discussion</a>
      */
     private final long cloudletOutputSize;
@@ -763,8 +762,6 @@ public class CTask {
      * cancel or to move this Cloudlet into different CloudResources.
      *
      * @param length length of this Cloudlet
-     * @see gridsim.AllocPolicy
-     * @see gridsim.ResCloudlet
      * @pre length >= 0.0
      * @post $none
      */
