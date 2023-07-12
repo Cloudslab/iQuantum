@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.iquantum.backends.classical.Host;
 import org.iquantum.backends.classical.Pe;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.core.Consts;
 import org.iquantum.policies.ctasks.CloudletSchedulerDynamicWorkload;
 import org.iquantum.policies.vm.VmSchedulerTimeShared;

@@ -18,7 +18,7 @@ import java.util.List;
 import org.iquantum.backends.classical.Host;
 import org.iquantum.backends.classical.Pe;
 import org.iquantum.backends.classical.Storage;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.brokers.CBroker;
 import org.iquantum.core.Consts;
 import org.iquantum.datacenters.CDatacenter;
