@@ -5,21 +5,16 @@
  * be submitted to the QBroker. Finally, it starts the simulation and prints the results.
  */
 
-package org.iquantum.examples.quantum;
+package org.iquantum.examples.multiqpu;
 
-import org.iquantum.backends.quantum.IBMQNode;
-import org.iquantum.backends.quantum.IBMQNodeExtended;
-import org.iquantum.backends.quantum.QNode;
-import org.iquantum.backends.quantum.QNodeExtended;
-import org.iquantum.brokers.QBroker;
-import org.iquantum.brokers.QBrokerExtended;
+
+import org.iquantum.backends.quantum.IBMQNodeMQ;
+import org.iquantum.backends.quantum.QNodeMQ;
+import org.iquantum.brokers.QBrokerMQ;
 import org.iquantum.core.iQuantum;
-import org.iquantum.datacenters.QDatacenter;
-import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.datacenters.QDatacenterCharacteristicsExtended;
 import org.iquantum.datacenters.QDatacenterExtended;
-import org.iquantum.policies.qtasks.QTaskSchedulerFCFSMultiQPU;
-import org.iquantum.policies.qtasks.QTaskSchedulerSpaceShared;
+import org.iquantum.policies.qtasks.QTaskSchedulerFCFSMQ;
 import org.iquantum.tasks.QTask;
 import org.iquantum.utils.Log;
 import org.iquantum.utils.QTaskImporter;
@@ -30,13 +25,13 @@ import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.*;
 
-public class iQuantumExample6Extended {
+public class iQuantumMultiQPUExample1 {
     private static List<QTask> QTaskList;
 
-    private static  List<QNodeExtended> qNodeList;
+    private static  List<QNodeMQ> qNodeList;
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Start the iQuantum Example 4");
+        System.out.println("Start the iQuantum Multi QPU Example 1...");
 
         // Step 1: Initialize the core simulation package. It should be called before creating any entities.
         int num_user = 1;
@@ -48,7 +43,7 @@ public class iQuantumExample6Extended {
         QDatacenterExtended qDatacenter = createQDatacenter("QDatacenter_0");
 
         // Step 3: Create a QBroker
-        QBrokerExtended qBroker = createQBroker();
+        QBrokerMQ qBroker = createQBroker();
 
         // Step 4: Create a QTask
         QTaskList = createQTaskList(qDatacenter, qBroker);
@@ -69,14 +64,14 @@ public class iQuantumExample6Extended {
         Log.printLine("iQuantum Example 6 finished!");
     }
 
-    private static List<QTask> createQTaskList(QDatacenterExtended qDatacenter, QBrokerExtended qBroker) {
+    private static List<QTask> createQTaskList(QDatacenterExtended qDatacenter, QBrokerMQ qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
         String folderPath = "dataset/iquantum/MQTQTasks/montrealDataset.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {
             List<QTask> QTasks = QTaskImporter.importQTasksFromCsv(datasetPath.toString());
-            List<QNodeExtended> qNodeList = (List<QNodeExtended>) qDatacenter.getCharacteristics().getQNodeList();
+            List<QNodeMQ> qNodeList = (List<QNodeMQ>) qDatacenter.getCharacteristics().getQNodeList();
             // Assign random QNode to each QTask
             Random random = new Random();
 
@@ -96,10 +91,10 @@ public class iQuantumExample6Extended {
      * Create a QBroker
      * @return QBroker
      */
-    private static QBrokerExtended createQBroker() {
-        QBrokerExtended qBroker = null;
+    private static QBrokerMQ createQBroker() {
+        QBrokerMQ qBroker = null;
         try {
-            qBroker = new QBrokerExtended("QBroker");
+            qBroker = new QBrokerMQ("QBroker");
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -114,8 +109,8 @@ public class iQuantumExample6Extended {
      */
     private static QDatacenterExtended createQDatacenter(String name) {
         // Automatically create two quantum nodes (IBM Hanoi and IBM Cairo) from the dataset
-        QNodeExtended qNode1 = IBMQNodeExtended.createNode(0,"ibm_cairo",new QTaskSchedulerFCFSMultiQPU());
-        QNodeExtended qNode2 = IBMQNodeExtended.createNode(1,"ibm_hanoi",new QTaskSchedulerFCFSMultiQPU());
+        QNodeMQ qNode1 = IBMQNodeMQ.createNode(0,"ibm_cairo",new QTaskSchedulerFCFSMQ());
+        QNodeMQ qNode2 = IBMQNodeMQ.createNode(1,"ibm_hanoi",new QTaskSchedulerFCFSMQ());
 //        QubitTopology.printTopology(qNode1.getQubitTopology());
         qNodeList = new ArrayList<>();
         qNodeList.addAll(Arrays.asList(qNode1, qNode2));

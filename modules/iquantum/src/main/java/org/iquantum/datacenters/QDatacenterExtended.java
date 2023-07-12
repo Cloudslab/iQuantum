@@ -7,14 +7,13 @@
  */
 package org.iquantum.datacenters;
 
-import org.iquantum.backends.quantum.QNode;
-import org.iquantum.backends.quantum.QNodeExtended;
+import org.iquantum.backends.quantum.QNodeMQ;
 import org.iquantum.core.SimEntity;
 import org.iquantum.core.SimEvent;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;
 import org.iquantum.policies.qtasks.QTaskScheduler;
-import org.iquantum.policies.qtasks.QTaskSchedulerFCFSMultiQPU;
+import org.iquantum.policies.qtasks.QTaskSchedulerFCFSMQ;
 import org.iquantum.tasks.QTask;
 import org.iquantum.utils.Log;
 
@@ -36,7 +35,7 @@ public class QDatacenterExtended extends SimEntity {
         setLastProcessTime(0.0);
         setCharacteristics(characteristics);
 
-        for (QNodeExtended qNode : getCharacteristics().getQNodeList()) {
+        for (QNodeMQ qNode : getCharacteristics().getQNodeList()) {
             qNode.setQDatacenter(this);
         }
 
@@ -171,9 +170,9 @@ public class QDatacenterExtended extends SimEntity {
     }
 
     private void checkQTaskCompletion() {
-        List<? extends QNodeExtended> qNodeList = getCharacteristics().getQNodeList();
-        for (QNodeExtended qNode : qNodeList) {
-            QTaskSchedulerFCFSMultiQPU scheduler = qNode.getQTaskScheduler();
+        List<? extends QNodeMQ> qNodeList = getCharacteristics().getQNodeList();
+        for (QNodeMQ qNode : qNodeList) {
+            QTaskSchedulerFCFSMQ scheduler = qNode.getQTaskScheduler();
             while (scheduler.isFinishedQTasks()) {
                 QTask QTask = scheduler.getNextFinishedQTask();
                 if (QTask != null) {
@@ -219,7 +218,7 @@ public class QDatacenterExtended extends SimEntity {
 
 
             // Get the QNode
-            QNodeExtended qNode = getCharacteristics().getQNodeList().get(qNodeId);
+            QNodeMQ qNode = getCharacteristics().getQNodeList().get(qNodeId);
             // Temporary ignore the transfer time (will be considered in the future)
             double transferTime = 0.0;
 
@@ -243,11 +242,11 @@ public class QDatacenterExtended extends SimEntity {
         // R: for term is to allow loop at simulation start. Otherwise, one initial
         // simulation step is skipped and schedulers are not properly initialized
         if (iQuantum.clock() < 0.111 || iQuantum.clock() >= getLastProcessTime() + iQuantum.getMinTimeBetweenEvents()) {
-            List<? extends QNodeExtended> list = getCharacteristics().getQNodeList();
+            List<? extends QNodeMQ> list = getCharacteristics().getQNodeList();
             double smallerTime = Double.MAX_VALUE;
             // for each host...
             for (int i = 0; i < list.size(); i++) {
-                QNodeExtended qNode = list.get(i);
+                QNodeMQ qNode = list.get(i);
                 double time = qNode.updateQTaskProcessing(iQuantum.clock());
                 // what time do we expect that the next qtask will finish?
                 if (time < smallerTime) {

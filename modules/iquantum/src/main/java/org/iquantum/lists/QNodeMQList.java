@@ -7,19 +7,18 @@
  */
 package org.iquantum.lists;
 
-import org.iquantum.backends.quantum.QNode;
-import org.iquantum.backends.quantum.QNodeExtended;
+import org.iquantum.backends.quantum.QNodeMQ;
 
 import java.util.List;
 
-public class QNodeListExtended {
+public class QNodeMQList {
 
 
-    private QNodeListExtended() {
+    private QNodeMQList() {
 
     }
 
-    public static <T extends QNodeExtended> T getById(List<T> qNodeList, int id) {
+    public static <T extends QNodeMQ> T getById(List<T> qNodeList, int id) {
         for (T qNode : qNodeList) {
             if (qNode.getId() == id) {
                 return qNode;

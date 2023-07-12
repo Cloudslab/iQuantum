@@ -2,21 +2,21 @@ package org.iquantum.backends.quantum;
 
 import org.iquantum.backends.quantum.qubittopologies.IBMQTopology;
 import org.iquantum.backends.quantum.qubittopologies.QubitTopologyExtended;
-import org.iquantum.policies.qtasks.QTaskSchedulerFCFSMultiQPU;
+import org.iquantum.lists.QPUList;
+import org.iquantum.policies.qtasks.QTaskSchedulerFCFSMQ;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-public class IBMQNodeExtended {
+public class IBMQNodeMQ {
 
-    public static QNodeExtended createNode(int id, String node, QTaskSchedulerFCFSMultiQPU QTaskScheduler) {
+    public static QNodeMQ createNode(int id, String node, QTaskSchedulerFCFSMQ QTaskScheduler) {
         int numQubits = 0;
         int quantumVolume = 0;
         int clops = 0;
         ArrayList<String> basicGateset;
         // Predefined common basic gate sets: rz, sx, x, measure, cx
-        ArrayList<String> basicGateset_1 = new ArrayList<>(Arrays.asList("cx", "id", "rz", "sx", "x", "measure"));
+        ArrayList<String> basicGateset_1 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X", "MEASURE"));
         ArrayList<String> basicGateset_2 = new ArrayList<>(Arrays.asList("ECR", "ID", "RZ", "SX", "X"));
         switch (node) {
             case "ibm_washington":
@@ -132,8 +132,8 @@ public class IBMQNodeExtended {
         }
         QubitTopologyExtended qubitTopology = IBMQTopology.getQubitTopology(node);
         QPU qpu = new QPU(0, numQubits, quantumVolume, clops, basicGateset, qubitTopology);
-        List<QPU> qpuList = new ArrayList<>();
+        QPUList qpuList = new QPUList();
         qpuList.add(qpu);
-        return new QNodeExtended(id, qpuList, QTaskScheduler);
+        return new QNodeMQ(id, qpuList, QTaskScheduler);
     }
 }

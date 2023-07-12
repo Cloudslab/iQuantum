@@ -7,29 +7,23 @@
  */
 package org.iquantum.brokers;
 
-import org.iquantum.backends.quantum.QNode;
-import org.iquantum.backends.quantum.QNodeExtended;
+import org.iquantum.backends.quantum.QNodeMQ;
 import org.iquantum.core.SimEntity;
 import org.iquantum.core.SimEvent;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;
-import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.datacenters.QDatacenterCharacteristicsExtended;
-import org.iquantum.lists.QNodeList;
-import org.iquantum.lists.QNodeListExtended;
+import org.iquantum.lists.QNodeMQList;
 import org.iquantum.lists.QTaskList;
 import org.iquantum.tasks.QTask;
 import org.iquantum.utils.Log;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class QBrokerExtended extends SimEntity {
+public class QBrokerMQ extends SimEntity {
 
     /** The list of QNodes submitted to be managed by the broker.. */
-    protected List<? extends QNodeExtended> qNodeList;
+    protected List<? extends QNodeMQ> qNodeList;
 
     /** The list of QTask submitted to the broker. */
     protected List<? extends QTask> qtaskList;
@@ -52,11 +46,11 @@ public class QBrokerExtended extends SimEntity {
     protected List<Integer> datacenterIdsList;
 
 
-    public QBrokerExtended(String name) throws Exception {
+    public QBrokerMQ(String name) throws Exception {
         super(name);
         numQTaskSubmitted = 0;
 
-        setQNodeList(new ArrayList<QNodeExtended>());
+        setQNodeList(new ArrayList<QNodeMQ>());
         setQTaskList(new ArrayList<QTask>());
         setQTaskSubmittedList(new ArrayList<QTask>());
         setQTaskReceivedList(new ArrayList<QTask>());
@@ -76,11 +70,11 @@ public class QBrokerExtended extends SimEntity {
 
     /////// GETTERS AND SETTERS ///////
 
-    protected <T extends QNodeExtended> void setQNodeList(List<T> qNodeList) {
+    protected <T extends QNodeMQ> void setQNodeList(List<T> qNodeList) {
         this.qNodeList = qNodeList;
     }
 
-    public <T extends QNodeExtended> List<T> getQNodeList() {
+    public <T extends QNodeMQ> List<T> getQNodeList() {
         return (List<T>) qNodeList;
     }
 
@@ -203,18 +197,18 @@ public class QBrokerExtended extends SimEntity {
         List<QTask> submittedQTasks = new ArrayList<QTask>();
         Log.printConcatLine(iQuantum.clock(), ": ", getName(), " : Started scheduling all QTasks to QDatacenter #", qDatacenter);
 
-        List<? extends QNodeExtended> qNodeList = getQDatacenterCharacteristicsList().get(qDatacenter).getQNodeList();
+        List<? extends QNodeMQ> qNodeList = getQDatacenterCharacteristicsList().get(qDatacenter).getQNodeList();
         setQNodeList(qNodeList);
 
         for (QTask QTask : getQTaskList()) {
-            QNodeExtended qNode;
+            QNodeMQ qNode;
             if (QTask.getQNodeId() == -1) {
                 // Submit qtask to a the first available QNode
                 // TODO: Implement a better (default) scheduling algorithm
                 qNode = getQNodeList().get(qNodeId);
             } else {
                 // Submit qtask to a specific QNode
-                qNode = QNodeListExtended.getById(getQNodeList(), QTask.getQNodeId());
+                qNode = QNodeMQList.getById(getQNodeList(), QTask.getQNodeId());
                 if (qNode == null) {
                     if(!Log.isDisabled()) {
                         Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Postponing execution of QTask ", QTask.getQTaskId(),
@@ -244,7 +238,7 @@ public class QBrokerExtended extends SimEntity {
         getQTaskList().removeAll(submittedQTasks);
     }
 
-    private boolean verifyConstraints(QNodeExtended qNode, QTask QTask, List<QTask> submittedQTasks){
+    private boolean verifyConstraints(QNodeMQ qNode, QTask QTask, List<QTask> submittedQTasks){
         if(qNode.getNumQubits() < QTask.getNumQubits()) {
             if (!Log.isDisabled()) {
                 Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Cancel the execution of QTask #", QTask.getQTaskId(),
@@ -279,15 +273,17 @@ public class QBrokerExtended extends SimEntity {
             return true;
         }
     }
-
-    private static boolean isSubset(List<String> firstList, List<String> secondList) {
-        for (String element : firstList) {
-            if (!secondList.contains(element)) {
-                return false; // element is not present in secondList, so firstList is not a subset of secondList
-            }
-        }
-        return true; // all elements of firstList are present in secondList, so firstList is a subset of secondList
+    public boolean isSubset(List<String> checkList, Set<String> gateSets) {
+        return gateSets.containsAll(checkList);
     }
+//    private static boolean isSubset(List<String> firstList, List<String> secondList) {
+//        for (String element : firstList) {
+//            if (!secondList.contains(element)) {
+//                return false; // element is not present in secondList, so firstList is not a subset of secondList
+//            }
+//        }
+//        return true; // all elements of firstList are present in secondList, so firstList is a subset of secondList
+//    }
 
     private void processOtherEvent(SimEvent ev) {
         if (ev == null) {

@@ -1,7 +1,7 @@
 package org.iquantum.policies.qtasks;
 
 import org.iquantum.backends.quantum.QNode;
-import org.iquantum.backends.quantum.QNodeExtended;
+import org.iquantum.backends.quantum.QNodeMQ;
 import org.iquantum.core.iQuantum;
 import org.iquantum.policies.qubitMapping.QubitMappingBackTracking;
 import org.iquantum.tasks.QTask;
@@ -13,10 +13,10 @@ import java.util.Map;
 
 import static org.iquantum.utils.DataFormat.roundDouble;
 
-public class QTaskSchedulerFCFSMultiQPU extends QTaskScheduler {
+public class QTaskSchedulerFCFSMQ extends QTaskScheduler {
     protected int currentQPUs;
 
-    public QTaskSchedulerFCFSMultiQPU() {
+    public QTaskSchedulerFCFSMQ() {
         super();
         // Initialize the number of QPUs (single QPU by default)
         currentQPUs = 1;
@@ -27,8 +27,9 @@ public class QTaskSchedulerFCFSMultiQPU extends QTaskScheduler {
         return QubitMappingBackTracking.findMapping(qNode.getQubitTopology(), QTask.getQubitTopology());
     }
 
-    public Map<String, String> qtaskMapping(QTask QTask, QNodeExtended qNode) {
-        return QubitMappingBackTracking.findMapping(qNode.getQPUList().get(0).getQubitTopology(), QTask.getQubitTopology());
+    public Map<String, String> qtaskMapping(QTask QTask, QNodeMQ qNode) {
+        // @TODO: Temporary get the first topology, need to consider all topologies
+        return QubitMappingBackTracking.findMapping(qNode.getQPUList().getQubitTopologyOfQPUById(0), QTask.getQubitTopology());
     }
 
     @Override

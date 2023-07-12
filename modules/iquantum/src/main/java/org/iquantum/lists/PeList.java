@@ -190,7 +190,7 @@ public class PeList {
 	/**
 	 * Sets the status of PEs of a host to FAILED or FREE. NOTE: <tt>resName</tt> and
 	 * <tt>hostId</tt> are used for debugging purposes, which is <b>ON</b> by default. 
-         * Use {@link #setStatusFailed(boolean)} if you do not want this information.
+         * Use {@link #setStatusFailed(List, boolean)} (boolean)} if you do not want this information.
 	 * 
          * @param peList the host's PE list to be set as failed or free
 	 * @param resName the name of the resource

@@ -8,7 +8,6 @@
 
 package org.iquantum.policies.qtasks;
 
-import org.iquantum.backends.quantum.QNodeExtended;
 import org.iquantum.tasks.ResQTask;
 import org.iquantum.backends.quantum.QNode;
 import org.iquantum.tasks.QTask;
