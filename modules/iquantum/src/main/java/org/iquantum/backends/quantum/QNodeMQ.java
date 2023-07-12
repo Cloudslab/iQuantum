@@ -1,22 +1,21 @@
 package org.iquantum.backends.quantum;
 
-import org.iquantum.datacenters.QDatacenter;
 import org.iquantum.datacenters.QDatacenterExtended;
-import org.iquantum.policies.qtasks.QTaskScheduler;
-import org.iquantum.policies.qtasks.QTaskSchedulerFCFSMultiQPU;
+import org.iquantum.lists.QPUList;
+import org.iquantum.policies.qtasks.QTaskSchedulerFCFSMQ;
 
-import java.util.List;
+import java.util.Set;
 
-public class QNodeExtended {
+public class QNodeMQ {
 
     private int id;
-    private List<? extends QPU> qpuList;
+    private QPUList qpuList;
 
-    private QTaskSchedulerFCFSMultiQPU qTaskScheduler;
+    private QTaskSchedulerFCFSMQ qTaskScheduler;
 
     private QDatacenterExtended qDatacenter;
 
-    public QNodeExtended(int id, List<? extends QPU> qpuList, QTaskSchedulerFCFSMultiQPU qTaskScheduler) {
+    public QNodeMQ(int id, QPUList qpuList, QTaskSchedulerFCFSMQ qTaskScheduler) {
         this.id = id;
         this.qpuList = qpuList;
         this.qTaskScheduler = qTaskScheduler;
@@ -26,31 +25,27 @@ public class QNodeExtended {
         return id;
     }
 
-    public List<? extends QPU> getQPUList() {
+    public QPUList getQPUList() {
         return qpuList;
     }
 
     public int getNumberOfQPU() {
-        return qpuList.size();
+        return qpuList.getNumberOfQPU();
     }
 
     public int getNumQubits() {
-        return getQPUList().get(0).getNumQubits();
+        return qpuList.getTotalNumQubits();
     }
 
-    public int getTotalClops() {
-        int clops = 0;
-        for (QPU qpu : qpuList) {
-            clops += qpu.getClops();
-        }
-        return clops;
+    public double getTotalClops() {
+        return qpuList.getTotalClops();
     }
 
-    public List<String> getGateSets() {
-        return getQPUList().get(0).getGateSets();
+    public Set<String> getGateSets() {
+        return qpuList.getAllGateSets();
     }
 
-    public QTaskSchedulerFCFSMultiQPU getQTaskScheduler() {
+    public QTaskSchedulerFCFSMQ getQTaskScheduler() {
         return qTaskScheduler;
     }
 

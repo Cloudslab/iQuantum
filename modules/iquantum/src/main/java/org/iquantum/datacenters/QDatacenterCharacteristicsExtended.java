@@ -7,8 +7,7 @@
  */
 package org.iquantum.datacenters;
 
-import org.iquantum.backends.quantum.QNode;
-import org.iquantum.backends.quantum.QNodeExtended;
+import org.iquantum.backends.quantum.QNodeMQ;
 import org.iquantum.core.iQuantum;
 
 import java.util.List;
@@ -18,13 +17,13 @@ public class QDatacenterCharacteristicsExtended {
     private int id;
 
     /** The hosts owned by the datacenter. */
-    private List<? extends QNodeExtended> qNodeList;
+    private List<? extends QNodeMQ> qNodeList;
 
     /** The time zone, defined as the difference from GMT. */
     private double timeZone;
 
     private double costPerSecond;
-    public QDatacenterCharacteristicsExtended(List<? extends QNodeExtended> qNodeList, double timeZone, double costPerSecond) {
+    public QDatacenterCharacteristicsExtended(List<? extends QNodeMQ> qNodeList, double timeZone, double costPerSecond) {
         setId(-1);
         setQNodeList(qNodeList);
         setTimeZone(0.0);
@@ -53,11 +52,11 @@ public class QDatacenterCharacteristicsExtended {
         this.id = id;
     }
 
-    public List<? extends QNodeExtended> getQNodeList() {
+    public List<? extends QNodeMQ> getQNodeList() {
         return qNodeList;
     }
 
-    public void setQNodeList(List<? extends QNodeExtended> qNodeList) {
+    public void setQNodeList(List<? extends QNodeMQ> qNodeList) {
         this.qNodeList = qNodeList;
     }
 
