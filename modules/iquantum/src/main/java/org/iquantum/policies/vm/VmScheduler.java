@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iquantum.backends.classical.Pe;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.lists.PeList;
 import org.iquantum.utils.Log;
 

@@ -202,7 +202,7 @@ public class iQuantum {
         try {
             runStop();
         } catch (IllegalArgumentException e) {
-            throw new NullPointerException("iQuantum.stopiQuantumulation() : "
+            throw new NullPointerException("iQuantum.stopiQuantumSimulation() : "
                     + "Error - can't stop Cloud Simulation.");
         }
     }
@@ -285,6 +285,14 @@ public class iQuantum {
         }
 
         return cis.getList();
+    }
+
+    public static List<Integer> getQuantumResourceList() {
+        if (cis == null) {
+            return null;
+        }
+
+        return cis.getQList();
     }
 
     // ======== SIMULATION METHODS ===============//

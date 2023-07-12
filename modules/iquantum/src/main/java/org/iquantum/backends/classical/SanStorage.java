@@ -22,7 +22,7 @@ import org.iquantum.utils.Log;
  * high network load.
  * 
  * @author Rodrigo N. Calheiros
- * @since iQuantum Toolkit 1.0
+ * @since CloudSim Toolkit 1.0
  */
 public class SanStorage extends HarddriveStorage {
 

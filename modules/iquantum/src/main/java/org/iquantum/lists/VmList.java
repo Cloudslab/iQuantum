@@ -10,7 +10,7 @@ package org.iquantum.lists;
 
 import java.util.List;
 
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * VmList is a collection of operations on lists of VMs.

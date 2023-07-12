@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.iquantum.models.UtilizationModel;
 import org.iquantum.models.UtilizationModelStochastic;
-import org.iquantum.policies.cctasks.CloudletSchedulerDynamicWorkload;
+import org.iquantum.policies.ctasks.CloudletSchedulerDynamicWorkload;
 import org.iquantum.tasks.CTask;
 import org.iquantum.tasks.ResCloudlet;
 import org.junit.Before;

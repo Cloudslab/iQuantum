@@ -7,8 +7,8 @@
  */
 package org.iquantum.sdn;
 
-import org.iquantum.policies.cctasks.CloudletScheduler;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.policies.ctasks.CloudletScheduler;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * Extension of VM that supports to set start and terminate time of VM in VM creation request.

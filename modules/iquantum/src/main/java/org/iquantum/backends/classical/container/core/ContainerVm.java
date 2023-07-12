@@ -21,7 +21,7 @@ import java.util.List;
  * @author Rodrigo N. Calheiros
  * @author Anton Beloglazov
  * @author Sareh Fotuhi Piraghaj
- * @since iQuantum Toolkit 1.0
+ * @since CloudSim Toolkit 1.0
  * <p/>
  * Created by sareh on 9/07/15.
  */

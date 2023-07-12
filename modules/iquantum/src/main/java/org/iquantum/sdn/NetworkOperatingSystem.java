@@ -19,12 +19,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.iquantum.sdn.SDNDatacenter;
+
 import org.iquantum.backends.classical.Host;
-import org.iquantum.policies.cctasks.CloudletSchedulerTimeShared;
+import org.iquantum.policies.ctasks.CloudletSchedulerTimeShared;
 import org.iquantum.utils.Log;
 import org.iquantum.backends.classical.Pe;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.policies.vm.VmScheduler;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;

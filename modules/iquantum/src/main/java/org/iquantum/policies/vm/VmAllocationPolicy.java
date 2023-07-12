@@ -9,7 +9,7 @@
 package org.iquantum.policies.vm;
 
 import org.iquantum.backends.classical.Host;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.datacenters.CDatacenter;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 /**
  * iQuantum Example 3
  * This example shows how to create a QDatacenter with two 7-qubit quantum nodes (IBM Oslo and IBM Nairobi),
- * a QBroker, and a list of 4 qulets for testing. Some qulets require more qubits than the quantum nodes.
- * The qulets are submitted to the QBroker and the simulation is started.
+ * a QBroker, and a list of 4 QTasks for testing. Some QTasks require more qubits than the quantum nodes.
+ * The QTasks are submitted to the QBroker and the simulation is started.
  * The results are printed when the simulation is over.
  */
 package org.iquantum.examples.quantum;
@@ -12,8 +12,8 @@ import org.iquantum.datacenters.QDatacenter;
 import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.backends.quantum.QNode;
 import org.iquantum.tasks.QTask;
-import org.iquantum.tasks.qubittopologies.QubitTopology;
-import org.iquantum.policies.qctasks.QuletSchedulerSpaceShared;
+import org.iquantum.backends.quantum.qubittopologies.QubitTopology;
+import org.iquantum.policies.qtasks.QTaskSchedulerSpaceShared;
 import org.iquantum.utils.Log;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -42,11 +42,11 @@ public class iQuantumExample3 {
         // Step 3: Create a QBroker
         QBroker qBroker = createQBroker();
 
-        // Step 4: Create a list of 4 qulets for testing
-        QTaskList = createQuletList(qDatacenter, qBroker);
+        // Step 4: Create a list of 4 QTasks for testing
+        QTaskList = createQTaskList(qDatacenter, qBroker);
 
-        // Step 5: Submit qulet to the QBroker
-        qBroker.submitQuletList(QTaskList);
+        // Step 5: Submit QTask to the QBroker
+        qBroker.submitQTaskList(QTaskList);
 
         // Step 6: Start the simulation
         iQuantum.startSimulation();
@@ -55,21 +55,21 @@ public class iQuantumExample3 {
         iQuantum.stopSimulation();
 
         // Step 8: Print the results when simulation is over
-        List<QTask> newList = qBroker.getQuletReceivedList();
-        printQuletList(newList);
+        List<QTask> newList = qBroker.getQTaskReceivedList();
+        printQTaskList(newList);
 
         Log.printLine("iQuantum Example 3 finished!");
     }
 
     /**
-     * Create a list of 4 Qulets and set the QBroker and QNode for each Qulet
+     * Create a list of 4 QTasks and set the QBroker and QNode for each QTask
      * @param qDatacenter: QDatacenter where the QNode is located
-     * @param qBroker: QBroker that will receive the Qulets
-     * @return A list of 4 Qulets
+     * @param qBroker: QBroker that will receive the QTasks
+     * @return A list of 4 QTasks
      */
-    private static List<QTask> createQuletList(QDatacenter qDatacenter, QBroker qBroker) {
+    private static List<QTask> createQTaskList(QDatacenter qDatacenter, QBroker qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
-        // Create Qulet 1
+        // Create QTask 1
         List<int[]> ql1Edges = new ArrayList<>();
         ql1Edges.add(new int[]{0, 1});
         ql1Edges.add(new int[]{1, 0});
@@ -80,12 +80,12 @@ public class iQuantumExample3 {
         QubitTopology ql1Topology = new QubitTopology(4, ql1Edges);
         ArrayList<String> qlGates = new ArrayList<>(Arrays.asList("CX", "RZ", "X"));
         QTask QTask1 = new QTask(0,4, 52, 3000, qlGates, ql1Topology);
-        // Set QBroker for Qulet 1
+        // Set QBroker for QTask 1
         QTask1.setBrokerId(qBroker.getId());
-        // Set QNode for Qulet 1
+        // Set QNode for QTask 1
         QTask1.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(0).getId());
 
-        // Create Qulet 2
+        // Create QTask 2
         List<int[]> ql2Edges = new ArrayList<>();
         ql2Edges.add(new int[]{0, 1});
         ql2Edges.add(new int[]{1, 0});
@@ -93,26 +93,26 @@ public class iQuantumExample3 {
         ql2Edges.add(new int[]{2, 1});
         QubitTopology ql2Topology = new QubitTopology(3, ql2Edges);
         QTask QTask2 = new QTask(1,10, 58, 1000, qlGates, ql2Topology);
-        // Set QBroker for Qulet 2
+        // Set QBroker for QTask 2
         QTask2.setBrokerId(qBroker.getId());
-        // Set QNode for Qulet 2
+        // Set QNode for QTask 2
         QTask2.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(1).getId());
 
-        // Create Qulet 3
+        // Create QTask 3
         QTask QTask3 = new QTask(2,3, 58, 4000, qlGates, ql2Topology);
-        // Set QBroker for Qulet 3
+        // Set QBroker for QTask 3
         QTask3.setBrokerId(qBroker.getId());
-        // Set QNode for Qulet 3
+        // Set QNode for QTask 3
         QTask3.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(1).getId());
 
-        // Create Qulet 4
+        // Create QTask 4
         QTask QTask4 = new QTask(3,8, 78, 2000, qlGates, ql2Topology);
-        // Set QBroker for Qulet 4
+        // Set QBroker for QTask 4
         QTask4.setBrokerId(qBroker.getId());
-        // Set QNode for Qulet 4
+        // Set QNode for QTask 4
         QTask4.setQNodeId(qDatacenter.getCharacteristics().getQNodeList().get(0).getId());
 
-        // Add all Qulets to the list
+        // Add all QTasks to the list
         QTaskList.add(QTask1);
         QTaskList.add(QTask2);
         QTaskList.add(QTask3);
@@ -161,9 +161,9 @@ public class iQuantumExample3 {
         ArrayList<String> gateSet1 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X"));
         ArrayList<String> gateSet2 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X"));
         QNode qNodeOslo = new QNode(0, 7,128,2600, gateSet1,
-                osloTopology, new QuletSchedulerSpaceShared());
+                osloTopology, new QTaskSchedulerSpaceShared());
         QNode qNodePerth = new QNode(1, 7,128,2900, gateSet2,
-                osloTopology, new QuletSchedulerSpaceShared());
+                osloTopology, new QTaskSchedulerSpaceShared());
         qNodeList = new ArrayList<QNode>();
         qNodeList.add(qNodeOslo);
         qNodeList.add(qNodePerth);
@@ -178,25 +178,25 @@ public class iQuantumExample3 {
     }
 
     /**
-     * Print the list of Qulets after the simulation
-     * @param list: list of Qulets
+     * Print the list of QTasks after the simulation
+     * @param list: list of QTasks
      */
-    private static void printQuletList(List<QTask> list) {
+    private static void printQTaskList(List<QTask> list) {
         int size = list.size();
         QTask QTask;
 
         String indent = "   ";
         Log.printLine();
         Log.printLine("========== OUTPUT ==========");
-        Log.printLine("Qulet ID" + indent + "Status" + indent
+        Log.printLine("QTask ID" + indent + "Status" + indent
                 + "QDCenter" + indent + "QNode ID" + indent + "Execution Time" + indent
                 + "Start Time" + indent + "Finish Time");
 
         DecimalFormat dft = new DecimalFormat("###.##");
         for (int i = 0; i < size; i++) {
             QTask = list.get(i);
-            Log.print(indent + QTask.getQuletId() + indent + indent);
-            if (QTask.getQuletStatus() == QTask.SUCCESS) {
+            Log.print(indent + QTask.getQTaskId() + indent + indent);
+            if (QTask.getQTaskStatus() == QTask.SUCCESS) {
                 Log.print("SUCCESS");
                 Log.printLine(indent + indent + QTask.getResourceId()
                         + indent + indent + indent + QTask.getQNodeId()
@@ -205,7 +205,7 @@ public class iQuantumExample3 {
                         + indent + indent + indent + dft.format(QTask.getFinishTime()));
             }
             else {
-                Log.printLine(QTask.getQuletStatusString());
+                Log.printLine(QTask.getQTaskStatusString());
             }
         }
     }

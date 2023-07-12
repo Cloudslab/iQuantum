@@ -7,47 +7,46 @@
  */
 
 package org.iquantum.tasks;
-import org.iquantum.tasks.qubittopologies.QubitTopology;
+import org.iquantum.backends.quantum.qubittopologies.QubitTopology;
 import org.iquantum.core.iQuantum;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Qulet is the class that represents a quantum task to be executed by a Quantum Computer.
+ * QTask is the class that represents a quantum task to be executed by a Quantum Computer.
  * It contains all the information about the quantum task, such as the number of qubits,
  * the number of layers, the number of shots, the gate set, the topology of the qubits,
  * the estimated completion time, the execution status, the execution start time and
  * the execution finish time.
  * <p/>
- * Note: This class is inspired on the Cloudlet class from iQuantum Toolkit.
  * @author Hoa Nguyen
  * @since iQuantum 1.0
  */
 public class QTask {
-    /** The id of the Qulet. */
+    /** The id of the QTask. */
     private int quletId;
-    /** The id of the QC broker this Qulet is submitted to */
+    /** The id of the QC broker this QTask is submitted to */
     private int brokerId;
-    /** The number of qubit in this Qulet. */
+    /** The number of qubit in this QTask. */
     private int numQubits;
-    /** The number of circuit layers in this Qulet. */
+    /** The number of circuit layers in this QTask. */
     private int numLayers;
-    /** The number of shots in this Qulet. */
+    /** The number of shots in this QTask. */
     private int numShots;
-    /** List of all gate set in the Qulet. */
+    /** List of all gate set in the QTask. */
     private List<String> gateSet;
-    /** The topology of the qubits in this Qulet. */
+    /** The topology of the qubits in this QTask. */
     private QubitTopology qubitTopology;
-    /** The estimated completion time of this Qulet. */
+    /** The estimated completion time of this QTask. */
     private double estimatedCompletionTime;
-    /** The execution status this Qulet. */
+    /** The execution status this QTask. */
     private int status;
-    /** The execution start time of this Qulet. */
+    /** The execution start time of this QTask. */
     private double execStartTime;
-    /** The execution finish time of this Qulet. */
+    /** The execution finish time of this QTask. */
     private double execFinishTime;
-    /** Indicates if transaction history records for this Qulet is to be outputted. */
+    /** Indicates if transaction history records for this QTask is to be outputted. */
     private boolean record;
     /** The format of decimal numbers. */
     private DecimalFormat num;
@@ -55,7 +54,7 @@ public class QTask {
     private StringBuffer history;
     /** Stores the operating system line separator */
     private String newline;
-    /** The id of the QNode that is planned to execute this Qulet. */
+    /** The id of the QNode that is planned to execute this QTask. */
     private int qNodeId;
     /**
      * The list of every resource where the qulet has been executed. In case
@@ -73,79 +72,79 @@ public class QTask {
 
     /** Constants attributes */
     /**
-     * The Qulet has been created and added to the QuletList object.
+     * The QTask has been created and added to the QTaskList object.
      */
     public static final int CREATED = 0;
 
     /**
-     * The Qulet has been assigned to a CloudResource object to be executed
+     * The QTask has been assigned to a CloudResource object to be executed
      * as planned.
      */
     public static final int READY = 1;
 
     /**
-     * The Qulet has moved to a Cloud node.
+     * The QTask has moved to a Cloud node.
      */
     public static final int QUEUED = 2;
 
     /**
-     * The Qulet is in execution in a Cloud node.
+     * The QTask is in execution in a Cloud node.
      */
     public static final int RUNNING = 3;
 
     /**
-     * The Qulet has been executed successfully.
+     * The QTask has been executed successfully.
      */
     public static final int SUCCESS = 4;
 
     /**
-     * The Qulet has failed.
+     * The QTask has failed.
      */
     public static final int FAILED = 5;
 
     /**
-     * The Qulet has been canceled.
+     * The QTask has been canceled.
      */
     public static final int CANCELED = 6;
 
     /**
-     * The Qulet has been paused. It can be resumed by changing the status
+     * The QTask has been paused. It can be resumed by changing the status
      * into <tt>RESUMED</tt>.
      */
     public static final int PAUSED = 7;
 
     /**
-     * The Qulet has been resumed from <tt>PAUSED</tt> state.
+     * The QTask has been resumed from <tt>PAUSED</tt> state.
      */
     public static final int RESUMED = 8;
 
     /**
-     * The Qulet has failed due to a resource failure.
+     * The QTask has failed due to a resource failure.
      */
     public static final int FAILED_RESOURCE_UNAVAILABLE = 9;
 
     /**
-     * The Qulet has failed due to qubits insufficient.
+     * The QTask has failed due to qubits insufficient.
      */
     public static final int FAILED_QUBITS_INSUFFICIENT = 10;
 
     /**
-     * The Qulet has failed due to gates insufficient.
+     * The QTask has failed due to gates insufficient.
      */
     public static final int FAILED_GATES_INSUFFICIENT = 11;
 
     /**
-     * The Qulet has failed due to qubit map impossible.
+     * The QTask has failed due to qubit map impossible.
      */
     public static final int FAILED_QUBIT_MAP = 12;
     /**
-     * Initializes a Qulet (Gate-based Quantum Task) object.
-     * @param quletId: the id of the Qulet
-     * @param numQubits: the number of qubits in the Qulet
-     * @param numLayers: the number of circuit layers in the Qulet
-     * @param numShots: the number of shots the Qulet is to be executed
-     * @param gateSet: the list of all gate set in the Qulet
-     * @param qubitTopology: the topology of the qubits in the Qulet
+     * Initializes a QTask (Gate-based Quantum Task) object.
+     * @param quletId: the id of the QTask
+     * @param numQubits: the number of qubits in the QTask
+     * @param numLayers: the number of circuit layers in the QTask
+     * @param numShots: the number of shots the QTask is to be executed
+     * @param gateSet: the list of all gate set in the QTask
+     * @param qubitTopology: the topology of the qubits in the QTask
      */
     public QTask(final int quletId, final int numQubits, final int numLayers,
                  final int numShots, final List<String> gateSet, final QubitTopology qubitTopology) {
@@ -168,12 +167,12 @@ public class QTask {
     }
 
     /**
-     * Validates the parameters of the Qulet.
-     * @param numQubits: the number of qubits in the Qulet
-     * @param numLayers: the number of circuit layers in the Qulet
-     * @param numShots: the number of shots the Qulet is to be executed
-     * @param gateSet: the list of all gate set in the Qulet
-     * @param qubitTopology: the topology of the qubits in the Qulet
+     * Validates the parameters of the QTask.
+     * @param numQubits: the number of qubits in the QTask
+     * @param numLayers: the number of circuit layers in the QTask
+     * @param numShots: the number of shots the QTask is to be executed
+     * @param gateSet: the list of all gate set in the QTask
+     * @param qubitTopology: the topology of the qubits in the QTask
      */
     private static void validateParameters(int numQubits, int numLayers, int numShots, List<String> gateSet,
                                            QubitTopology qubitTopology) {
@@ -203,11 +202,11 @@ public class QTask {
     /**
      * GETTERS AND SETTERS START------------------------------------------------
      */
-    public int getQuletStatus() {
+    public int getQTaskStatus() {
         return status;
     }
 
-    public void setQuletId(final int id) {
+    public void setQTaskId(final int id) {
         quletId = id;
     }
 
@@ -234,7 +233,7 @@ public class QTask {
     public void setBrokerId(final int id) {
         brokerId = id;
         if (record) {
-            write("Assigns the Qulet to " + iQuantum.getEntityName(id) + " (ID #" + id + ")");
+            write("Assigns the QTask to " + iQuantum.getEntityName(id) + " (ID #" + id + ")");
         }
     }
 
@@ -242,7 +241,7 @@ public class QTask {
         return brokerId;
     }
 
-    public int getQuletId() {
+    public int getQTaskId() {
         return quletId;
     }
     public int getQNodeId() {
@@ -264,28 +263,28 @@ public class QTask {
      */
     private static class Resource {
         /**
-         * Qulet's submission (arrival) time to a CloudResource.
+         * QTask's submission (arrival) time to a CloudResource.
          */
         public double submissionTime = 0.0;
 
         /**
-         * The time this Qulet resides in a CloudResource (from arrival time
+         * The time this QTask resides in a CloudResource (from arrival time
          * until departure time, that may include waiting time).
          */
         public double wallClockTime = 0.0;
 
         /**
-         * The total time the Qulet spent being executed in a CloudResource.
+         * The total time the QTask spent being executed in a CloudResource.
          */
         public double actualQPUTime = 0.0;
 
         /**
-         * Cost per second a CloudResource charge to execute this Qulet.
+         * Cost per second a CloudResource charge to execute this QTask.
          */
         public double costPerSec = 0.0;
 
         /**
-         * Qulet's layer finished so far.
+         * QTask's layer finished so far.
          */
         public long finishedSoFar = 0;
 
@@ -302,12 +301,12 @@ public class QTask {
     /** INTERNAL CLASSES END------------------------------------------------*/
 
     /**
-     * Sets the resource parameters for which the Qulet is going to be
+     * Sets the resource parameters for which the QTask is going to be
      * executed. From the second time this method is called, every call make the
      * qulet to be migrated to the indicated resource.<br>
      *
      * NOTE: This method <tt>should</tt> be called only by a resource entity,
-     * not the user or owner of this Qulet.
+     * not the user or owner of this QTask.
      *
      * @param resourceID the CloudResource ID
      * @param cost the cost running this CloudResource per second
@@ -322,19 +321,19 @@ public class QTask {
         resList.add(res);
 
         if (index == -1 && record) {
-            write("Allocates this Qulet to " + res.resourceName + " (ID #" + resourceID
+            write("Allocates this QTask to " + res.resourceName + " (ID #" + resourceID
                     + ") with cost = $" + cost + "/sec");
         } else if (record) {
             final int id = resList.get(index).resourceId;
             final String name = resList.get(index).resourceName;
-            write("Moves Qulet from " + name + " (ID #" + id + ") to " + res.resourceName + " (ID #"
+            write("Moves QTask from " + name + " (ID #" + id + ") to " + res.resourceName + " (ID #"
                     + resourceID + ") with cost = $" + cost + "/sec");
         }
         index++;
     }
 
     /**
-     * Get waiting time of the Qulet.
+     * Get waiting time of the QTask.
      */
     public double getWaitingTime() {
         if (index == -1) {
@@ -346,13 +345,13 @@ public class QTask {
     }
 
     /**
-     * Prints the Qulet's execution history.
-     * @return Qulet's execution history
+     * Prints the QTask's execution history.
+     * @return QTask's execution history
      */
-    public String getQuletHistory() {
+    public String getQTaskHistory() {
         String msg = null;
         if (history == null) {
-            msg = "No history is recorded for Qulet #" + quletId;
+            msg = "No history is recorded for QTask #" + quletId;
         } else {
             msg = history.toString();
         }
@@ -363,7 +362,7 @@ public class QTask {
     /**
      * Get the number of circuit layers of qulet finished so far.
      */
-    public long getQuletFinishedSoFar() {
+    public long getQTaskFinishedSoFar() {
         if (index == -1) {
             return numLayers;
         }
@@ -377,7 +376,7 @@ public class QTask {
     /**
      * Set the number of circuit layers of qulet finished so far.
      */
-    public void setQuletFinishedSoFar(final long layers) {
+    public void setQTaskFinishedSoFar(final long layers) {
         if (layers < 0.0 || index < 0) {
             return;
         }
@@ -390,14 +389,14 @@ public class QTask {
     }
 
     /**
-     * Check if the Qulet has finished.
+     * Check if the QTask has finished.
      */
     public boolean isFinished() {
         if (index == -1) {
             return false;
         }
         boolean completed = false;
-        // if result is 0 or -ve then this Qulet has finished
+        // if result is 0 or -ve then this QTask has finished
         final long finish = resList.get(index).finishedSoFar;
         final long result = numLayers - finish;
         if (result <= 0.0) {
@@ -406,7 +405,7 @@ public class QTask {
         return completed;
     }
 
-    /** Get the latest resource id that this Qulet has run on. */
+    /** Get the latest resource id that this QTask has run on. */
     public int getResourceId() {
         if (index == -1) {
             return -1;
@@ -415,7 +414,7 @@ public class QTask {
     }
 
     /**
-     * Sets the submission (arrival) time of this Qulet into a CloudResource.
+     * Sets the submission (arrival) time of this QTask into a CloudResource.
      *
      * @param clockTime the submission time
      * @pre clockTime >= 0.0
@@ -433,7 +432,7 @@ public class QTask {
         }
     }
     /**
-     * Gets the submission (arrival) time of this Qulet from the latest
+     * Gets the submission (arrival) time of this QTask from the latest
      * CloudResource.
      *
      * @return the submission time or <tt>0.0</tt> if none
@@ -447,7 +446,7 @@ public class QTask {
         return resList.get(index).submissionTime;
     }
     /**
-     * Sets the execution start time of this Qulet.
+     * Sets the execution start time of this QTask.
      *
      * @param clockTime the execution start time
      * @pre clockTime >= 0.0
@@ -484,7 +483,7 @@ public class QTask {
         }
     }
 
-    public void setQuletStatus(final int newStatus) throws Exception {
+    public void setQTaskStatus(final int newStatus) throws Exception {
         // if the new status is same as current one, then ignore the rest
         if (status == newStatus) {
             return;
@@ -493,7 +492,7 @@ public class QTask {
         // throws an exception if the new status is outside the range
         if (newStatus < QTask.CREATED || newStatus > QTask.FAILED_QUBIT_MAP) {
             throw new Exception(
-                    "Qulet.setQuletStatus() : Error - Invalid integer range for Qulet status.");
+                    "QTask.setQTaskStatus() : Error - Invalid integer range for QTask status.");
         }
 
         if (newStatus == QTask.SUCCESS) {
@@ -501,14 +500,14 @@ public class QTask {
         }
 
         if (record) {
-            write("Sets Qulet status from " + getQuletStatusString() + " to "
+            write("Sets QTask status from " + getQTaskStatusString() + " to "
                     + QTask.quletStatusString(newStatus));
         }
 
         status = newStatus;
     }
 
-    public String getQuletStatusString() {
+    public String getQTaskStatusString() {
         return QTask.quletStatusString(status);
     }
 
@@ -575,10 +574,10 @@ public class QTask {
         return statusString;
     }
     /**
-     * Gets the time of this Qulet resides in the latest CloudResource (from
+     * Gets the time of this QTask resides in the latest CloudResource (from
      * arrival time until departure time).
      *
-     * @return the time of this Qulet resides in a CloudResource
+     * @return the time of this QTask resides in a CloudResource
      * @pre $none
      * @post $result >= 0.0
      */
@@ -590,7 +589,7 @@ public class QTask {
     }
 
     /**
-     * Gets all the CloudResource names that executed this Qulet.
+     * Gets all the CloudResource names that executed this QTask.
      *
      * @return an array of CloudResource names or <tt>null</tt> if it has none
      * @pre $none
@@ -610,7 +609,7 @@ public class QTask {
         return data;
     }
     /**
-     * Gets all the CloudResource IDs that executed this Qulet.
+     * Gets all the CloudResource IDs that executed this QTask.
      *
      * @return an array of CloudResource IDs or <tt>null</tt> if it has none
      * @pre $none
@@ -631,11 +630,11 @@ public class QTask {
     }
 
     /**
-     * Gets the total execution time of this Qulet in a given CloudResource
+     * Gets the total execution time of this QTask in a given CloudResource
      * ID.
      *
      * @param resId a CloudResource entity ID
-     * @return the total execution time of this Qulet in a CloudResource or
+     * @return the total execution time of this QTask in a CloudResource or
      * <tt>0.0</tt> if not found
      * @pre resId >= 0
      * @post $result >= 0.0
@@ -653,17 +652,17 @@ public class QTask {
     }
 
     /**
-     * Gets the length of this Qulet that has been executed so far in a given
-     * CloudResource ID. This method is useful when trying to move this Qulet
+     * Gets the length of this QTask that has been executed so far in a given
+     * CloudResource ID. This method is useful when trying to move this QTask
      * into different CloudResources or to cancel it.
      *
      * @param resId a CloudResource entity ID
-     * @return the length of a partially executed Qulet or the full Qulet
+     * @return the length of a partially executed QTask or the full QTask
      * length if it is completed or <tt>0.0</tt> if not found
      * @pre resId >= 0
      * @post $result >= 0.0
      */
-    public long getQuletFinishedSoFar(final int resId) {
+    public long getQTaskFinishedSoFar(final int resId) {
         QTask.Resource resource = getResourceById(resId);
         if (resource != null) {
             return resource.finishedSoFar;
@@ -672,7 +671,7 @@ public class QTask {
     }
 
     /**
-     * Gets the submission (arrival) time of this Qulet in the given
+     * Gets the submission (arrival) time of this QTask in the given
      * CloudResource ID.
      *
      * @param resId a CloudResource entity ID
@@ -689,11 +688,11 @@ public class QTask {
     }
 
     /**
-     * Gets the time of this Qulet resides in a given CloudResource ID (from
+     * Gets the time of this QTask resides in a given CloudResource ID (from
      * arrival time until departure time).
      *
      * @param resId a CloudResource entity ID
-     * @return the time of this Qulet resides in the CloudResource or
+     * @return the time of this QTask resides in the CloudResource or
      * <tt>0.0</tt> if not found
      * @pre resId >= 0
      * @post $result >= 0.0
@@ -738,9 +737,9 @@ public class QTask {
     }
 
     /**
-     * Gets the finish time of this Qulet in a CloudResource.
+     * Gets the finish time of this QTask in a CloudResource.
      *
-     * @return the finish or completion time of this Qulet or <tt>-1</tt> if
+     * @return the finish or completion time of this QTask or <tt>-1</tt> if
      * not finished yet.
      * @pre $none
      * @post $result >= -1
@@ -751,9 +750,9 @@ public class QTask {
 
     // //////////////////////// PROTECTED METHODS //////////////////////////////
     /**
-     * Writes this particular history transaction of this Qulet into a log.
+     * Writes this particular history transaction of this QTask into a log.
      *
-     * @param str a history transaction of this Qulet
+     * @param str a history transaction of this QTask
      * @pre str != null
      * @post $none
      */
@@ -763,18 +762,18 @@ public class QTask {
         }
 
         if (num == null || history == null) { // Creates the history or
-            // transactions of this Qulet
+            // transactions of this QTask
             newline = System.getProperty("line.separator");
             num = new DecimalFormat("#0.00#"); // with 3 decimal spaces
             history = new StringBuffer(1000);
             history.append("Time below denotes the simulation time.");
             history.append(System.getProperty("line.separator"));
-            history.append("Time (sec)       Description Qulet #" + quletId);
+            history.append("Time (sec)       Description QTask #" + quletId);
             history.append(System.getProperty("line.separator"));
             history.append("------------------------------------------");
             history.append(System.getProperty("line.separator"));
             history.append(num.format(iQuantum.clock()));
-            history.append("   Creates Qulet ID #" + quletId);
+            history.append("   Creates QTask ID #" + quletId);
             history.append(System.getProperty("line.separator"));
         }
 

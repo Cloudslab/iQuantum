@@ -11,12 +11,12 @@ package org.iquantum.tasks;
 import org.iquantum.core.iQuantum;
 
 /**
- * iQuantum ResQulet represents a Qulet submitted to CloudResource for processing. This class
- * keeps track the time for all activities in the CloudResource for a specific Qulet. Before a
- * Qulet exits the CloudResource, it is RECOMMENDED to call this method
- * {@link #finalizeQulet()}.
+ * iQuantum ResQTask represents a QTask submitted to CloudResource for processing. This class
+ * keeps track the time for all activities in the CloudResource for a specific QTask. Before a
+ * QTask exits the CloudResource, it is RECOMMENDED to call this method
+ * {@link #finalizeQTask()}.
  * <p/>
- * It contains a Qulet object along with its arrival time and the ID of the machine and the Pe
+ * It contains a QTask object along with its arrival time and the ID of the machine and the Pe
  * (Processing Element) allocated to it. It acts as a placeholder for maintaining the amount of
  * resource share allocated at various times for simulating any scheduling using internal events.
  * <p/>
@@ -26,33 +26,33 @@ import org.iquantum.core.iQuantum;
  */
 public class ResQTask {
 
-	/** The Qulet object. */
+	/** The QTask object. */
 	private final QTask QTask;
 
-	/** The Qulet arrival time for the first time. */
+	/** The QTask arrival time for the first time. */
 	private double arrivalTime;
 
-	/** The estimation of Qulet finished time. */
+	/** The estimation of QTask finished time. */
 	private double finishedTime;
 
-	/** The length of Qulet finished so far. */
-	private long quletFinishedSoFar;
+	/** The length of QTask finished so far. */
+	private long qtaskFinishedSoFar;
 
 	/**
-	 * Qulet execution start time. This attribute will only hold the latest time since a Qulet
+	 * QTask execution start time. This attribute will only hold the latest time since a QTask
 	 * can be canceled, paused or resumed.
 	 */
 	private double startExecTime;
 
-	/** The total time to complete this Qulet. */
+	/** The total time to complete this QTask. */
 	private double totalCompletionTime;
 
 	// The below attributes are only to be used by the SpaceShared policy.
 
-	/** The machine id this Qulet is assigned to. */
+	/** The machine id this QTask is assigned to. */
 	private int machineId;
 
-	/** The Pe id this Qulet is assigned to. */
+	/** The Pe id this QTask is assigned to. */
 	private int peId;
 
 	/** The an array of machine IDs. */
@@ -78,19 +78,19 @@ public class ResQTask {
 	/** The reservation id. */
 	private final int reservId;
 
-	/** The num Pe needed to execute this Qulet. */
+	/** The num Pe needed to execute this QTask. */
 	private int pesNumber;
 
 	/**
-	 * Allocates a new ResQulet object upon the arrival of a Qulet object.
+	 * Allocates a new ResQTask object upon the arrival of a QTask object.
 	 * 
-	 * @param Qulet a Qulet object
+	 * @param QTask a QTask object
 	 * @see iQuantum#clock()
-	 * @pre Qulet != null
+	 * @pre QTask != null
 	 * @post $none
 	 */
 	public ResQTask(QTask QTask) {
-		// when a new ResQulet is created, then it will automatically set
+		// when a new ResQTask is created, then it will automatically set
 		// the submission time and other properties, such as remaining length
 		this.QTask = QTask;
 		startTime = 0;
@@ -101,18 +101,18 @@ public class ResQTask {
 	}
 
 	/**
-	 * Allocates a new ResQulet object upon the arrival of a Qulet object. Use this
-	 * constructor to store reserved Qulets, i.e. Qulets that done reservation before. The
+	 * Allocates a new ResQTask object upon the arrival of a QTask object. Use this
+	 * constructor to store reserved QTasks, i.e. QTasks that done reservation before. The
 	 * arriving time is determined by {@link iQuantum#clock()}.
 	 * 
-	 * @param Qulet a Qulet object
+	 * @param QTask a QTask object
 	 * @param startTime a reservation start time. Can also be interpreted as starting time to
-	 *            execute this Qulet.
+	 *            execute this QTask.
 	 * @param duration a reservation duration time. Can also be interpreted as how long to execute
-	 *            this Qulet.
-	 * @param reservID a reservation ID that owns this Qulet
+	 *            this QTask.
+	 * @param reservID a reservation ID that owns this QTask
 	 * @see iQuantum#clock()
-	 * @pre Qulet != null
+	 * @pre QTask != null
 	 * @pre startTime > 0
 	 * @pre duration > 0
 	 * @pre reservID > 0
@@ -128,9 +128,9 @@ public class ResQTask {
 	}
 
 	/**
-	 * Gets the Qulet or reservation start time.
+	 * Gets the QTask or reservation start time.
 	 * 
-	 * @return Qulet's starting time
+	 * @return QTask's starting time
 	 * @pre $none
 	 * @post $none
 	 */
@@ -150,7 +150,7 @@ public class ResQTask {
 	}
 
 	/**
-	 * Gets the number of PEs required to execute this Qulet.
+	 * Gets the number of PEs required to execute this QTask.
 	 * 
 	 * @return number of Pe
 	 * @pre $none
@@ -161,7 +161,7 @@ public class ResQTask {
 	}
 
 	/**
-	 * Gets the reservation ID that owns this Qulet.
+	 * Gets the reservation ID that owns this QTask.
 	 * 
 	 * @return a reservation ID
 	 * @pre $none
@@ -172,9 +172,9 @@ public class ResQTask {
 	}
 
 	/**
-	 * Checks whether this Qulet is submitted by reserving or not.
+	 * Checks whether this QTask is submitted by reserving or not.
 	 * 
-	 * @return <tt>true</tt> if this Qulet has reserved before, <tt>false</tt> otherwise
+	 * @return <tt>true</tt> if this QTask has reserved before, <tt>false</tt> otherwise
 	 * @pre $none
 	 * @post $none
 	 */
@@ -205,26 +205,26 @@ public class ResQTask {
 		totalCompletionTime = 0.0;
 		startExecTime = 0.0;
 
-		// In case a Qulet has been executed partially by some other grid
+		// In case a QTask has been executed partially by some other grid
 		// hostList.
-		quletFinishedSoFar = QTask.getQuletFinishedSoFar();
+		qtaskFinishedSoFar = QTask.getQTaskFinishedSoFar();
 	}
 
 	/**
-	 * Gets this Qulet entity Id.
+	 * Gets this QTask entity Id.
 	 * 
-	 * @return the Qulet entity Id
+	 * @return the QTask entity Id
 	 * @pre $none
 	 * @post $none
 	 */
-	public int getQuletId() {
-		return QTask.getQuletId();
+	public int getQTaskId() {
+		return QTask.getQTaskId();
 	}
 
 	/**
-	 * Gets the user or owner of this Qulet.
+	 * Gets the user or owner of this QTask.
 	 * 
-	 * @return the Qulet's user Id
+	 * @return the QTask's user Id
 	 * @pre $none
 	 * @post $none
 	 */
@@ -237,33 +237,33 @@ public class ResQTask {
 	}
 
 	/**
-	 * Gets the Qulet's length.
+	 * Gets the QTask's length.
 	 * 
-	 * @return Qulet's length
+	 * @return QTask's length
 	 * @pre $none
 	 * @post $none
 	 */
-	public long getQuletLayer() {
+	public long getQTaskLayer() {
 		return QTask.getNumLayers();
 	}
 
-	public long getQuletLength() {
+	public long getQTaskLength() {
 		return QTask.getNumLayers() * QTask.getNumShots();
 	}
 
 	/**
-	 * Sets the Qulet status.
+	 * Sets the QTask status.
 	 * 
-	 * @param status the Qulet status
+	 * @param status the QTask status
 	 * @return <tt>true</tt> if the new status has been set, <tt>false</tt> otherwise
 	 * @pre status >= 0
 	 * @post $none
 	 */
-	public boolean setQuletStatus(int status) {
-		// gets Qulet's previous status
-		int prevStatus = QTask.getQuletStatus();
+	public boolean setQTaskStatus(int status) {
+		// gets QTask's previous status
+		int prevStatus = QTask.getQTaskStatus();
 
-		// if the status of a Qulet is the same as last time, then ignore
+		// if the status of a QTask is the same as last time, then ignore
 		if (prevStatus == status) {
 			return false;
 		}
@@ -272,14 +272,14 @@ public class ResQTask {
 		try {
 			double clock = iQuantum.clock();   // gets the current clock
 
-			// sets Qulet's current status
-			QTask.setQuletStatus(status);
+			// sets QTask's current status
+			QTask.setQTaskStatus(status);
 
-			// if a previous Qulet status is INEXEC
+			// if a previous QTask status is INEXEC
 			if (prevStatus == QTask.RUNNING) {
 				// and current status is either CANCELED, PAUSED or SUCCESS
 				if (status == QTask.CANCELED || status == QTask.PAUSED || status == QTask.SUCCESS) {
-					// then update the Qulet completion time
+					// then update the QTask completion time
 					totalCompletionTime += (clock - startExecTime);
 					index = 0;
 					return true;
@@ -287,12 +287,12 @@ public class ResQTask {
 			}
 
 			if (prevStatus == QTask.RESUMED && status == QTask.SUCCESS) {
-				// then update the Qulet completion time
+				// then update the QTask completion time
 				totalCompletionTime += (clock - startExecTime);
 				return true;
 			}
 
-			// if a Qulet is now in execution
+			// if a QTask is now in execution
 			if (status == QTask.RUNNING || (prevStatus == QTask.PAUSED && status == QTask.RESUMED)) {
 				startExecTime = clock;
 				QTask.setExecStartTime(startExecTime);
@@ -306,9 +306,9 @@ public class ResQTask {
 	}
 
 	/**
-	 * Gets the Qulet's execution start time.
+	 * Gets the QTask's execution start time.
 	 * 
-	 * @return Qulet's execution start time
+	 * @return QTask's execution start time
 	 * @pre $none
 	 * @post $none
 	 */
@@ -317,12 +317,12 @@ public class ResQTask {
 	}
 
 	/**
-	 * Sets this Qulet's execution parameters. These parameters are set by the CloudResource
-	 * before departure or sending back to the original Qulet's owner.
+	 * Sets this QTask's execution parameters. These parameters are set by the CloudResource
+	 * before departure or sending back to the original QTask's owner.
 	 * 
-	 * @param wallClockTime the time of this Qulet resides in a CloudResource (from arrival time
+	 * @param wallClockTime the time of this QTask resides in a CloudResource (from arrival time
 	 *            until departure time).
-	 * @param actualCPUTime the total execution time of this Qulet in a CloudResource.
+	 * @param actualQPUTime the total execution time of this QTask in a CloudResource.
 	 * @pre wallClockTime >= 0.0
 	 * @pre actualCPUTime >= 0.0
 	 * @post $none
@@ -331,11 +331,11 @@ public class ResQTask {
 		QTask.setExecParam(wallClockTime, actualQPUTime);
 	}
 
-	public long getRemainingQuletLength() {
-		// Remaining Qulet length.
-		long rLength = this.getQuletLength() - quletFinishedSoFar;
+	public long getRemainingQTaskLength() {
+		// Remaining QTask length.
+		long rLength = this.getQTaskLength() - qtaskFinishedSoFar;
 
-		// Remaining Qulet length can't be negative number.
+		// Remaining QTask length can't be negative number.
 		if (rLength < 0) {
 			return 0;
 		}
@@ -347,59 +347,59 @@ public class ResQTask {
 	 * Finalizes all relevant information before <tt>exiting</tt> the CloudResource entity. This
 	 * method sets the final data of:
 	 * <ul>
-	 * <li>wall clock time, i.e. the time of this Qulet resides in a CloudResource (from arrival
+	 * <li>wall clock time, i.e. the time of this QTask resides in a CloudResource (from arrival
 	 * time until departure time).
-	 * <li>actual CPU time, i.e. the total execution time of this Qulet in a CloudResource.
-	 * <li>Qulet's finished time so far
+	 * <li>actual CPU time, i.e. the total execution time of this QTask in a CloudResource.
+	 * <li>QTask's finished time so far
 	 * </ul>
 	 * 
 	 * @pre $none
 	 * @post $none
 	 */
-	public void finalizeQulet() {
+	public void finalizeQTask() {
 		// Sets the wall clock time and actual QPU time
 		double wallClockTime = iQuantum.clock() - arrivalTime;
 		QTask.setExecParam(wallClockTime, totalCompletionTime);
 
 		long finished = 0;
-		if (QTask.getQuletStatus()== QTask.SUCCESS) {
+		if (QTask.getQTaskStatus()== QTask.SUCCESS) {
 			finished = QTask.getNumLayers() * QTask.getNumShots();
 		} else {
-			finished = quletFinishedSoFar;
+			finished = qtaskFinishedSoFar;
 		}
 
-		QTask.setQuletFinishedSoFar(finished);
+		QTask.setQTaskFinishedSoFar(finished);
 	}
 
 	/**
-	 * Updates the length of Qulet that has already been completed.
+	 * Updates the length of QTask that has already been completed.
 	 * 
-	 * @param miLength Qulet length in Instructions (I)
-	 * @pre miLength >= 0.0
+	 * @param layers QTask length that has been completed so far
+	 * @pre layers >= 0.0
 	 * @post $none
 	 */
-	public void updateQuletFinishedSoFar(long layers) {
-		quletFinishedSoFar += layers;
+	public void updateQTaskFinishedSoFar(long layers) {
+		qtaskFinishedSoFar += layers;
 	}
 
 	/**
-	 * Gets arrival time of a Qulet.
+	 * Gets arrival time of a QTask.
 	 * 
 	 * @return arrival time
 	 * @pre $none
 	 * @post $result >= 0.0
          * 
          * @todo It is being used different words for the same term.
-         * Here it is used arrival time while at Resource inner classe of the Qulet class
+         * Here it is used arrival time while at Resource inner classe of the QTask class
          * it is being used submissionTime. It needs to be checked if they are 
          * the same term or different ones in fact.
 	 */
-	public double getQuletArrivalTime() {
+	public double getQTaskArrivalTime() {
 		return arrivalTime;
 	}
 
 	/**
-	 * Sets the finish time for this Qulet. If time is negative, then it is being ignored.
+	 * Sets the finish time for this QTask. If time is negative, then it is being ignored.
 	 * 
 	 * @param time finish time
 	 * @pre time >= 0.0
@@ -414,45 +414,45 @@ public class ResQTask {
 	}
 
 	/**
-	 * Gets the Qulet's finish time.
+	 * Gets the QTask's finish time.
 	 * 
-	 * @return finish time of a Qulet or <tt>-1.0</tt> if it cannot finish in this hourly slot
+	 * @return finish time of a QTask or <tt>-1.0</tt> if it cannot finish in this hourly slot
 	 * @pre $none
 	 * @post $result >= -1.0
 	 */
-	public double getQuletFinishTime() {
+	public double getQTaskFinishTime() {
 		return finishedTime;
 	}
 
 	/**
-	 * Gets the related Qulet object.
+	 * Gets the related QTask object.
 	 * 
-	 * @return Qulet object
+	 * @return QTask object
 	 * @pre $none
 	 * @post $result != null
 	 */
-	public QTask getQulet() {
+	public QTask getQTask() {
 		return QTask;
 	}
 
 	/**
-	 * Gets the Qulet status.
+	 * Gets the QTask status.
 	 * 
-	 * @return Qulet status
+	 * @return QTask status
 	 * @pre $none
 	 * @post $none
 	 */
-	public int getQuletStatus() {
-		return QTask.getQuletStatus();
+	public int getQTaskStatus() {
+		return QTask.getQTaskStatus();
 	}
 
 	/**
-	 * Get am Unique Identifier (UID) of the Qulet.
+	 * Get am Unique Identifier (UID) of the QTask.
 	 * 
 	 * @return The UID
 	 */
 	public String getUid() {
-		return getBrokerId() + "-" + getQuletId();
+		return getBrokerId() + "-" + getQTaskId();
 	}
 
 }

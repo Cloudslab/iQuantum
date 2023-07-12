@@ -11,7 +11,7 @@ package org.iquantum.power;
 import java.util.List;
 import java.util.Random;
 
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * A VM selection policy that randomly select VMs to migrate from a host.

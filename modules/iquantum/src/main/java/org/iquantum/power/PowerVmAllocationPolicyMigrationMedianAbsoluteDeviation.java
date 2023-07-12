@@ -11,7 +11,7 @@ package org.iquantum.power;
 import java.util.List;
 
 import org.iquantum.backends.classical.Host;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.utils.MathUtil;
 import org.iquantum.utils.Log;
 /**

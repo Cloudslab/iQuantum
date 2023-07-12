@@ -25,7 +25,7 @@ import org.iquantum.datacenters.CDatacenter;
 import org.iquantum.datacenters.CDatacenterCharacteristics;
 import org.iquantum.models.UtilizationModel;
 import org.iquantum.models.UtilizationModelFull;
-import org.iquantum.policies.cctasks.CloudletSchedulerTimeShared;
+import org.iquantum.policies.ctasks.CloudletSchedulerTimeShared;
 import org.iquantum.policies.vm.VmAllocationPolicySimple;
 import org.iquantum.policies.vm.VmSchedulerTimeSharedOverSubscription;
 import org.iquantum.tasks.CTask;

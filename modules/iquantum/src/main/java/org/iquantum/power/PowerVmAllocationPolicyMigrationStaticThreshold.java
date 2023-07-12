@@ -11,7 +11,7 @@ package org.iquantum.power;
 import java.util.List;
 
 import org.iquantum.backends.classical.Host;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * A VM allocation policy that uses a Static CPU utilization Threshold (THR) to detect host over

@@ -10,8 +10,8 @@ package org.iquantum.network.datacenter;
 
 import java.util.ArrayList;
 
-import org.iquantum.policies.cctasks.CloudletScheduler;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.policies.ctasks.CloudletScheduler;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * NetworkVm class extends {@link Vm} to support simulation of networked datacenters. 

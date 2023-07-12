@@ -19,7 +19,7 @@ import org.iquantum.provisioners.PeProvisioner;
  * 
  * @author Manzur Murshed
  * @author Rajkumar Buyya
- * @since iQuantum Toolkit 1.0
+ * @since CloudSim Toolkit 1.0
  */
 public class Pe {
 

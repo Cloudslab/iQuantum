@@ -11,7 +11,7 @@ package org.iquantum.sdn.example.policies;
 import java.util.List;
 
 import org.iquantum.backends.classical.Host;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 /**
  * VM Allocation Policy - BW and Compute combined, LFF.

@@ -1,15 +1,15 @@
 package org.iquantum.backends.quantum;
 
-import org.iquantum.tasks.qubittopologies.IBMQTopology;
-import org.iquantum.tasks.qubittopologies.QubitTopologyExtended;
-import org.iquantum.policies.qctasks.QuletScheduler;
+import org.iquantum.backends.quantum.qubittopologies.IBMQTopology;
+import org.iquantum.backends.quantum.qubittopologies.QubitTopologyExtended;
+import org.iquantum.policies.qtasks.QTaskScheduler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class IBMQNode {
 
-    public static QNode createNode(int id, String node, QuletScheduler quletScheduler) {
+    public static QNode createNode(int id, String node, QTaskScheduler QTaskScheduler) {
         int numQubits = 0;
         int quantumVolume = 0;
         int clops = 0;
@@ -130,6 +130,6 @@ public class IBMQNode {
                 throw new IllegalArgumentException("Invalid IBMQ Node name");
         }
         QubitTopologyExtended qubitTopology = IBMQTopology.getQubitTopology(node);
-        return new QNode(id, numQubits, quantumVolume, clops, basicGateset, qubitTopology, quletScheduler);
+        return new QNode(id, numQubits, quantumVolume, clops, basicGateset, qubitTopology, QTaskScheduler);
     }
 }

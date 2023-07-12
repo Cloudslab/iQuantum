@@ -11,7 +11,7 @@ package org.iquantum.sdn.overbooking;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 import org.iquantum.provisioners.BwProvisioner;
 
 /**

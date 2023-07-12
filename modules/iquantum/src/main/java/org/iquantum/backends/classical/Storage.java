@@ -21,7 +21,7 @@ import java.util.List;
  * 
  * @author Uros Cibej
  * @author Anthony Sulistio
- * @since iQuantum Toolkit 1.0
+ * @since CloudSim Toolkit 1.0
  */
 public interface Storage {
 

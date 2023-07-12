@@ -11,9 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iquantum.core.iQuantum;
-import org.iquantum.backends.classical.vm.Vm;
 import org.iquantum.lists.PeList;
-import org.iquantum.policies.cctasks.CloudletScheduler;
+import org.iquantum.policies.ctasks.CloudletScheduler;
 import org.iquantum.policies.vm.VmScheduler;
 import org.iquantum.provisioners.BwProvisioner;
 import org.iquantum.provisioners.RamProvisioner;
@@ -28,7 +27,7 @@ import org.iquantum.utils.Log;
  * 
  * @author Rodrigo N. Calheiros
  * @author Anton Beloglazov
- * @since iQuantum Toolkit 1.0
+ * @since CloudSim Toolkit 1.0
  */
 public class Host {
 

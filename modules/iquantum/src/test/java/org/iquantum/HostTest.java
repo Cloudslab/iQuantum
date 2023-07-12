@@ -21,7 +21,7 @@ import org.iquantum.backends.classical.Host;
 import org.iquantum.backends.classical.Pe;
 import org.iquantum.backends.classical.vm.Vm;
 import org.iquantum.core.Consts;
-import org.iquantum.policies.cctasks.CloudletSchedulerDynamicWorkload;
+import org.iquantum.policies.ctasks.CloudletSchedulerDynamicWorkload;
 import org.iquantum.policies.vm.VmSchedulerTimeShared;
 import org.iquantum.provisioners.BwProvisionerSimple;
 import org.iquantum.provisioners.PeProvisionerSimple;

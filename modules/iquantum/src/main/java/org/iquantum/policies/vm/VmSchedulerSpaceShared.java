@@ -9,7 +9,7 @@
 package org.iquantum.policies.vm;
 
 import org.iquantum.backends.classical.Pe;
-import org.iquantum.backends.classical.vm.Vm;
+import org.iquantum.backends.classical.Vm;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -275,11 +275,7 @@ public class iQuantumTags {
 //     */
 //    public static final int RESOURCE_CHARACTERISTICS_REQUEST = BASE + 15;
 //
-//    /**
-//     * Denotes cloud resource characteristics information. This tag is normally used between iQuantum
-//     * and CloudResource entity.
-//     */
-//    public static final int RESOURCE_CHARACTERISTICS = BASE + 6;
+
 
 
     /**
@@ -288,45 +284,65 @@ public class iQuantumTags {
      * @since iQuantum 0.1
      */
     /**
-     * Denotes a Qulet is ready to be submitted to a QDatacenter.
+     * Denotes a QTask is ready to be submitted to a QDatacenter.
      */
-    public static final int QULET_SUBMIT_READY = BASE + 1000;
+
+    private static final int QBASE = 1000;
+
+    public static final int QTASK_SUBMIT_READY = QBASE + 1;
 
 /**
-     * Denotes a Qulet is submitting to a QDatacenter.
+     * Denotes a QTask is submitting to a QDatacenter.
      */
-    public static final int QULET_SUBMIT = BASE + 1001;
+    public static final int QTASK_SUBMIT = QBASE + 2;
 
     /**
-     * Denotes a Qulet is returned from a QDatacenter.
+     * Denotes a QTask is returned from a QDatacenter.
      */
-    public static final int QULET_RETURN = BASE + 1002;
+    public static final int QTASK_RETURN = QBASE + 3;
 
     /**
-     * Denotes a Qulet is being processed in a QDatacenter.
+     * Denotes a QTask is being processed in a QDatacenter.
      */
-    public static final int UPDATE_QULET_PROCESSING = BASE + 1003;
+    public static final int UPDATE_QTASK_PROCESSING = QBASE + 4;
 
     /**
-     * Denotes a Qulet is cancelled.
+     * Denotes a QTask is cancelled.
      */
-    public static final int QULET_CANCEL = BASE + 1004;
+    public static final int QTASK_CANCEL = QBASE + 5;
 
     /**
-     * Denotes a Qulet is failed as a result of a qubit insufficiency.
+     * Denotes a QTask is failed as a result of a qubit insufficiency.
      */
-    public static final int QULET_FAILED_QUBIT = BASE + 1005;
+    public static final int QTASK_FAILED_QUBIT = QBASE + 6;
 
     /**
-     * Denotes a Qulet is failed as a result of a gate insufficiency.
+     * Denotes a QTask is failed as a result of a gate insufficiency.
      */
-    public static final int QULET_FAILED_GATES = BASE + 1006;
+    public static final int QTASK_FAILED_GATES = QBASE + 7;
 
     /**
-     * Denotes a Qulet is failed as a result of a time insufficiency.
+     * Denotes a QTask is failed as a result of a time insufficiency.
      */
-    public static final int QULET_FAILED_QUBIT_MAP = BASE + 1007;
+    public static final int QTASK_FAILED_QUBIT_MAP = QBASE + 8;
 
+    /**
+     * Denotes cloud resource characteristics information. This tag is normally used between iQuantum
+     * and CloudResource entity.
+     */
+    public static final int QRESOURCE_CHARACTERISTICS = QBASE + 9;
+
+    /**
+     * Denotes request for cloud resource characteristics information. This tag is normally used
+     * between iQuantum and CloudResource entity.
+     */
+    public static final int QRESOURCE_CHARACTERISTICS_REQUEST = QBASE + 10;
+
+    public static final int QREGISTER_RESOURCE = QBASE + 11;
+
+    public static final int QRESOURCE_LIST = QBASE + 12;
+
+    public static final int CLOUD_GATEWAY_DISPATCH_TASK = QBASE + 13;
     /** Private Constructor. */
     private iQuantumTags() {
         throw new UnsupportedOperationException("iQuantumTags cannot be instantiated");
