@@ -66,7 +66,7 @@ public class iQuantumMultiQPUExample1 {
 
     private static List<QTask> createQTaskList(QDatacenterExtended qDatacenter, QBrokerMQ qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
-        String folderPath = "dataset/iquantum/MQTQTasks/montrealDataset.csv";
+        String folderPath = "dataset/iquantum/MQT-Set1-298-10-27-IBMQ27-Opt3.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {

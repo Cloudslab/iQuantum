@@ -10,7 +10,7 @@ package org.iquantum.policies.ctasks;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iquantum.tasks.ResCloudlet;
+import org.iquantum.tasks.ResCTask;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.Consts;
 import org.iquantum.tasks.CTask;
@@ -48,7 +48,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 		setCurrentMipsShare(mipsShare);
 		double timeSpam = currentTime - getPreviousTime();
 
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			rcl.updateCloudletFinishedSoFar((long) (getCapacity(mipsShare) * timeSpam * rcl.getNumberOfPes() * Consts.MILLION));
 		}
 
@@ -59,8 +59,8 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 
 		// check finished cloudlets
 		double nextEvent = Double.MAX_VALUE;
-		List<ResCloudlet> toRemove = new ArrayList<ResCloudlet>();
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		List<ResCTask> toRemove = new ArrayList<ResCTask>();
+		for (ResCTask rcl : getCloudletExecList()) {
 			long remainingLength = rcl.getRemainingCloudletLength();
 			if (remainingLength == 0) {// finished: remove from the list
 				toRemove.add(rcl);
@@ -71,7 +71,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 		getCloudletExecList().removeAll(toRemove);
 
 		// estimate finish time of cloudlets
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			double estimatedFinishTime = currentTime
 					+ (rcl.getRemainingCloudletLength() / (getCapacity(mipsShare) * rcl.getNumberOfPes()));
 			if (estimatedFinishTime - currentTime < iQuantum.getMinTimeBetweenEvents()) {
@@ -106,7 +106,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 		currentCPUs = cpus;
 
 		int pesInUse = 0;
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			pesInUse += rcl.getNumberOfPes();
 		}
 
@@ -125,7 +125,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 
 		// First, looks in the finished queue
 		found = false;
-		for (ResCloudlet rcl : getCloudletFinishedList()) {
+		for (ResCTask rcl : getCloudletFinishedList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				found = true;
 				break;
@@ -139,7 +139,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 
 		// Then searches in the exec list
 		position=0;
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				found = true;
 				break;
@@ -148,7 +148,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 		}
 
 		if (found) {
-			ResCloudlet rcl = getCloudletExecList().remove(position);
+			ResCTask rcl = getCloudletExecList().remove(position);
 			if (rcl.getRemainingCloudletLength() == 0) {
 				cloudletFinish(rcl);
 			} else {
@@ -160,7 +160,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 		// Now, looks in the paused queue
 		found = false;
 		position=0;
-		for (ResCloudlet rcl : getCloudletPausedList()) {
+		for (ResCTask rcl : getCloudletPausedList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				found = true;
 				rcl.setCloudletStatus(CTask.CANCELED);
@@ -181,7 +181,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 		boolean found = false;
 		int position = 0;
 
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				found = true;
 				break;
@@ -191,7 +191,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 
 		if (found) {
 			// remove cloudlet from the exec list and put it in the paused list
-			ResCloudlet rcl = getCloudletExecList().remove(position);
+			ResCTask rcl = getCloudletExecList().remove(position);
 			if (rcl.getRemainingCloudletLength() == 0) {
 				cloudletFinish(rcl);
 			} else {
@@ -204,7 +204,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 	}
 
 	@Override
-	public void cloudletFinish(ResCloudlet rcl) {
+	public void cloudletFinish(ResCTask rcl) {
 		rcl.setCloudletStatus(CTask.SUCCESS);
 		rcl.finalizeCloudlet();
 		getCloudletFinishedList().add(rcl);
@@ -216,7 +216,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 		int position = 0;
 
 		// look for the cloudlet in the paused list
-		for (ResCloudlet rcl : getCloudletPausedList()) {
+		for (ResCTask rcl : getCloudletPausedList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				found = true;
 				break;
@@ -225,7 +225,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 		}
 
 		if (found) {
-			ResCloudlet rgl = getCloudletPausedList().remove(position);
+			ResCTask rgl = getCloudletPausedList().remove(position);
 			rgl.setCloudletStatus(CTask.INEXEC);
 			getCloudletExecList().add(rgl);
 
@@ -244,7 +244,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 
 	@Override
 	public double cloudletSubmit(CTask CTask, double fileTransferTime) {
-		ResCloudlet rcl = new ResCloudlet(CTask);
+		ResCTask rcl = new ResCTask(CTask);
 		rcl.setCloudletStatus(CTask.INEXEC);
 		for (int i = 0; i < CTask.getNumberOfPes(); i++) {
 			rcl.setMachineAndPeId(0, i);
@@ -268,12 +268,12 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 
 	@Override
 	public int getCloudletStatus(int cloudletId) {
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				return rcl.getCloudletStatus();
 			}
 		}
-		for (ResCloudlet rcl : getCloudletPausedList()) {
+		for (ResCTask rcl : getCloudletPausedList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				return rcl.getCloudletStatus();
 			}
@@ -287,7 +287,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
                  * @todo 
                  */
 		double totalUtilization = 0;
-		for (ResCloudlet gl : getCloudletExecList()) {
+		for (ResCTask gl : getCloudletExecList()) {
 			totalUtilization += gl.getCloudlet().getUtilizationOfCpu(time);
 		}
 		return totalUtilization;
@@ -313,7 +313,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 
 	@Override
 	public CTask migrateCloudlet() {
-		ResCloudlet rgl = getCloudletExecList().remove(0);
+		ResCTask rgl = getCloudletExecList().remove(0);
 		rgl.finalizeCloudlet();
 		return rgl.getCloudlet();
 	}
@@ -325,19 +325,19 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 	}
 
 	@Override
-	public double getTotalCurrentAvailableMipsForCloudlet(ResCloudlet rcl, List<Double> mipsShare) {
+	public double getTotalCurrentAvailableMipsForCloudlet(ResCTask rcl, List<Double> mipsShare) {
             /*@todo It isn't being used any the the given parameters.*/
             return getCapacity(getCurrentMipsShare());
 	}
 
 	@Override
-	public double getTotalCurrentAllocatedMipsForCloudlet(ResCloudlet rcl, double time) {
+	public double getTotalCurrentAllocatedMipsForCloudlet(ResCTask rcl, double time) {
                 //@todo The method is not implemented, in fact
 		return 0.0;
 	}
 
 	@Override
-	public double getTotalCurrentRequestedMipsForCloudlet(ResCloudlet rcl, double time) {
+	public double getTotalCurrentRequestedMipsForCloudlet(ResCTask rcl, double time) {
                 //@todo The method is not implemented, in fact
 		// TODO Auto-generated method stub
 		return 0.0;
@@ -346,7 +346,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 	@Override
 	public double getCurrentRequestedUtilizationOfRam() {
 		double ram = 0;
-		for (ResCloudlet cloudlet : cloudletExecList) {
+		for (ResCTask cloudlet : cloudletExecList) {
 			ram += cloudlet.getCloudlet().getUtilizationOfRam(iQuantum.clock());
 		}
 		return ram;
@@ -355,7 +355,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 	@Override
 	public double getCurrentRequestedUtilizationOfBw() {
 		double bw = 0;
-		for (ResCloudlet cloudlet : cloudletExecList) {
+		for (ResCTask cloudlet : cloudletExecList) {
 			bw += cloudlet.getCloudlet().getUtilizationOfBw(iQuantum.clock());
 		}
 		return bw;

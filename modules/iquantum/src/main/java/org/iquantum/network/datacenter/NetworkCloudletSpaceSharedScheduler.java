@@ -16,7 +16,7 @@ import java.util.Map;
 
 import org.iquantum.tasks.CTask;
 import org.iquantum.policies.ctasks.CloudletScheduler;
-import org.iquantum.tasks.ResCloudlet;
+import org.iquantum.tasks.ResCTask;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;
 
@@ -63,10 +63,10 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 	 */
 	public NetworkCloudletSpaceSharedScheduler() {
 		super();
-		cloudletWaitingList = new ArrayList<ResCloudlet>();
-		cloudletExecList = new ArrayList<ResCloudlet>();
-		cloudletPausedList = new ArrayList<ResCloudlet>();
-		cloudletFinishedList = new ArrayList<ResCloudlet>();
+		cloudletWaitingList = new ArrayList<ResCTask>();
+		cloudletExecList = new ArrayList<ResCTask>();
+		cloudletPausedList = new ArrayList<ResCTask>();
+		cloudletFinishedList = new ArrayList<ResCTask>();
 		usedPes = 0;
 		currentCpus = 0;
 		pkttosend = new HashMap<Integer, List<HostPacket>>();
@@ -90,7 +90,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		currentCpus = cpus;
 		capacity /= cpus; // average capacity of each cpu
 
-		for (ResCloudlet rcl : getCloudletExecList()) { // each machine in the
+		for (ResCTask rcl : getCloudletExecList()) { // each machine in the
 			// exec list has the
 			// same amount of cpu
 
@@ -166,8 +166,8 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 
 		// update each cloudlet
 		int finished = 0;
-		List<ResCloudlet> toRemove = new ArrayList<ResCloudlet>();
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		List<ResCTask> toRemove = new ArrayList<ResCTask>();
+		for (ResCTask rcl : getCloudletExecList()) {
 			// rounding issue...
 			if (((NetworkCTask) (rcl.getCloudlet())).currStagenum == NetworkConstants.FINISH) {
 				// stage is changed and packet to send
@@ -185,7 +185,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		if (!getCloudletWaitingList().isEmpty()) {
 			for (int i = 0; i < finished; i++) {
 				toRemove.clear();
-				for (ResCloudlet rcl : getCloudletWaitingList()) {
+				for (ResCTask rcl : getCloudletWaitingList()) {
 					if ((currentCpus - usedPes) >= rcl.getNumberOfPes()) {
 						rcl.setCloudletStatus(CTask.INEXEC);
 						for (int k = 0; k < rcl.getNumberOfPes(); k++) {
@@ -203,7 +203,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 
 		// estimate finish time of cloudlets in the execution queue
 		double nextEvent = Double.MAX_VALUE;
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			double remainingLength = rcl.getRemainingCloudletLength();
 			double estimatedFinishTime = currentTime + (remainingLength / (capacity * rcl.getNumberOfPes()));
 			if (estimatedFinishTime - currentTime < iQuantum.getMinTimeBetweenEvents()) {
@@ -276,7 +276,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 	@Override
 	public CTask cloudletCancel(int cloudletId) {
 		// First, looks in the finished queue
-		for (ResCloudlet rcl : getCloudletFinishedList()) {
+		for (ResCTask rcl : getCloudletFinishedList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				getCloudletFinishedList().remove(rcl);
 				return rcl.getCloudlet();
@@ -284,7 +284,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		}
 
 		// Then searches in the exec list
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				getCloudletExecList().remove(rcl);
 				if (rcl.getRemainingCloudletLength() == 0.0) {
@@ -297,7 +297,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		}
 
 		// Now, looks in the paused queue
-		for (ResCloudlet rcl : getCloudletPausedList()) {
+		for (ResCTask rcl : getCloudletPausedList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				getCloudletPausedList().remove(rcl);
 				return rcl.getCloudlet();
@@ -305,7 +305,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		}
 
 		// Finally, looks in the waiting list
-		for (ResCloudlet rcl : getCloudletWaitingList()) {
+		for (ResCTask rcl : getCloudletWaitingList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				rcl.setCloudletStatus(CTask.CANCELED);
 				getCloudletWaitingList().remove(rcl);
@@ -323,7 +323,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		int position = 0;
 
 		// first, looks for the cloudlet in the exec list
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				found = true;
 				break;
@@ -333,7 +333,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 
 		if (found) {
 			// moves to the paused list
-			ResCloudlet rgl = getCloudletExecList().remove(position);
+			ResCTask rgl = getCloudletExecList().remove(position);
 			if (rgl.getRemainingCloudletLength() == 0.0) {
 				cloudletFinish(rgl);
 			} else {
@@ -347,7 +347,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		// now, look for the cloudlet in the waiting list
 		position = 0;
 		found = false;
-		for (ResCloudlet rcl : getCloudletWaitingList()) {
+		for (ResCTask rcl : getCloudletWaitingList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				found = true;
 				break;
@@ -357,7 +357,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 
 		if (found) {
 			// moves to the paused list
-			ResCloudlet rgl = getCloudletWaitingList().remove(position);
+			ResCTask rgl = getCloudletWaitingList().remove(position);
 			if (rgl.getRemainingCloudletLength() == 0.0) {
 				cloudletFinish(rgl);
 			} else {
@@ -372,7 +372,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 	}
 
 	@Override
-	public void cloudletFinish(ResCloudlet rcl) {
+	public void cloudletFinish(ResCTask rcl) {
 		rcl.setCloudletStatus(CTask.SUCCESS);
 		rcl.finalizeCloudlet();
 		getCloudletFinishedList().add(rcl);
@@ -385,7 +385,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		int position = 0;
 
 		// look for the cloudlet in the paused list
-		for (ResCloudlet rcl : getCloudletPausedList()) {
+		for (ResCTask rcl : getCloudletPausedList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				found = true;
 				break;
@@ -394,7 +394,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		}
 
 		if (found) {
-			ResCloudlet rcl = getCloudletPausedList().remove(position);
+			ResCTask rcl = getCloudletPausedList().remove(position);
 
 			// it can go to the exec list
 			if ((currentCpus - usedPes) >= rcl.getNumberOfPes()) {
@@ -450,7 +450,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 	public double cloudletSubmit(CTask CTask, double fileTransferTime) {
 		// it can go to the exec list
 		if ((currentCpus - usedPes) >= CTask.getNumberOfPes()) {
-			ResCloudlet rcl = new ResCloudlet(CTask);
+			ResCTask rcl = new ResCTask(CTask);
 			rcl.setCloudletStatus(CTask.INEXEC);
 			for (int i = 0; i < CTask.getNumberOfPes(); i++) {
 				rcl.setMachineAndPeId(0, i);
@@ -459,7 +459,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 			getCloudletExecList().add(rcl);
 			usedPes += CTask.getNumberOfPes();
 		} else {// no enough free PEs: go to the waiting queue
-			ResCloudlet rcl = new ResCloudlet(CTask);
+			ResCTask rcl = new ResCTask(CTask);
 			rcl.setCloudletStatus(CTask.QUEUED);
 			getCloudletWaitingList().add(rcl);
 			return 0.0;
@@ -495,19 +495,19 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 
 	@Override
 	public int getCloudletStatus(int cloudletId) {
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				return rcl.getCloudletStatus();
 			}
 		}
 
-		for (ResCloudlet rcl : getCloudletPausedList()) {
+		for (ResCTask rcl : getCloudletPausedList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				return rcl.getCloudletStatus();
 			}
 		}
 
-		for (ResCloudlet rcl : getCloudletWaitingList()) {
+		for (ResCTask rcl : getCloudletWaitingList()) {
 			if (rcl.getCloudletId() == cloudletId) {
 				return rcl.getCloudletStatus();
 			}
@@ -519,7 +519,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 	@Override
 	public double getTotalUtilizationOfCpu(double time) {
 		double totalUtilization = 0;
-		for (ResCloudlet gl : getCloudletExecList()) {
+		for (ResCTask gl : getCloudletExecList()) {
 			totalUtilization += gl.getCloudlet().getUtilizationOfCpu(time);
 		}
 		return totalUtilization;
@@ -545,7 +545,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 
 	@Override
 	public CTask migrateCloudlet() {
-		ResCloudlet rcl = getCloudletExecList().remove(0);
+		ResCTask rcl = getCloudletExecList().remove(0);
 		rcl.finalizeCloudlet();
 		CTask cl = rcl.getCloudlet();
 		usedPes -= cl.getNumberOfPes();
@@ -564,7 +564,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 	}
 
 	@Override
-	public double getTotalCurrentAvailableMipsForCloudlet(ResCloudlet rcl, List<Double> mipsShare) {
+	public double getTotalCurrentAvailableMipsForCloudlet(ResCTask rcl, List<Double> mipsShare) {
                 /*@todo The param rcl is not being used.*/
 		double capacity = 0.0;
 		int cpus = 0;
@@ -580,13 +580,13 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 	}
 
 	@Override
-	public double getTotalCurrentAllocatedMipsForCloudlet(ResCloudlet rcl, double time) {
+	public double getTotalCurrentAllocatedMipsForCloudlet(ResCTask rcl, double time) {
                 //@todo The method doesn't appear to be implemented in fact
 		return 0.0;
 	}
 
 	@Override
-	public double getTotalCurrentRequestedMipsForCloudlet(ResCloudlet rcl, double time) {
+	public double getTotalCurrentRequestedMipsForCloudlet(ResCTask rcl, double time) {
                 //@todo The method doesn't appear to be implemented in fact
 		return 0.0;
 	}

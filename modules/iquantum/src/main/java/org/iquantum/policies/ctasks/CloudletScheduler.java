@@ -11,7 +11,7 @@ package org.iquantum.policies.ctasks;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.iquantum.tasks.ResCloudlet;
+import org.iquantum.tasks.ResCTask;
 import org.iquantum.network.datacenter.NetworkCloudletSpaceSharedScheduler;
 import org.iquantum.tasks.CTask;
 
@@ -36,19 +36,19 @@ public abstract class CloudletScheduler {
 	private List<Double> currentMipsShare;
 
 	/** The list of cloudlet waiting to be executed on the VM. */
-	protected List<? extends ResCloudlet> cloudletWaitingList;
+	protected List<? extends ResCTask> cloudletWaitingList;
 
 	/** The list of cloudlets being executed on the VM. */
-	protected List<? extends ResCloudlet> cloudletExecList;
+	protected List<? extends ResCTask> cloudletExecList;
 
 	/** The list of paused cloudlets. */
-	protected List<? extends ResCloudlet> cloudletPausedList;
+	protected List<? extends ResCTask> cloudletPausedList;
 
 	/** The list of finished cloudlets. */
-	protected List<? extends ResCloudlet> cloudletFinishedList;
+	protected List<? extends ResCTask> cloudletFinishedList;
 
 	/** The list of failed cloudlets. */
-	protected List<? extends ResCloudlet> cloudletFailedList;
+	protected List<? extends ResCTask> cloudletFailedList;
 
 	/**
 	 * Creates a new CloudletScheduler object. 
@@ -59,11 +59,11 @@ public abstract class CloudletScheduler {
 	 */
 	public CloudletScheduler() {
 		setPreviousTime(0.0);
-		cloudletWaitingList = new LinkedList<ResCloudlet>();
-		cloudletExecList = new LinkedList<ResCloudlet>();
-		cloudletPausedList = new LinkedList<ResCloudlet>();
-		cloudletFinishedList = new LinkedList<ResCloudlet>();
-		cloudletFailedList = new LinkedList<ResCloudlet>();
+		cloudletWaitingList = new LinkedList<ResCTask>();
+		cloudletExecList = new LinkedList<ResCTask>();
+		cloudletPausedList = new LinkedList<ResCTask>();
+		cloudletFinishedList = new LinkedList<ResCTask>();
+		cloudletFailedList = new LinkedList<ResCTask>();
 	}
 
 	/**
@@ -136,7 +136,7 @@ public abstract class CloudletScheduler {
 	 * @pre rgl != $null
 	 * @post $none
 	 */
-	public abstract void cloudletFinish(ResCloudlet rcl);
+	public abstract void cloudletFinish(ResCTask rcl);
 
 	/**
 	 * Gets the status of a cloudlet.
@@ -219,7 +219,7 @@ public abstract class CloudletScheduler {
          * in other classes such as {@link CloudletSchedulerDynamicWorkload} it returns
          * the MIPS' sum of all PEs.
 	 */
-	public abstract double getTotalCurrentAvailableMipsForCloudlet(ResCloudlet rcl, List<Double> mipsShare);
+	public abstract double getTotalCurrentAvailableMipsForCloudlet(ResCTask rcl, List<Double> mipsShare);
 
 	/**
 	 * Gets the total current requested mips for a given cloudlet.
@@ -228,7 +228,7 @@ public abstract class CloudletScheduler {
 	 * @param time the time
 	 * @return the total current requested mips for the given cloudlet
 	 */
-	public abstract double getTotalCurrentRequestedMipsForCloudlet(ResCloudlet rcl, double time);
+	public abstract double getTotalCurrentRequestedMipsForCloudlet(ResCTask rcl, double time);
 
 	/**
 	 * Gets the total current allocated mips for cloudlet.
@@ -237,7 +237,7 @@ public abstract class CloudletScheduler {
 	 * @param time the time
 	 * @return the total current allocated mips for cloudlet
 	 */
-	public abstract double getTotalCurrentAllocatedMipsForCloudlet(ResCloudlet rcl, double time);
+	public abstract double getTotalCurrentAllocatedMipsForCloudlet(ResCTask rcl, double time);
 
 	/**
 	 * Gets the current requested ram.
@@ -296,7 +296,7 @@ public abstract class CloudletScheduler {
 	 * @return the cloudlet waiting list
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends ResCloudlet> List<T> getCloudletWaitingList() {
+	public <T extends ResCTask> List<T> getCloudletWaitingList() {
 		return (List<T>) cloudletWaitingList;
 	}
 
@@ -306,7 +306,7 @@ public abstract class CloudletScheduler {
 	 * @param <T> the generic type
 	 * @param cloudletWaitingList the cloudlet waiting list
 	 */
-	protected <T extends ResCloudlet> void setCloudletWaitingList(List<T> cloudletWaitingList) {
+	protected <T extends ResCTask> void setCloudletWaitingList(List<T> cloudletWaitingList) {
 		this.cloudletWaitingList = cloudletWaitingList;
 	}
 
@@ -317,7 +317,7 @@ public abstract class CloudletScheduler {
 	 * @return the cloudlet exec list
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends ResCloudlet> List<T> getCloudletExecList() {
+	public <T extends ResCTask> List<T> getCloudletExecList() {
 		return (List<T>) cloudletExecList;
 	}
 
@@ -327,7 +327,7 @@ public abstract class CloudletScheduler {
 	 * @param <T> the generic type
 	 * @param cloudletExecList the new cloudlet exec list
 	 */
-	protected <T extends ResCloudlet> void setCloudletExecList(List<T> cloudletExecList) {
+	protected <T extends ResCTask> void setCloudletExecList(List<T> cloudletExecList) {
 		this.cloudletExecList = cloudletExecList;
 	}
 
@@ -338,7 +338,7 @@ public abstract class CloudletScheduler {
 	 * @return the cloudlet paused list
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends ResCloudlet> List<T> getCloudletPausedList() {
+	public <T extends ResCTask> List<T> getCloudletPausedList() {
 		return (List<T>) cloudletPausedList;
 	}
 
@@ -348,7 +348,7 @@ public abstract class CloudletScheduler {
 	 * @param <T> the generic type
 	 * @param cloudletPausedList the new cloudlet paused list
 	 */
-	protected <T extends ResCloudlet> void setCloudletPausedList(List<T> cloudletPausedList) {
+	protected <T extends ResCTask> void setCloudletPausedList(List<T> cloudletPausedList) {
 		this.cloudletPausedList = cloudletPausedList;
 	}
 
@@ -359,7 +359,7 @@ public abstract class CloudletScheduler {
 	 * @return the cloudlet finished list
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends ResCloudlet> List<T> getCloudletFinishedList() {
+	public <T extends ResCTask> List<T> getCloudletFinishedList() {
 		return (List<T>) cloudletFinishedList;
 	}
 
@@ -369,7 +369,7 @@ public abstract class CloudletScheduler {
 	 * @param <T> the generic type
 	 * @param cloudletFinishedList the new cloudlet finished list
 	 */
-	protected <T extends ResCloudlet> void setCloudletFinishedList(List<T> cloudletFinishedList) {
+	protected <T extends ResCTask> void setCloudletFinishedList(List<T> cloudletFinishedList) {
 		this.cloudletFinishedList = cloudletFinishedList;
 	}
 
@@ -380,7 +380,7 @@ public abstract class CloudletScheduler {
 	 * @return the cloudlet failed list.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends ResCloudlet> List<T>  getCloudletFailedList() {
+	public <T extends ResCTask> List<T>  getCloudletFailedList() {
 		return (List<T>) cloudletFailedList;
 	}
 
@@ -390,7 +390,7 @@ public abstract class CloudletScheduler {
 	 * @param <T> the generic type
 	 * @param cloudletFailedList the new cloudlet failed list.
 	 */
-	protected <T extends ResCloudlet> void setCloudletFailedList(List<T> cloudletFailedList) {
+	protected <T extends ResCTask> void setCloudletFailedList(List<T> cloudletFailedList) {
 		this.cloudletFailedList = cloudletFailedList;
 	}
 

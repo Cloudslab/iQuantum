@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.iquantum.tasks.ResCloudlet;
+import org.iquantum.tasks.ResCTask;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.Consts;
 import org.iquantum.tasks.CTask;
@@ -85,9 +85,9 @@ public class CloudletSchedulerDynamicWorkload extends CloudletSchedulerTimeShare
 
 		double timeSpan = currentTime - getPreviousTime();
 		double nextEvent = Double.MAX_VALUE;
-		List<ResCloudlet> cloudletsToFinish = new ArrayList<ResCloudlet>();
+		List<ResCTask> cloudletsToFinish = new ArrayList<ResCTask>();
 
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			rcl.updateCloudletFinishedSoFar((long) (timeSpan
 					* getTotalCurrentAllocatedMipsForCloudlet(rcl, getPreviousTime()) * Consts.MILLION));
 
@@ -105,7 +105,7 @@ public class CloudletSchedulerDynamicWorkload extends CloudletSchedulerTimeShare
 			}
 		}
 
-		for (ResCloudlet rgl : cloudletsToFinish) {
+		for (ResCTask rgl : cloudletsToFinish) {
 			getCloudletExecList().remove(rgl);
 			cloudletFinish(rgl);
 		}
@@ -126,7 +126,7 @@ public class CloudletSchedulerDynamicWorkload extends CloudletSchedulerTimeShare
 
 	@Override
 	public double cloudletSubmit(CTask cl, double fileTransferTime) {
-		ResCloudlet rcl = new ResCloudlet(cl);
+		ResCTask rcl = new ResCTask(cl);
 		rcl.setCloudletStatus(CTask.INEXEC);
 
 		for (int i = 0; i < cl.getNumberOfPes(); i++) {
@@ -138,7 +138,7 @@ public class CloudletSchedulerDynamicWorkload extends CloudletSchedulerTimeShare
 	}
 
 	@Override
-	public void cloudletFinish(ResCloudlet rcl) {
+	public void cloudletFinish(ResCTask rcl) {
 		rcl.setCloudletStatus(CTask.SUCCESS);
 		rcl.finalizeCloudlet();
 		getCloudletFinishedList().add(rcl);
@@ -147,7 +147,7 @@ public class CloudletSchedulerDynamicWorkload extends CloudletSchedulerTimeShare
 	@Override
 	public double getTotalUtilizationOfCpu(double time) {
 		double totalUtilization = 0;
-		for (ResCloudlet rcl : getCloudletExecList()) {
+		for (ResCTask rcl : getCloudletExecList()) {
 			totalUtilization += rcl.getCloudlet().getUtilizationOfCpu(time);
 		}
 		return totalUtilization;
@@ -173,12 +173,12 @@ public class CloudletSchedulerDynamicWorkload extends CloudletSchedulerTimeShare
 	}
 
 	@Override
-	public double getTotalCurrentRequestedMipsForCloudlet(ResCloudlet rcl, double time) {
+	public double getTotalCurrentRequestedMipsForCloudlet(ResCTask rcl, double time) {
 		return rcl.getCloudlet().getUtilizationOfCpu(time) * getTotalMips();
 	}
 
 	@Override
-	public double getTotalCurrentAvailableMipsForCloudlet(ResCloudlet rcl, List<Double> mipsShare) {
+	public double getTotalCurrentAvailableMipsForCloudlet(ResCTask rcl, List<Double> mipsShare) {
 		double totalCurrentMips = 0.0;
 		if (mipsShare != null) {
 			int neededPEs = rcl.getNumberOfPes();
@@ -194,7 +194,7 @@ public class CloudletSchedulerDynamicWorkload extends CloudletSchedulerTimeShare
 	}
 
 	@Override
-	public double getTotalCurrentAllocatedMipsForCloudlet(ResCloudlet rcl, double time) {
+	public double getTotalCurrentAllocatedMipsForCloudlet(ResCTask rcl, double time) {
 		double totalCurrentRequestedMips = getTotalCurrentRequestedMipsForCloudlet(rcl, time);
 		double totalCurrentAvailableMips = getTotalCurrentAvailableMipsForCloudlet(rcl, getCurrentMipsShare());
 		if (totalCurrentRequestedMips > totalCurrentAvailableMips) {
@@ -211,7 +211,7 @@ public class CloudletSchedulerDynamicWorkload extends CloudletSchedulerTimeShare
          * @todo It is not clear the goal of this method. The related test case
          * doesn't make it clear too. The method doesn't appear to be used anywhere.
 	 */
-	public void updateUnderAllocatedMipsForCloudlet(ResCloudlet rcl, double mips) {
+	public void updateUnderAllocatedMipsForCloudlet(ResCTask rcl, double mips) {
 		if (getUnderAllocatedMips().containsKey(rcl.getUid())) {
 			mips += getUnderAllocatedMips().get(rcl.getUid());
 		}
@@ -225,7 +225,7 @@ public class CloudletSchedulerDynamicWorkload extends CloudletSchedulerTimeShare
 	 * @param time the time
 	 * @return the estimated finish time
 	 */
-	public double getEstimatedFinishTime(ResCloudlet rcl, double time) {
+	public double getEstimatedFinishTime(ResCTask rcl, double time) {
 		return time
 				+ ((rcl.getRemainingCloudletLength()) / getTotalCurrentAllocatedMipsForCloudlet(rcl, time));
 	}

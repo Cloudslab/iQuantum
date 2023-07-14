@@ -2,6 +2,8 @@ package org.iquantum.examples.cloudsim.container;
 
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * This Example is following the format for {@link org.iquantum.examples.cloudsim.power.planetlab.Dvfs}
@@ -30,7 +32,10 @@ public class ContainerOverbooking {
             /**
              * Getting the path of the planet lab workload that is included in the cloudSim Package
              */
-            String inputFolder = ContainerOverbooking.class.getClassLoader().getResource("workload/planetlab").getPath();
+//            String inputFolder = ContainerOverbooking.class.getClassLoader().getResource("workload/planetlab").getPath();
+            String folderPath = "dataset/cloudsim/planetlab";
+            Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
+            String inputFolder = datasetPath.toString();
             /**
              * The output folder for the logs. The log files would be located in this folder.
              */
