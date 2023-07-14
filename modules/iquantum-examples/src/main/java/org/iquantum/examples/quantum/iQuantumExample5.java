@@ -30,7 +30,7 @@ public class iQuantumExample5 {
     private static  List<QNode> qNodeList;
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Start the iQuantum Example 4");
+        System.out.println("Start the iQuantum Example 5");
 
         // Step 1: Initialize the core simulation package. It should be called before creating any entities.
         int num_user = 1;
@@ -65,7 +65,7 @@ public class iQuantumExample5 {
 
     private static List<QTask> createQTaskList(QDatacenter qDatacenter, QBroker qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
-        String folderPath = "dataset/iquantum/MQTQTasks/montrealDataset.csv";
+        String folderPath = "dataset/iquantum/MQT-Set1-298-10-27-IBMQ27-Opt3.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {
@@ -108,8 +108,8 @@ public class iQuantumExample5 {
      */
     private static QDatacenter createQDatacenter(String name) {
         // Automatically create two quantum nodes (IBM Hanoi and IBM Cairo) from the dataset
-        QNode qNode1 = IBMQNode.createNode(0,"ibm_cairo",new QTaskSchedulerSpaceShared());
-        QNode qNode2 = IBMQNode.createNode(1,"ibm_hanoi",new QTaskSchedulerSpaceShared());
+        QNode qNode1 = IBMQNode.createNode(0,"ibm_hanoi",new QTaskSchedulerSpaceShared());
+        QNode qNode2 = IBMQNode.createNode(1,"ibm_cairo",new QTaskSchedulerSpaceShared());
 //        QubitTopology.printTopology(qNode1.getQubitTopology());
         qNodeList = new ArrayList<>();
         qNodeList.addAll(Arrays.asList(qNode1, qNode2));

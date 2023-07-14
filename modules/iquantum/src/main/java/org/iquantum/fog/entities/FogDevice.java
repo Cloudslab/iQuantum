@@ -40,7 +40,6 @@ public class FogDevice extends PowerCDatacenter {
     protected Map<String, List<String>> appToModulesMap;
     protected Map<Integer, Double> childToLatencyMap;
 
-
     protected Map<Integer, Integer> cloudTrafficMap;
 
     protected double lockTime;
@@ -95,7 +94,6 @@ public class FogDevice extends PowerCDatacenter {
     protected Queue<Pair<Tuple, Integer>> clusterTupleQueue;// tuple and destination cluster device ID
     protected boolean isClusterLinkBusy; //Flag denoting whether the link connecting to cluster from this FogDevice is busy
     protected double clusterLinkBandwidth;
-
 
     public FogDevice(
             String name,

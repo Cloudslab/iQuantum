@@ -16,8 +16,8 @@ public class IBMQNodeMQ {
         int clops = 0;
         ArrayList<String> basicGateset;
         // Predefined common basic gate sets: rz, sx, x, measure, cx
-        ArrayList<String> basicGateset_1 = new ArrayList<>(Arrays.asList("CX", "ID", "RZ", "SX", "X", "MEASURE"));
-        ArrayList<String> basicGateset_2 = new ArrayList<>(Arrays.asList("ECR", "ID", "RZ", "SX", "X"));
+        ArrayList<String> basicGateset_1 = new ArrayList<>(Arrays.asList("cx", "id", "rz", "sx", "x", "measure"));
+        ArrayList<String> basicGateset_2 = new ArrayList<>(Arrays.asList("ecr", "id", "rz", "sx", "x"));
         switch (node) {
             case "ibm_washington":
                 numQubits = 127;

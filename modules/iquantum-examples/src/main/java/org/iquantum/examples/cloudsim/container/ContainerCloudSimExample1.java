@@ -38,6 +38,8 @@ import org.iquantum.backends.classical.container.vmSelectionPolicies.PowerContai
 import org.iquantum.core.iQuantum;
 
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -407,12 +409,13 @@ public class ContainerCloudSimExample1 {
      */
     public static List<ContainerCTask> createContainerCloudletList(int brokerId, int numberOfCloudlets)
             throws FileNotFoundException {
-        String inputFolderName = ContainerCloudSimExample1.class.getClassLoader().getResource("workload/planetlab").getPath();
+        String folderPath = "dataset/cloudsim/planetlab";
+        Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         ArrayList<ContainerCTask> cloudletList = new ArrayList<ContainerCTask>();
         long fileSize = 300L;
         long outputSize = 300L;
         UtilizationModelNull utilizationModelNull = new UtilizationModelNull();
-        java.io.File inputFolder1 = new java.io.File(inputFolderName);
+        java.io.File inputFolder1 = new java.io.File(datasetPath.toString());
         java.io.File[] files1 = inputFolder1.listFiles();
         int createdCloudlets = 0;
         for (java.io.File aFiles1 : files1) {

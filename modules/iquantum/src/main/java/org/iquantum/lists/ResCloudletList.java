@@ -10,7 +10,7 @@ package org.iquantum.lists;
 
 import java.util.List;
 
-import org.iquantum.tasks.ResCloudlet;
+import org.iquantum.tasks.ResCTask;
 
 /**
  * ResCloudletList is a collection of operations on lists of ResCloudlets.
@@ -21,7 +21,7 @@ import org.iquantum.tasks.ResCloudlet;
 public class ResCloudletList {
 
 	/**
-	 * Gets a {@link ResCloudlet} with a given id and owned by a given user.
+	 * Gets a {@link ResCTask} with a given id and owned by a given user.
          * This method needs a combination of Cloudlet Id and User Id because
 	 * each Cloud User might have exactly the same Cloudlet Id.
 	 * 
@@ -35,7 +35,7 @@ public class ResCloudletList {
      * 
      * @todo The second phrase of the class documentation is not clear. 
 	 */
-	public static <T extends ResCloudlet> ResCloudlet getByIdAndUserId(
+	public static <T extends ResCTask> ResCTask getByIdAndUserId(
 			List<T> list,
 			int cloudletId,
 			int userId) {
@@ -61,7 +61,7 @@ public class ResCloudletList {
 	 * @pre userId >= 0
 	 * @post $none
 	 */
-	public static <T extends ResCloudlet> int indexOf(List<T> list, int cloudletId, int userId) {
+	public static <T extends ResCTask> int indexOf(List<T> list, int cloudletId, int userId) {
 		int i = 0;
 		for (T rcl : list) {
 			if (rcl.getCloudletId() == cloudletId && rcl.getUserId() == userId) {
@@ -83,7 +83,7 @@ public class ResCloudletList {
 	 * @pre list != null
 	 * @post $result == true || $result == false
 	 */
-	public static <T extends ResCloudlet> boolean move(List<T> listFrom, List<T> listTo, T cloudlet) {
+	public static <T extends ResCTask> boolean move(List<T> listFrom, List<T> listTo, T cloudlet) {
 		if (listFrom.remove(cloudlet)) {
 			listTo.add(cloudlet);
 			return true;
@@ -98,7 +98,7 @@ public class ResCloudletList {
 	 * @param id the cloudlet id
 	 * @return the position of the cloudlet with that id, or -1 if not found.
 	 */
-	public static <T extends ResCloudlet> int getPositionById(List<T> cloudletList, int id) {
+	public static <T extends ResCTask> int getPositionById(List<T> cloudletList, int id) {
 		int i = 0 ;
 	        for (T cloudlet : cloudletList) {
 			if (cloudlet.getCloudletId() == id) {

@@ -1,7 +1,7 @@
 package org.iquantum.fog.scheduler;
 
 import org.iquantum.policies.ctasks.CloudletSchedulerTimeShared;
-import org.iquantum.tasks.ResCloudlet;
+import org.iquantum.tasks.ResCTask;
 
 public class TupleScheduler extends CloudletSchedulerTimeShared{
 
@@ -17,7 +17,7 @@ public class TupleScheduler extends CloudletSchedulerTimeShared{
 	 * @param time the time
 	 * @return the estimated finish time
 	 */
-	public double getEstimatedFinishTime(ResCloudlet rcl, double time) {
+	public double getEstimatedFinishTime(ResCTask rcl, double time) {
 		//System.out.println("REMAINING CLOUDLET LENGTH : "+rcl.getRemainingCloudletLength()+"\tCLOUDLET LENGTH"+rcl.getCloudletLength());
 		//System.out.println("CURRENT ALLOC MIPS FOR CLOUDLET : "+getTotalCurrentAllocatedMipsForCloudlet(rcl, time));
 		
