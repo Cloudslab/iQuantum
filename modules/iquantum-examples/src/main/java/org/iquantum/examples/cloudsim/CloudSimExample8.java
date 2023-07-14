@@ -101,6 +101,7 @@ public class CloudSimExample8 {
 
 	/**
 	 * Creates main() to run this example
+	 * @param args
 	 */
 	public static void main(String[] args) {
 		Log.printLine("Starting CloudSimExample8...");

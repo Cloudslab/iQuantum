@@ -51,6 +51,7 @@ public class CloudSimExample5 {
 
 	/**
 	 * Creates main() to run this example
+	 * @param args
 	 */
 	public static void main(String[] args) {
 

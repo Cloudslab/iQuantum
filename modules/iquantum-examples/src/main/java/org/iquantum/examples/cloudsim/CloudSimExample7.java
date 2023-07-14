@@ -99,6 +99,7 @@ public class CloudSimExample7 {
 
 	/**
 	 * Creates main() to run this example
+	 * @param args
 	 */
 	public static void main(String[] args) {
 		Log.printLine("Starting CloudSimExample7...");
