@@ -26,7 +26,7 @@ import org.iquantum.models.UtilizationModel;
 import org.iquantum.models.UtilizationModelStochastic;
 import org.iquantum.policies.ctasks.CloudletSchedulerDynamicWorkload;
 import org.iquantum.tasks.CTask;
-import org.iquantum.tasks.ResCloudlet;
+import org.iquantum.tasks.ResCTask;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -65,7 +65,7 @@ public class CloudletSchedulerSingleServiceTest {
 		UtilizationModelStochastic utilizationModel = new UtilizationModelStochastic();
 		CTask cloudlet = new CTask(0, CLOUDLET_LENGTH, PES_NUMBER, CLOUDLET_FILE_SIZE, CLOUDLET_OUTPUT_SIZE,
 				utilizationModel, utilizationModel, utilizationModel);
-		ResCloudlet rcl = new ResCloudlet(cloudlet);
+		ResCTask rcl = new ResCTask(cloudlet);
 
 		Map<String, Double> underAllocatedMips = new HashMap<String, Double>();
 		assertEquals(underAllocatedMips, vmScheduler.getUnderAllocatedMips());
@@ -142,7 +142,7 @@ public class CloudletSchedulerSingleServiceTest {
 		vmScheduler.setCurrentMipsShare(mipsShare);
 
 		vmScheduler.cloudletSubmit(cloudlet, 0);
-		vmScheduler.cloudletFinish(new ResCloudlet(cloudlet));
+		vmScheduler.cloudletFinish(new ResCTask(cloudlet));
 
 		assertEquals(CTask.SUCCESS, vmScheduler.getCloudletStatus(0));
 		assertTrue(vmScheduler.isFinishedCloudlets());
@@ -165,7 +165,7 @@ public class CloudletSchedulerSingleServiceTest {
 		CTask cloudlet = new CTask(0, CLOUDLET_LENGTH, PES_NUMBER, CLOUDLET_FILE_SIZE, CLOUDLET_OUTPUT_SIZE,
 				utilizationModel, utilizationModel, utilizationModel);
 		cloudlet.setResourceParameter(0, 0, 0);
-		ResCloudlet rgl = new ResCloudlet(cloudlet);
+		ResCTask rgl = new ResCTask(cloudlet);
 
 		List<Double> mipsShare = new ArrayList<Double>();
 		mipsShare.add(MIPS / 4);
@@ -202,7 +202,7 @@ public class CloudletSchedulerSingleServiceTest {
 		CTask cloudlet = new CTask(0, CLOUDLET_LENGTH, PES_NUMBER, CLOUDLET_FILE_SIZE, CLOUDLET_OUTPUT_SIZE,
 				utilizationModel, utilizationModel, utilizationModel);
 		cloudlet.setResourceParameter(0, 0, 0);
-		ResCloudlet rgl = new ResCloudlet(cloudlet);
+		ResCTask rgl = new ResCTask(cloudlet);
 
 		List<Double> mipsShare = new ArrayList<Double>();
 		mipsShare.add(MIPS / 4);
