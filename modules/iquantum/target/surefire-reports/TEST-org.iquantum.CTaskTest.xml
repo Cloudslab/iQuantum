@@ -33,7 +33,7 @@
     <property name="java.class.version" value="61.0"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
-    <property name="os.version" value="13.4"/>
+    <property name="os.version" value="13.4.1"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="user.home" value="/Users/biboo"/>
     <property name="user.timezone" value="Australia/Melbourne"/>
@@ -61,8 +61,8 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
   </properties>
-  <testcase classname="org.iquantum.CTaskTest" name="testCTask" time="0.001"/>
-  <testcase classname="org.iquantum.CTaskTest" name="testGetUtilizationOfBw" time="0"/>
+  <testcase classname="org.iquantum.CTaskTest" name="testCTask" time="0"/>
+  <testcase classname="org.iquantum.CTaskTest" name="testGetUtilizationOfBw" time="0.001"/>
   <testcase classname="org.iquantum.CTaskTest" name="testCTaskAlternativeConstructor1" time="0"/>
   <testcase classname="org.iquantum.CTaskTest" name="testCTaskAlternativeConstructor2" time="0"/>
   <testcase classname="org.iquantum.CTaskTest" name="testGetUtilizationOfCpu" time="0"/>
