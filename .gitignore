@@ -126,6 +126,7 @@ fabric.properties
 
 # Package Files #
 *.jar
+!py4j0.10.9.7.jar
 *.war
 *.nar
 *.ear
