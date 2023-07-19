@@ -38,7 +38,7 @@ public class iQuantum {
     private static int shutdownId = -1;
 
     /** The CIS object. */
-    private static CloudInformationService cis = null;
+    private static ResourceInformationService cis = null;
 
     /** The Constant NOT_FOUND. */
     private static final int NOT_FOUND = -1;
@@ -110,7 +110,7 @@ public class iQuantum {
             initCommonVariable(cal, traceFlag, numUser);
 
             // create a GIS object
-            cis = new CloudInformationService("CloudInformationService");
+            cis = new ResourceInformationService("CloudInformationService");
 
             // set all the above entity IDs
             cisId = cis.getId();

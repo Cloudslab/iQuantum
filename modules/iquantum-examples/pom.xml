@@ -15,7 +15,16 @@
   		<groupId>${project.groupId}</groupId>
   		<artifactId>iquantum</artifactId>
   		<version>${project.version}</version>
-  	</dependency>  
+  	</dependency>
+    <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>py4j</artifactId>
+        <version>1.0.0</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/libs/py4j0.10.9.7.jar</systemPath>
+    </dependency>
+
+
   </dependencies>
     
 </project>

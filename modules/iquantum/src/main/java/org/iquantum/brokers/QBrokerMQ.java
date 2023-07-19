@@ -161,7 +161,7 @@ public class QBrokerMQ extends SimEntity {
 
     }
 
-    private void processQResourceCharacteristicsRequest(SimEvent ev) {
+    protected void processQResourceCharacteristicsRequest(SimEvent ev) {
         setDatacenterIdsList(iQuantum.getQuantumResourceList());
         setDatacenterCharacteristicsList(new HashMap<Integer, QDatacenterCharacteristicsExtended>());
 

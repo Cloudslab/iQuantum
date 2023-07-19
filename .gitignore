@@ -141,3 +141,5 @@ replay_pid*
 
 .DS_Store
 .idea/
+/output/
+*.qasm

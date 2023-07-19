@@ -6,6 +6,10 @@ import org.iquantum.policies.qtasks.QTaskSchedulerFCFSMQ;
 
 import java.util.Set;
 
+/**
+ * Quantum Node with multiple QPU support. All information of QPU capabilities are modeled in the QPU class.
+ * This class will replace the original QNode class in the future.
+ */
 public class QNodeMQ {
 
     private int id;

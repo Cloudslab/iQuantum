@@ -49,25 +49,25 @@ public class iQuantumTags {
 
     /**
      * Denotes a cloud resource to be registered. This tag is normally used between
-     * {@link org.iquantum.core.CloudInformationService} and CloudResouce entities.
+     * {@link ResourceInformationService} and CloudResouce entities.
      */
     public static final int REGISTER_RESOURCE = BASE + 2;
 
     /**
      * Denotes a cloud resource to be registered, that can support advance reservation. This tag is
-     * normally used between {@link org.iquantum.core.CloudInformationService} and CloudResouce entity.
+     * normally used between {@link ResourceInformationService} and CloudResouce entity.
      */
     public static final int REGISTER_RESOURCE_AR = BASE + 3;
 
     /**
      * Denotes a list of all hostList's, including the ones that can support advance reservation. This
-     * tag is normally used between {@link org.iquantum.core.CloudInformationService} and iQuantum entity.
+     * tag is normally used between {@link ResourceInformationService} and iQuantum entity.
      */
     public static final int RESOURCE_LIST = BASE + 4;
 
     /**
      * Denotes a list of hostList's that only support advance reservation. This tag is normally used
-     * between {@link org.iquantum.core.CloudInformationService} and iQuantum entity.
+     * between {@link ResourceInformationService} and iQuantum entity.
      */
     public static final int RESOURCE_AR_LIST = BASE + 5;
 
@@ -112,7 +112,7 @@ public class iQuantumTags {
 
     /**
      * Denotes a request to register a CloudResource entity to a regional
-     * {@link CloudInformationService} (CIS) entity.
+     * {@link ResourceInformationService} (CIS) entity.
      */
     public static final int REGISTER_REGIONAL_GIS = BASE + 13;
 

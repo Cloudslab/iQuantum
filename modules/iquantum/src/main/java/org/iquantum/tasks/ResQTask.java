@@ -367,8 +367,8 @@ public class ResQTask {
 		} else {
 			finished = qtaskFinishedSoFar;
 		}
-
 		QTask.setQTaskFinishedSoFar(finished);
+		QTask.setCost();
 	}
 
 	/**
@@ -454,5 +454,6 @@ public class ResQTask {
 	public String getUid() {
 		return getBrokerId() + "-" + getQTaskId();
 	}
+
 
 }

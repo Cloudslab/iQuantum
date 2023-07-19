@@ -14,6 +14,7 @@ import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.backends.quantum.IBMQNode;
 import org.iquantum.backends.quantum.QNode;
 import org.iquantum.tasks.QTask;
+import org.iquantum.utils.QTaskExporter;
 import org.iquantum.utils.QTaskImporter;
 import org.iquantum.policies.qtasks.QTaskSchedulerSpaceShared;
 import org.iquantum.utils.Log;
@@ -30,6 +31,7 @@ public class iQuantumExample5 {
     private static  List<QNode> qNodeList;
 
     public static void main(String[] args) throws IOException {
+        String exampleName = "iQuantumExample5";
         System.out.println("Start the iQuantum Example 5");
 
         // Step 1: Initialize the core simulation package. It should be called before creating any entities.
@@ -59,13 +61,14 @@ public class iQuantumExample5 {
 //        // Step 8: Print the results when simulation is over
         List<QTask> newList = qBroker.getQTaskReceivedList();
         printQTaskList(newList);
+        QTaskExporter.extractQTaskListToCSV(newList, exampleName);
 
-        Log.printLine("iQuantum Example 6 finished!");
+        Log.printLine("iQuantum Example 5 finished!");
     }
 
     private static List<QTask> createQTaskList(QDatacenter qDatacenter, QBroker qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
-        String folderPath = "dataset/iquantum/MQT-Set1-298-10-27-IBMQ27-Opt3.csv";
+        String folderPath = "dataset/iquantum/MQT-Set1-298-10-27-IBMQ27-Opt3-Extra.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {
@@ -110,11 +113,10 @@ public class iQuantumExample5 {
         // Automatically create two quantum nodes (IBM Hanoi and IBM Cairo) from the dataset
         QNode qNode1 = IBMQNode.createNode(0,"ibm_hanoi",new QTaskSchedulerSpaceShared());
         QNode qNode2 = IBMQNode.createNode(1,"ibm_cairo",new QTaskSchedulerSpaceShared());
-//        QubitTopology.printTopology(qNode1.getQubitTopology());
         qNodeList = new ArrayList<>();
         qNodeList.addAll(Arrays.asList(qNode1, qNode2));
         double timeZone = 0.0;
-        double costPerSec = 3.0;
+        double costPerSec = 1.6; // the cost of using a quantum node per second (as IBM Quantum Pricing)
 
         // Create a QDatacenter with two 7-qubit quantum nodes (IBM Hanoi and IBM Geneva)
         QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qNodeList, timeZone, costPerSec);

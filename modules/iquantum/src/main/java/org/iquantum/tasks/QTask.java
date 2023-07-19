@@ -56,6 +56,12 @@ public class QTask {
     private String newline;
     /** The id of the QNode that is planned to execute this QTask. */
     private int qNodeId;
+    /** Preferred backend type to executed this QTask. */
+    private String preferredBackend;
+    /** The name of the application of this QTask. */
+    private String applicationName;
+    /** The cost of executing this QTask. */
+    private double cost;
     /**
      * The list of every resource where the qulet has been executed. In case
      * it starts and finishes executing in a single cloud resource, without
@@ -157,13 +163,47 @@ public class QTask {
         this.numShots = numShots;
         this.gateSet = gateSet;
         this.qubitTopology = qubitTopology;
+        this.preferredBackend = null;
+        this.applicationName = null;
+        this.record = iQuantum.getTraceFlag();
+        this.cost = 0.0;
+        execStartTime = 0.0;
+        execFinishTime = -1.0;
+        qNodeId = -1;
+        resList = new ArrayList<Resource>(2);
+        index = -1;
+    }
+
+    /**
+     * Initializes a QTask (Gate-based Quantum Task) object.
+     * @param quletId: the id of the QTask
+     * @param numQubits: the number of qubits in the QTask
+     * @param numLayers: the number of circuit layers in the QTask
+     * @param numShots: the number of shots the QTask is to be executed
+     * @param gateSet: the list of all gate set in the QTask
+     * @param qubitTopology: the topology of the qubits in the QTask
+     * @param preferredBackend: the preferred backend type to execute the QTask
+     */
+    public QTask(final int quletId, final int numQubits, final int numLayers,
+                 final int numShots, final List<String> gateSet, final QubitTopology qubitTopology,
+                 final String preferredBackend, final String applicationName) {
+        validateParameters(numQubits, numLayers, numShots, gateSet, qubitTopology);
+        brokerId = -1;
+        status = CREATED;
+        this.quletId = quletId;
+        this.numQubits = numQubits;
+        this.numLayers = numLayers;
+        this.numShots = numShots;
+        this.gateSet = gateSet;
+        this.qubitTopology = qubitTopology;
+        this.preferredBackend = preferredBackend;
+        this.applicationName = applicationName;
         this.record = iQuantum.getTraceFlag();
         execStartTime = 0.0;
         execFinishTime = -1.0;
         qNodeId = -1;
         resList = new ArrayList<Resource>(2);
         index = -1;
-
     }
 
     /**
@@ -251,6 +291,29 @@ public class QTask {
         this.qNodeId = qNodeId;
     }
 
+    public void setPreferredBackend(final String backend) {
+        preferredBackend = backend;
+    }
+
+    public String getPreferredBackend() {
+        return preferredBackend;
+    }
+
+    public void setApplicationName(final String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setCost(final double cost) {
+        this.cost = cost;
+    }
+
+    public double getCost() {
+        return cost;
+    }
     /**
      * GETTERS AND SETTERS END------------------------------------------------
      */
@@ -480,6 +543,19 @@ public class QTask {
         if (record) {
             write("Sets the wall clock time to " + num.format(wallTime) + " and the actual QPU time to "
                     + num.format(actualTime));
+        }
+    }
+
+    public void setCost() {
+        if (index < 0) {
+            return;
+        }
+        final QTask.Resource res = resList.get(index);
+        double execCost = res.actualQPUTime * res.costPerSec;
+        setCost(execCost);
+
+        if (record) {
+            write("Sets the cost to $" + num.format(execCost));
         }
     }
 

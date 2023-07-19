@@ -13,10 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.iquantum.core.iQuantum;
-import org.iquantum.core.iQuantumTags;
-import org.iquantum.core.SimEntity;
-import org.iquantum.core.SimEvent;
+import org.iquantum.core.*;
 import org.iquantum.backends.classical.Host;
 import org.iquantum.backends.classical.Storage;
 import org.iquantum.backends.classical.Vm;
@@ -49,7 +46,7 @@ public class CDatacenter extends SimEntity {
 	private CDatacenterCharacteristics characteristics;
 
 	/** The regional Cloud Information Service (CIS) name. 
-         * @see org.iquantum.core.CloudInformationService
+         * @see ResourceInformationService
          */
 	private String regionalCisName;
 

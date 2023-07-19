@@ -36,11 +36,24 @@ public class QTaskImporter {
                 }
 
                 List<String> gateSet = extractGateSet(record.get("single_qubit_gates"), record.get("multi_qubit_gates"));
-//                System.out.println(gateSet);
 
                 QubitTopology qubitTopology = extractQubitTopology(numQubits, record.get("qubit_topology"));
 
-                QTasks.add(new QTask(quletId, numQubits, numLayers, numShots, gateSet, qubitTopology));
+                // Checking extra information
+                String preferredBackend;
+                if (record.isMapped("mapped_backend")) {
+                    preferredBackend = record.get("mapped_backend");
+                } else {
+                    preferredBackend = ""; // or any other default value you want to set
+                }
+                String applicationName;
+                if (record.isMapped("application")) {
+                    applicationName = record.get("application");
+                } else {
+                    applicationName = ""; // or any other default value you want to set
+                }
+
+                QTasks.add(new QTask(quletId, numQubits, numLayers, numShots, gateSet, qubitTopology, preferredBackend, applicationName));
             }
         }
 

@@ -21,7 +21,6 @@ public class QNode {
     private List<String> gateSets;
     private QubitTopology qubitTopology;
     private QTaskScheduler QTaskScheduler;
-
     private QDatacenter qDatacenter;
 
     /**

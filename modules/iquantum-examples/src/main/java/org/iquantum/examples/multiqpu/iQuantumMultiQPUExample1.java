@@ -61,7 +61,7 @@ public class iQuantumMultiQPUExample1 {
         List<QTask> newList = qBroker.getQTaskReceivedList();
         printQTaskList(newList);
 
-        Log.printLine("iQuantum Example 6 finished!");
+        Log.printLine("iQuantum MultiQPU Example finished!");
     }
 
     private static List<QTask> createQTaskList(QDatacenterExtended qDatacenter, QBrokerMQ qBroker) {
