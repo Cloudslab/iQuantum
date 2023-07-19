@@ -1,7 +1,6 @@
-[![iQuantum Maven Build](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml/badge.svg)](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml)
-![Project Status](https://img.shields.io/badge/Project-Under%20Development-yellow)
 
-# iQuantum
+# iQuantum ![Project Status](https://img.shields.io/badge/Project-Under%20Development-yellow) [![iQuantum Maven Build](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml/badge.svg)](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml)
+
 ##  A Toolkit for Modeling and Simulation of Hybrid Quantum Computing Environments
 
 As quantum computers become increasingly accessible through 
