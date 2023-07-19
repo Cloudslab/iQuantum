@@ -27,8 +27,6 @@ Quantum Computers (QNode), QPU, Quantum Tasks (QTask), and Quantum Broker (QBrok
 ## Installation and Examples
 The downloaded package contains all the source code and examples for iQuantum.
 Several examples that demonstrate the use of iQuantum can be found in the `org.iquantum.examples` package, located in `/modules/iquantum-examples` folder.
-iQuantum API documentation can be found at https://cloudslab.github.io/iQuantum/.
-Please note that iQuantum is still under development for adding advanced features and the API documentation is not fully complete yet. 
 More details will be updated soon.
 
 ## Contributing
