@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"py4j"},{"l":"py4j.commands"},{"l":"py4j.model"},{"l":"py4j.reflection"}]
