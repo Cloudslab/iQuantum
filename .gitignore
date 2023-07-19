@@ -144,3 +144,5 @@ replay_pid*
 .idea/
 /output/
 *.qasm
+/target/
+*.html
