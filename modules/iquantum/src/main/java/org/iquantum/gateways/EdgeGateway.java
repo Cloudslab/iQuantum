@@ -57,6 +57,14 @@ public class EdgeGateway extends SimEntity {
         getQTaskList().addAll(qTaskList);
     }
 
+    public void submitQTasks(List<? extends QTask> qTaskList) {
+        getQTaskList().addAll(qTaskList);
+    }
+
+    public void submitCTasks(List<? extends CTask> cTaskList) {
+        getCTaskList().addAll(cTaskList);
+    }
+
 
     @Override
     public void startEntity() {

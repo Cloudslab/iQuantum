@@ -24,7 +24,7 @@ import java.util.Map;
 public class QBroker extends SimEntity {
 
     /** The list of QNodes submitted to be managed by the broker.. */
-    protected List<? extends QNode> qNodeList;
+    protected QNodeList qNodeList;
 
     /** The list of QTask submitted to the broker. */
     protected List<? extends QTask> qtaskList;
@@ -71,12 +71,12 @@ public class QBroker extends SimEntity {
 
     /////// GETTERS AND SETTERS ///////
 
-    protected <T extends QNode> void setQNodeList(List<T> qNodeList) {
+    protected void setQNodeList(QNodeList qNodeList) {
         this.qNodeList = qNodeList;
     }
 
-    public <T extends QNode> List<T> getQNodeList() {
-        return (List<T>) qNodeList;
+    public QNodeList getQNodeList() {
+        return qNodeList;
     }
 
     protected <T extends QTask> void setQTaskList(List<T> qtaskList) {
@@ -198,7 +198,7 @@ public class QBroker extends SimEntity {
         List<QTask> submittedQTasks = new ArrayList<QTask>();
         Log.printConcatLine(iQuantum.clock(), ": ", getName(), " : Started scheduling all QTasks to QDatacenter #", qDatacenter);
 
-        List<? extends QNode> qNodeList = getQDatacenterCharacteristicsList().get(qDatacenter).getQNodeList();
+        QNodeList qNodeList = getQDatacenterCharacteristicsList().get(qDatacenter).getQNodeList();
         setQNodeList(qNodeList);
 
         for (QTask QTask : getQTaskList()) {

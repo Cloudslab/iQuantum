@@ -9,17 +9,20 @@ package org.iquantum.lists;
 
 import org.iquantum.backends.quantum.QNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QNodeList {
 
+    protected static List<QNode> qNodeList;
 
-    private QNodeList() {
+    public QNodeList() {
+        qNodeList = new ArrayList<QNode>();
 
     }
 
-    public static <T extends QNode> T getById(List<T> qNodeList, int id) {
-        for (T qNode : qNodeList) {
+    public static QNode getById(int id) {
+        for (QNode qNode : qNodeList) {
             if (qNode.getId() == id) {
                 return qNode;
             }

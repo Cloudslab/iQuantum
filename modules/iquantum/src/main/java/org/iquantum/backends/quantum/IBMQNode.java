@@ -16,7 +16,7 @@ public class IBMQNode {
         ArrayList<String> basicGateset;
         // Predefined common basic gate sets: rz, sx, x, measure, cx
         ArrayList<String> basicGateset_1 = new ArrayList<>(Arrays.asList("cx", "id", "rz", "sx", "x", "measure"));
-        ArrayList<String> basicGateset_2 = new ArrayList<>(Arrays.asList("ECR", "ID", "RZ", "SX", "X"));
+        ArrayList<String> basicGateset_2 = new ArrayList<>(Arrays.asList("ecr", "cx", "id", "rz", "sx", "x", "measure"));
         switch (node) {
             case "ibm_washington":
                 numQubits = 127;

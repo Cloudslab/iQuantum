@@ -217,10 +217,12 @@ public class QDatacenter extends SimEntity {
 
 
             // Get the QNode
-            QNode qNode = getCharacteristics().getQNodeList().get(qNodeId);
+            //QNode qNode = getCharacteristics().getQNodeList().get(qNodeId);
+            QNode qNode = getCharacteristics().getQNodeList()
             // Temporary ignore the transfer time (will be considered in the future)
             double transferTime = 0.0;
 
+            assert qNode != null;
             QTaskScheduler scheduler = qNode.getQTaskScheduler();
             double estimatedCompletionTime = scheduler.qtaskSubmit(QTask, transferTime);
 

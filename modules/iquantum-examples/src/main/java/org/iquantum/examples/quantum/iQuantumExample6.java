@@ -62,10 +62,7 @@ public class iQuantumExample6 {
         // Step 7: Stop the simulation
         iQuantum.stopSimulation();
 
-        // Step 8: Print the results when simulation is over
-        List<QTask> newList = qBroker.getQTaskReceivedList();
-        QTaskExporter.printQTaskList(newList);
-        QTaskExporter.extractQTaskListToCSV(newList, exampleName);
+
 
         Log.printLine("iQuantum Example 6 finished!");
     }

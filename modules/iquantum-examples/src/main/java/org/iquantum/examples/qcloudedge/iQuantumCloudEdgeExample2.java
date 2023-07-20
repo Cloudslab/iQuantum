@@ -37,7 +37,7 @@ import org.iquantum.utils.Log;
 import java.text.DecimalFormat;
 import java.util.*;
 
-public class iQuantumCloudEdgeExample {
+public class iQuantumCloudEdgeExample2 {
     /** The CTask list. */
     private static List<CTask> CTaskList;
     /** The vmlist. */
