@@ -3,9 +3,9 @@ package org.iquantum.brokers;
 import org.iquantum.core.SimEvent;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;
-import org.iquantum.datacenters.QCloudDatacenter;
 import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.datacenters.QEdgeDatacenter;
+import org.iquantum.gateways.CloudGateway;
 import org.iquantum.utils.Log;
 
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import java.util.List;
  * Quantum Edge Broker
  */
 public class QEdgeBroker extends QBroker{
+
     public QEdgeBroker(String name) throws Exception {
         super(name);
     }

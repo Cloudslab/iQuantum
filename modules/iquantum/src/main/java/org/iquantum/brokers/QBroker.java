@@ -9,6 +9,7 @@ package org.iquantum.brokers;
 
 import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.backends.quantum.QNode;
+import org.iquantum.policies.qtasks.QNodeSelectionLottery;
 import org.iquantum.tasks.QTask;
 import org.iquantum.utils.Log;
 import org.iquantum.core.*;
@@ -24,7 +25,7 @@ import java.util.Map;
 public class QBroker extends SimEntity {
 
     /** The list of QNodes submitted to be managed by the broker.. */
-    protected QNodeList qNodeList;
+    protected List<? extends QNode> qNodeList;
 
     /** The list of QTask submitted to the broker. */
     protected List<? extends QTask> qtaskList;
@@ -38,6 +39,8 @@ public class QBroker extends SimEntity {
     /** The number of submitted QTasks. */
     protected int numQTaskSubmitted;
 
+    protected int numQTaskFailed;
+
     /** The id list of available quantum datacenters. */
     protected List<Integer> qDatacenterIdList;
 
@@ -50,6 +53,7 @@ public class QBroker extends SimEntity {
     public QBroker(String name) throws Exception {
         super(name);
         numQTaskSubmitted = 0;
+        numQTaskFailed = 0;
 
         setQNodeList(new ArrayList<QNode>());
         setQTaskList(new ArrayList<QTask>());
@@ -71,12 +75,12 @@ public class QBroker extends SimEntity {
 
     /////// GETTERS AND SETTERS ///////
 
-    protected void setQNodeList(QNodeList qNodeList) {
+    protected <T extends QNode> void setQNodeList(List<T> qNodeList) {
         this.qNodeList = qNodeList;
     }
 
-    public QNodeList getQNodeList() {
-        return qNodeList;
+    public <T extends QNode> List<T> getQNodeList() {
+        return (List<T>) qNodeList;
     }
 
     protected <T extends QTask> void setQTaskList(List<T> qtaskList) {
@@ -194,49 +198,78 @@ public class QBroker extends SimEntity {
     private void processQTaskSubmit(SimEvent ev) {
         int[] data = (int[]) ev.getData();
         int qDatacenter = data[0];
-        int qNodeId = 0;
         List<QTask> submittedQTasks = new ArrayList<QTask>();
+        List<QTask> failedQTasks = new ArrayList<QTask>();
         Log.printConcatLine(iQuantum.clock(), ": ", getName(), " : Started scheduling all QTasks to QDatacenter #", qDatacenter);
 
-        QNodeList qNodeList = getQDatacenterCharacteristicsList().get(qDatacenter).getQNodeList();
+        List<? extends QNode> qNodeList = getQDatacenterCharacteristicsList().get(qDatacenter).getQNodeList();
         setQNodeList(qNodeList);
-
-        for (QTask QTask : getQTaskList()) {
-            QNode qNode;
-            if (QTask.getQNodeId() == -1) {
-                // Submit qtask to a the first available QNode
-                // TODO: Implement a better (default) scheduling algorithm
-                qNode = getQNodeList().get(qNodeId);
+        QNodeSelectionLottery qnodeselection = new QNodeSelectionLottery(0.5, 0.5);
+        QNode qNode = null;
+        for (QTask qTask : getQTaskList()) {
+            if (qTask.getQNodeId() == -1) {
+                // APPLY SIMPLE LOTTERY BACKEND SELECTION STRATEGY
+                List<? extends QNode> preQNodes;
+                preQNodes = preScheduleQTask((List<QNode>) qNodeList, qTask);
+                if(!preQNodes.isEmpty()) {
+                    qNode = qnodeselection.selectQNode(preQNodes);
+                    qTask.setQNodeId(qNode.getId());
+                }
             } else {
                 // Submit qtask to a specific QNode
-                qNode = QNodeList.getById(getQNodeList(), QTask.getQNodeId());
+                qNode = QNodeList.getById(getQNodeList(), qTask.getQNodeId());
                 if (qNode == null) {
                     if(!Log.isDisabled()) {
-                        Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Postponing execution of QTask ", QTask.getQTaskId(),
+                        Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Postponing execution of QTask ", qTask.getQTaskId(),
                                 ": QNode is not available");
                     }
                     continue;
                 }
             }
-            // TODO: Check the constraints
             /** QNode must have enough resources to execute the QTask
              * number of qubits of QNode >= number of qubits of QTask
              */
-            if (!Log.isDisabled()) {
-                Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Checking if QNode #", qNode.getId(), " has enough qubits/gates to execute QTask",
-                        QTask.getQTaskId());
-            }
-            if(verifyConstraints(qNode, QTask, submittedQTasks)) {
+            if (qNode!=null) {
                 if (!Log.isDisabled()) {
-                    Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Sending QTask ",
-                            QTask.getQTaskId(), " to QNode #", qNode.getId());
+                    Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Checking if QNode #", qNode.getId(), " has enough qubits/gates to execute QTask",
+                            qTask.getQTaskId());
                 }
-                sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QTASK_SUBMIT, QTask);
-                numQTaskSubmitted++;
-                submittedQTasks.add(QTask);
+                if(verifyConstraints(qNode, qTask, submittedQTasks)) {
+                    if (!Log.isDisabled()) {
+                        Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Sending QTask ",
+                                qTask.getQTaskId(), " to QNode #", qNode.getId());
+                    }
+                    sendNow(qNode.getQDatacenter().getId(), iQuantumTags.QTASK_SUBMIT, qTask);
+                    numQTaskSubmitted++;
+                    submittedQTasks.add(qTask);
+                }
+            } else
+            {
+                if(!Log.isDisabled()) {
+                    Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Postponing execution of QTask ", qTask.getQTaskId(),
+                            ": No sufficient QNode available.");
+                }
+                failedQTasks.add(qTask);
+                numQTaskFailed++;
+                // If this task is submitted to Edge Layer, it can be offloaded to Cloud Layer
             }
         }
         getQTaskList().removeAll(submittedQTasks);
+        getQTaskList().removeAll(failedQTasks);
+    }
+
+    private List<? extends QNode> preScheduleQTask(List<QNode> qNodeList, QTask qTask) {
+        List<QNode> preScheduledQNodeList = new ArrayList<>();
+        for (QNode qNode : qNodeList) {
+            if (qNode.getNumQubits() >= qTask.getNumQubits()
+                    & isSubset(qTask.getGateSet(), qNode.getGateSets())) {
+                if(qNode.getQTaskScheduler().qtaskMapping(qTask, qNode)!=null)
+                {
+                    preScheduledQNodeList.add(qNode);
+                }
+            }
+        }
+        return preScheduledQNodeList;
     }
 
     private boolean verifyConstraints(QNode qNode, QTask QTask, List<QTask> submittedQTasks){

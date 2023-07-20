@@ -7,6 +7,7 @@
  */
 package org.iquantum.datacenters;
 
+import org.iquantum.lists.QNodeList;
 import org.iquantum.tasks.QTask;
 import org.iquantum.backends.quantum.QNode;
 import org.iquantum.utils.Log;
@@ -217,12 +218,10 @@ public class QDatacenter extends SimEntity {
 
 
             // Get the QNode
-            //QNode qNode = getCharacteristics().getQNodeList().get(qNodeId);
-            QNode qNode = getCharacteristics().getQNodeList()
+            QNode qNode = QNodeList.getById(getCharacteristics().getQNodeList(), qNodeId);
             // Temporary ignore the transfer time (will be considered in the future)
             double transferTime = 0.0;
 
-            assert qNode != null;
             QTaskScheduler scheduler = qNode.getQTaskScheduler();
             double estimatedCompletionTime = scheduler.qtaskSubmit(QTask, transferTime);
 

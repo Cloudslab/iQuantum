@@ -73,7 +73,7 @@ public class iQuantumCloudEdgeExample1 {
         EdgeGateway edgeGateway = new EdgeGateway("EdgeGateway", ceBroker, qeBroker);
 
         // Step 6: Create 4 QTasks
-        qTaskList = createQTaskList(QEDatacenter, qeBroker);
+        qTaskList = createQTaskList(qeBroker);
 
         // Step 7: Submit all tasks to brokers
         edgeGateway.submitQTasks(qTaskList);
@@ -85,11 +85,25 @@ public class iQuantumCloudEdgeExample1 {
         iQuantum.stopSimulation();
 
         // Step 10: Print the results when simulation is over
-        // Step 8: Print the results when simulation is over
+        Log.printLine("SIMULATION RESULTS");
+        Log.printLine("==========================================================");
         List<QTask> qcTaskResults = qcBroker.getQTaskReceivedList();
-        QTaskExporter.printQTaskList(qcTaskResults);
-        QTaskExporter.extractQTaskListToCSV(qcTaskResults, exampleName);
-        Log.printLine("iQuantum Hybrid Example finished!");
+        Log.printLine("CLOUD Layer ================================");
+        if(qcTaskResults.size() == 0) {
+            Log.printLine("No QTask received");
+        } else {
+            QTaskExporter.printQTaskList(qcTaskResults);
+            QTaskExporter.extractQTaskListToCSV(qcTaskResults, exampleName+"-cloud");
+        }
+        List<QTask> qeTaskResults = qeBroker.getQTaskReceivedList();
+        Log.printLine("EDGE Layer ================================");
+        if(qeTaskResults.size() == 0) {
+            Log.printLine("No QTask received");
+        } else {
+            QTaskExporter.printQTaskList(qeTaskResults);
+            QTaskExporter.extractQTaskListToCSV(qeTaskResults, exampleName+"-edge");
+        }
+        Log.printLine(exampleName +" finished!");
     }
 
     /**
@@ -123,34 +137,21 @@ public class iQuantumCloudEdgeExample1 {
      * QUANTUM PART
      */
 
-    private static List<QTask> createQTaskList(QDatacenter qDatacenter, QBroker qBroker) {
+    private static List<QTask> createQTaskList(QBroker qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
-        String folderPath = "dataset/iquantum/MQT-Set1-298-10-27-IBMQ27-Opt3-Extra.csv";
+//        String folderPath = "dataset/iquantum/MQT-Set1-298-10-27-IBMQ27-Opt3-Extra.csv";
+        String folderPath = "dataset/iquantum/MQT-Set2-7-127-AllOpt-IBMMapped-Extra.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {
             List<QTask> QTasks = QTaskImporter.importQTasksFromCsv(datasetPath.toString());
-            List<QNode> qNodeList = (List<QNode>) qDatacenter.getCharacteristics().getQNodeList();
-            Random random = new Random();
             for (QTask qtask : QTasks) {
-                switch(qtask.getPreferredBackend()) {
-                    case "ibm_27q":
-                        qtask.setQNodeId(11);
-                        break;
-                    case "ibm_127q":
-                        qtask.setQNodeId(21);
-                        break;
-                    default:
-                        qtask.setQNodeId(qNodeList.get(random.nextInt(qNodeList.size())).getId());
-                        break;
-                }
                 qtask.setBrokerId(qBroker.getId());
                 QTaskList.add(qtask);
             }
         } catch (IOException e) {
             System.err.println("Error reading CSV file: " + e.getMessage());
         }
-
         return QTaskList;
     }
 

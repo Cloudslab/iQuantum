@@ -2,7 +2,6 @@ package org.iquantum.gateways;
 
 import org.iquantum.brokers.CCloudBroker;
 import org.iquantum.brokers.QCloudBroker;
-import org.iquantum.core.SimEntity;
 import org.iquantum.core.SimEvent;
 import org.iquantum.core.iQuantum;
 import org.iquantum.core.iQuantumTags;
@@ -13,7 +12,7 @@ import org.iquantum.utils.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CloudGateway extends SimEntity {
+public class CloudGateway extends Gateway {
     /** The name of the cloud gateway. */
     protected String name;
     /** List of all CTask submitted to the cloud gateway. */
@@ -55,6 +54,14 @@ public class CloudGateway extends SimEntity {
         getQTaskList().addAll(qTaskList);
     }
 
+    public void submitQTasks(List<? extends QTask> qTaskList) {
+        getQTaskList().addAll(qTaskList);
+    }
+
+    public void submitCTasks(List<? extends CTask> cTaskList) {
+        getCTaskList().addAll(cTaskList);
+    }
+
 
     @Override
     public void startEntity() {
@@ -73,7 +80,8 @@ public class CloudGateway extends SimEntity {
         }
     }
 
-    private void processTaskDispatch(SimEvent ev) {
+    @Override
+    protected void processTaskDispatch(SimEvent ev) {
         Log.printConcatLine(iQuantum.clock(), ": ", getName(), " : Dispatching ",getCTaskList().size()," CTasks and ",getQTaskList().size()," QTasks from Cloud Gateway to Brokers for processing");
         cBroker.submitCloudletList(getCTaskList());
         qBroker.submitQTaskList(getQTaskList());
