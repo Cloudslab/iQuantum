@@ -19,7 +19,6 @@ public class QTaskExporter {
         QTask QTask;
 
         String indent = "   ";
-        Log.printLine();
         Log.printLine("========== OUTPUT ==========");
         Log.printLine("QTask ID" + indent + "Status" + indent
                 + "QDCenter" + indent + "QNode ID" + indent + "Execution Time" + indent

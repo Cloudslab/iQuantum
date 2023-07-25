@@ -10,9 +10,9 @@ package org.iquantum.examples.quantum;
 import org.iquantum.backends.quantum.IBMQNode;
 import org.iquantum.backends.quantum.QNode;
 import org.iquantum.brokers.QBroker;
-import org.iquantum.brokers.QBroker;
 import org.iquantum.brokers.QCloudBroker;
 import org.iquantum.core.iQuantum;
+import org.iquantum.datacenters.QCloudDatacenter;
 import org.iquantum.datacenters.QDatacenter;
 import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.policies.qtasks.QTaskSchedulerSpaceShared;
@@ -21,23 +21,19 @@ import org.iquantum.utils.Log;
 import org.iquantum.utils.QTaskExporter;
 import org.iquantum.utils.QTaskImporter;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class iQuantumExample6 {
+public class iQuantumExample7 {
     private static List<QTask> QTaskList;
 
     private static  List<QNode> qNodeList;
 
     public static void main(String[] args) throws IOException {
-        String exampleName = "iQuantumExample6";
-        System.out.println("Start the iQuantum Example 6");
+        String exampleName = "iQuantumExample7";
+        System.out.println("Start the " + exampleName);
 
         // Step 1: Initialize the core simulation package. It should be called before creating any entities.
         int num_user = 1;
@@ -46,13 +42,13 @@ public class iQuantumExample6 {
         iQuantum.init(num_user, calendar, trace_flag);
 
         // Step 2: Create a QDatacenter and two quantum nodes (IBM Hanoi and IBM Geneva)
-        QDatacenter qDatacenter = createQDatacenter("QDatacenter_0");
+        QCloudDatacenter qDatacenter = createQDatacenter("QDatacenter_0");
 
         // Step 3: Create a QBroker
-        QBroker qBroker = createQBroker();
+        QCloudBroker qBroker = createQBroker();
 
         // Step 4: Create a list of QTasks
-        QTaskList = createQTaskList(qDatacenter, qBroker);
+        QTaskList = createQTaskList(qBroker);
 
         // Step 5: Submit QTask to the QBroker
         qBroker.submitQTaskList(QTaskList);
@@ -68,37 +64,23 @@ public class iQuantumExample6 {
         QTaskExporter.printQTaskList(newList);
         QTaskExporter.extractQTaskListToCSV(newList, exampleName);
 
-        Log.printLine("iQuantum Example 6 finished!");
+        Log.printLine(exampleName + " finished!");
     }
 
-    private static List<QTask> createQTaskList(QDatacenter qDatacenter, QBroker qBroker) {
+    private static List<QTask> createQTaskList(QCloudBroker qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
-        String folderPath = "dataset/iquantum/MQT-Set2-7-127-AllOpt-IBMMapped-Extra.csv";
+        String folderPath = "dataset/iquantum/MQT-Set3-10-27-Mapped-AllAlgorithmLeft-Extra.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {
             List<QTask> QTasks = QTaskImporter.importQTasksFromCsv(datasetPath.toString());
-            List<QNode> qNodeList = (List<QNode>) qDatacenter.getCharacteristics().getQNodeList();
-            Random random = new Random();
             for (QTask qtask : QTasks) {
-                switch(qtask.getPreferredBackend()) {
-                    case "ibm_27q":
-                        qtask.setQNodeId(0);
-                        break;
-                    case "ibm_127q":
-                        qtask.setQNodeId(1);
-                        break;
-                    default:
-                        qtask.setQNodeId(qNodeList.get(random.nextInt(qNodeList.size())).getId());
-                        break;
-                }
                 qtask.setBrokerId(qBroker.getId());
                 QTaskList.add(qtask);
             }
         } catch (IOException e) {
             System.err.println("Error reading CSV file: " + e.getMessage());
         }
-
         return QTaskList;
     }
 
@@ -106,8 +88,8 @@ public class iQuantumExample6 {
      * Create a QBroker
      * @return QBroker
      */
-    private static QBroker createQBroker() {
-        QBroker qBroker = null;
+    private static QCloudBroker createQBroker() {
+        QCloudBroker qBroker = null;
         try {
             qBroker = new QCloudBroker("QBroker");
         } catch (Exception e) {
@@ -122,18 +104,21 @@ public class iQuantumExample6 {
      * @param name name of the QDatacenter
      * @return QDatacenter
      */
-    private static QDatacenter createQDatacenter(String name) {
+    private static QCloudDatacenter createQDatacenter(String name) {
         // Automatically create two quantum nodes (IBM Hanoi and IBM Cairo) from the dataset
         QNode qNode1 = IBMQNode.createNode(0,"ibm_hanoi",new QTaskSchedulerSpaceShared());
-        QNode qNode2 = IBMQNode.createNode(1,"ibm_washington",new QTaskSchedulerSpaceShared());
+        QNode qNode2 = IBMQNode.createNode(1,"ibm_auckland",new QTaskSchedulerSpaceShared());
+        QNode qNode3 = IBMQNode.createNode(2,"ibm_cairo",new QTaskSchedulerSpaceShared());
+        QNode qNode4 = IBMQNode.createNode(3,"ibmq_mumbai",new QTaskSchedulerSpaceShared());
+        QNode qNode5 = IBMQNode.createNode(4,"ibmq_kolkata",new QTaskSchedulerSpaceShared());
         qNodeList = new ArrayList<>();
-        qNodeList.addAll(Arrays.asList(qNode1, qNode2));
+        qNodeList.addAll(Arrays.asList(qNode1, qNode2, qNode3, qNode4, qNode5));
         double timeZone = 0.0;
         double costPerSec = 1.6; // the cost of using a quantum node per second (as IBM Quantum Pricing)
 
         // Create a QDatacenter with two 7-qubit quantum nodes (IBM Hanoi and IBM Geneva)
         QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qNodeList, timeZone, costPerSec);
-        QDatacenter qDatacenter = new QDatacenter(name, characteristics);
+        QCloudDatacenter qDatacenter = new QCloudDatacenter(name, characteristics);
         return qDatacenter;
     }
 

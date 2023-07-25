@@ -13,6 +13,7 @@ import org.iquantum.backends.classical.Storage;
 import org.iquantum.backends.classical.Vm;
 import org.iquantum.brokers.CBroker;
 import org.iquantum.brokers.QBroker;
+import org.iquantum.brokers.QCloudBroker;
 import org.iquantum.datacenters.CDatacenter;
 import org.iquantum.datacenters.CDatacenterCharacteristics;
 import org.iquantum.datacenters.QDatacenter;
@@ -335,7 +336,7 @@ public class iQuantumHybridExample1 {
     private static QBroker createQBroker() {
         QBroker qBroker = null;
         try {
-            qBroker = new QBroker("QBroker");
+            qBroker = new QCloudBroker("QBroker");
         } catch (Exception e) {
             e.printStackTrace();
             return null;

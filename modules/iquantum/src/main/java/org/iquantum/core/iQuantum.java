@@ -183,7 +183,7 @@ public class iQuantum {
             return clock;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            throw new NullPointerException("iQuantum.startiQuantumulation() :"
+            throw new NullPointerException("iQuantum.starSimulation() :"
                     + " Error - you haven't initialized iQuantum.");
         }
     }

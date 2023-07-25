@@ -66,6 +66,12 @@ public class IBMQNode {
                 clops = 1900;
                 basicGateset = basicGateset_1;
                 break;
+            case "ibm_algiers":
+                numQubits = 27;
+                quantumVolume = 128;
+                clops = 2200;
+                basicGateset = basicGateset_1;
+                break;
             case "ibm_guadalupe":
                 numQubits = 16;
                 quantumVolume = 32;

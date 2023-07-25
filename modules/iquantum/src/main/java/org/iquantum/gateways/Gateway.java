@@ -37,6 +37,24 @@ public abstract class Gateway extends SimEntity {
         setQTaskList(new ArrayList<>());
     }
 
+    public Gateway(String name, CBroker cBroker) throws Exception {
+        super(name);
+        this.name = name;
+        this.cBroker = cBroker;
+        this.qBroker = null;
+        setCTaskList(new ArrayList<>());
+        setQTaskList(new ArrayList<>());
+    }
+
+    public Gateway(String name, QBroker qBroker) throws Exception {
+        super(name);
+        this.name = name;
+        this.cBroker = null;
+        this.qBroker = null;
+        setCTaskList(new ArrayList<>());
+        setQTaskList(new ArrayList<>());
+    }
+
     public Gateway(String name) {
         super(name);
         this.name = name;

@@ -1,6 +1,8 @@
 package org.iquantum.gateways;
 
+import org.iquantum.brokers.CBroker;
 import org.iquantum.brokers.CCloudBroker;
+import org.iquantum.brokers.QBroker;
 import org.iquantum.brokers.QCloudBroker;
 import org.iquantum.core.SimEvent;
 import org.iquantum.core.iQuantum;
@@ -28,6 +30,24 @@ public class CloudGateway extends Gateway {
     public CloudGateway(String name, CCloudBroker cBroker, QCloudBroker qBroker) throws Exception {
         super(name);
         this.cBroker = cBroker;
+        this.qBroker = qBroker;
+        setCTaskList(new ArrayList<>());
+        setQTaskList(new ArrayList<>());
+    }
+
+    public CloudGateway(String name, CCloudBroker cBroker) throws Exception {
+        super(name);
+        this.name = name;
+        this.cBroker = cBroker;
+        this.qBroker = null;
+        setCTaskList(new ArrayList<>());
+        setQTaskList(new ArrayList<>());
+    }
+
+    public CloudGateway(String name, QCloudBroker qBroker) throws Exception {
+        super(name);
+        this.name = name;
+        this.cBroker = null;
         this.qBroker = qBroker;
         setCTaskList(new ArrayList<>());
         setQTaskList(new ArrayList<>());
@@ -75,16 +95,30 @@ public class CloudGateway extends Gateway {
             case iQuantumTags.CLOUD_GATEWAY_DISPATCH_TASK:
                 processTaskDispatch(ev);
                 break;
+            case iQuantumTags.OFFLOAD_QTASK_FROM_EDGE:
+                processQTaskOffload(ev);
+                break;
             default:
                 Log.printConcatLine(getName(), ": unknown event type at Cloud Gateway");
         }
     }
 
+    private void processQTaskOffload(SimEvent ev) {
+        List<QTask> qTaskList = (List<QTask>) ev.getData();
+        Log.printConcatLine(iQuantum.clock(), ": ", getName(), " : Offloading ",qTaskList.size()," QTasks from Edge Gateway to Cloud Gateway");
+        getQTaskList().addAll(qTaskList);
+        sendNow(qBroker.getId(), iQuantumTags.OFFLOAD_QTASK_FROM_EDGE, qTaskList);
+    }
+
     @Override
     protected void processTaskDispatch(SimEvent ev) {
         Log.printConcatLine(iQuantum.clock(), ": ", getName(), " : Dispatching ",getCTaskList().size()," CTasks and ",getQTaskList().size()," QTasks from Cloud Gateway to Brokers for processing");
-        cBroker.submitCloudletList(getCTaskList());
-        qBroker.submitQTaskList(getQTaskList());
+        if(cBroker != null) {
+            cBroker.submitCloudletList(getCTaskList());
+        }
+        if(qBroker != null) {
+            qBroker.submitQTaskList(getQTaskList());
+        }
     }
 
     @Override

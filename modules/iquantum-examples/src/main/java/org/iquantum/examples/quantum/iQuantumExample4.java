@@ -7,6 +7,7 @@
 
 package org.iquantum.examples.quantum;
 import org.iquantum.brokers.QBroker;
+import org.iquantum.brokers.QCloudBroker;
 import org.iquantum.datacenters.QDatacenter;
 import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.backends.quantum.IBMQNode;
@@ -124,7 +125,7 @@ public class iQuantumExample4 {
     private static QBroker createQBroker() {
         QBroker qBroker = null;
         try {
-            qBroker = new QBroker("QBroker");
+            qBroker = new QCloudBroker("QBroker");
         } catch (Exception e) {
             e.printStackTrace();
             return null;

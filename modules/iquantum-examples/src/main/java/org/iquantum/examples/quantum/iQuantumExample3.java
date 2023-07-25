@@ -6,6 +6,7 @@
  * The results are printed when the simulation is over.
  */
 package org.iquantum.examples.quantum;
+import org.iquantum.brokers.QCloudBroker;
 import org.iquantum.core.iQuantum;
 import org.iquantum.brokers.QBroker;
 import org.iquantum.datacenters.QDatacenter;
@@ -128,7 +129,7 @@ public class iQuantumExample3 {
     private static QBroker createQBroker() {
         QBroker qBroker = null;
         try {
-            qBroker = new QBroker("QBroker");
+            qBroker = new QCloudBroker("QBroker");
         } catch (Exception e) {
             e.printStackTrace();
             return null;

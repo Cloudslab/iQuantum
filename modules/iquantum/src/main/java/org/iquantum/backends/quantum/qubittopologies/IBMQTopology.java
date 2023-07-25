@@ -71,7 +71,7 @@ public class IBMQTopology {
                 double idError = parseDoubleOrDefault(csvRecord.get("ID error "), -1);
                 double sxError = parseDoubleOrDefault(csvRecord.get("√x (sx) error "), -1);
                 double pauliXError = parseDoubleOrDefault(csvRecord.get("Pauli-X error "), -1);
-                String cnotErrors = csvRecord.get("CNOT error ");
+                String cnotErrors = csvRecord.isSet("CNOT error ") ? csvRecord.get("CNOT error ") : (csvRecord.isSet("ECR error ") ? csvRecord.get("ECR error ") : "");
                 String gateTimes = csvRecord.get("Gate time (ns)");
 
 

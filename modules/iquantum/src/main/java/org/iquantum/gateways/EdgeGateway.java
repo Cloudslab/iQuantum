@@ -1,6 +1,8 @@
 package org.iquantum.gateways;
 
+import org.iquantum.brokers.CCloudBroker;
 import org.iquantum.brokers.CEdgeBroker;
+import org.iquantum.brokers.QCloudBroker;
 import org.iquantum.brokers.QEdgeBroker;
 import org.iquantum.core.SimEntity;
 import org.iquantum.core.SimEvent;
@@ -28,12 +30,44 @@ public class EdgeGateway extends Gateway {
 
     protected QEdgeBroker qBroker;
 
+    /** Linked Cloud Gateway that will be used to offload Tasks. */
+    protected CloudGateway cloudGateway;
+
     public EdgeGateway(String name, CEdgeBroker cBroker, QEdgeBroker qBroker) throws Exception {
         super(name);
         this.cBroker = cBroker;
         this.qBroker = qBroker;
         setCTaskList(new ArrayList<>());
         setQTaskList(new ArrayList<>());
+    }
+    public EdgeGateway(String name, CEdgeBroker cBroker) throws Exception {
+        super(name);
+        this.name = name;
+        this.cBroker = cBroker;
+        this.qBroker = null;
+        setCTaskList(new ArrayList<>());
+        setQTaskList(new ArrayList<>());
+    }
+
+    public EdgeGateway(String name, QEdgeBroker qBroker) throws Exception {
+        super(name);
+        this.name = name;
+        this.cBroker = null;
+        this.qBroker = qBroker;
+        setCTaskList(new ArrayList<>());
+        setQTaskList(new ArrayList<>());
+    }
+
+    public EdgeGateway(String name, CEdgeBroker cBroker, QEdgeBroker qBroker, CloudGateway cloudGateway) throws Exception {
+        super(name);
+        this.cBroker = cBroker;
+        this.qBroker = qBroker;
+        this.cloudGateway = cloudGateway;
+        setCTaskList(new ArrayList<>());
+        setQTaskList(new ArrayList<>());
+        qBroker.setEdgeGateway(this);
+        qBroker.setCloudGateway(cloudGateway);
+
     }
 
     // GETTERS AND SETTERS
@@ -86,8 +120,12 @@ public class EdgeGateway extends Gateway {
     @Override
     protected void processTaskDispatch(SimEvent ev) {
         Log.printConcatLine(iQuantum.clock(), ": ", getName(), " : Dispatching ",getCTaskList().size()," CTasks and ",getQTaskList().size()," QTasks from Edge Gateway to Brokers for processing");
-        cBroker.submitCloudletList(getCTaskList());
-        qBroker.submitQTaskList(getQTaskList());
+        if(cBroker != null) {
+            cBroker.submitCloudletList(getCTaskList());
+        }
+        if(qBroker != null) {
+            qBroker.submitQTaskList(getQTaskList());
+        }
     }
 
     @Override

@@ -6,6 +6,8 @@
  */
 
 package org.iquantum.examples.p4j;
+import org.iquantum.brokers.QBrokerSimple;
+import org.iquantum.brokers.QCloudBroker;
 import py4j.GatewayServer;
 
 import org.iquantum.backends.quantum.IBMQNode;
@@ -102,7 +104,7 @@ public class iQuantumExampleP4J {
     private static QBroker createQBroker() {
         QBroker qBroker = null;
         try {
-            qBroker = new QBroker("QBroker");
+            qBroker = new QCloudBroker("QBroker");
         } catch (Exception e) {
             e.printStackTrace();
             return null;

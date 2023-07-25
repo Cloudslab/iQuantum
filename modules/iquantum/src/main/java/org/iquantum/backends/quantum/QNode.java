@@ -96,8 +96,15 @@ public class QNode {
         return quantumVolume;
     }
 
+    public void setQuantumVolume(int quantumVolume) {
+        this.quantumVolume = quantumVolume;
+    }
     public double getCLOPS() {
         return clops;
+    }
+
+    public void setCLOPS(double clops) {
+        this.clops = clops;
     }
 
     public List<String> getGateSets() {
