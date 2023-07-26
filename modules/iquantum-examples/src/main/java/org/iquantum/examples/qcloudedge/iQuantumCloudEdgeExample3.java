@@ -42,7 +42,7 @@ public class iQuantumCloudEdgeExample3 {
 
     private static  List<QNode> qeNodeList;
     public static void main(String[] args) throws Exception {
-        Log.disable();
+//        Log.disable();
         // Get the current time before executing the Java code
         long startTime = System.currentTimeMillis();
         String exampleName = "iQuantumCloudEdgeExample3";
@@ -170,7 +170,8 @@ public class iQuantumCloudEdgeExample3 {
         List<QTask> QTaskList = new ArrayList<>();
 //        String folderPath = "dataset/iquantum/MQT-Set01-298-10-27-IBMQ27-Opt3-Extra.csv";
 //        String folderPath = "dataset/iquantum/MQT-Set02-10-27-Mapped-AllAlgorithmLeft-Extra.csv";
-        String folderPath = "dataset/iquantum/MQT-Set03-7-127-AllOpt-IBMMapped-Extra.csv";
+//        String folderPath = "dataset/iquantum/MQT-Set03-7-127-AllOpt-IBMMapped-Only127-Extra.csv";
+        String folderPath = "dataset/iquantum/MQT-Set04-7-127-AllOpt-IBMMapped-Extra.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {

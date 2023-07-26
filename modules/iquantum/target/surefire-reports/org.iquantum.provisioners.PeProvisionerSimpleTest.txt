@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: org.iquantum.provisioners.PeProvisionerSimpleTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s - in org.iquantum.provisioners.PeProvisionerSimpleTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec

@@ -119,7 +119,12 @@ public class QEdgeBroker extends QBroker{
                 if(!Log.isDisabled()) {
                     Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Postponing execution of QTask ", qTask.getQTaskId(),
                             ": No sufficient QNode available.");
+                    Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Try offloading QTask to Cloud ", qTask.getQTaskId(),
+                            ": No sufficient QNode at Edge layer is available.");
                 }
+                qTask.setBrokerId(-1);
+                failedQTasks.add(qTask);
+                numQTaskFailed++;
             }
         }
         // If this task is submitted to Edge Layer, it can be offloaded to Cloud Layer

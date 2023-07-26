@@ -1,59 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.iquantum.util.WorkloadFileReaderTest" time="0.746" tests="1" errors="0" skipped="0" failures="0">
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="1" failures="0" name="org.iquantum.util.WorkloadFileReaderTest" time="0.345" errors="0" skipped="0">
   <properties>
-    <property name="java.specification.version" value="20"/>
-    <property name="sun.jnu.encoding" value="UTF-8"/>
-    <property name="java.class.path" value="/home/ubuntu/projects/iQuantum/modules/iquantum/target/test-classes:/home/ubuntu/projects/iQuantum/modules/iquantum/target/classes:/home/ubuntu/.m2/repository/org/apache/commons/commons-math3/3.4.1/commons-math3-3.4.1.jar:/home/ubuntu/.m2/repository/com/opencsv/opencsv/3.7/opencsv-3.7.jar:/home/ubuntu/.m2/repository/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2.jar:/home/ubuntu/.m2/repository/com/google/guava/guava/32.0.1-jre/guava-32.0.1-jre.jar:/home/ubuntu/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/home/ubuntu/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/ubuntu/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/ubuntu/.m2/repository/org/checkerframework/checker-qual/3.33.0/checker-qual-3.33.0.jar:/home/ubuntu/.m2/repository/com/google/errorprone/error_prone_annotations/2.18.0/error_prone_annotations-2.18.0.jar:/home/ubuntu/.m2/repository/com/google/j2objc/j2objc-annotations/2.8/j2objc-annotations-2.8.jar:/home/ubuntu/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar:/home/ubuntu/.m2/repository/junit/junit/4.13.1/junit-4.13.1.jar:/home/ubuntu/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/ubuntu/.m2/repository/org/apache/commons/commons-csv/1.10.0/commons-csv-1.10.0.jar:/home/ubuntu/.m2/repository/org/easymock/easymock/3.1/easymock-3.1.jar:/home/ubuntu/.m2/repository/cglib/cglib-nodep/2.2.2/cglib-nodep-2.2.2.jar:/home/ubuntu/.m2/repository/org/objenesis/objenesis/1.2/objenesis-1.2.jar:/home/ubuntu/.m2/repository/org/easymock/easymockclassextension/3.1/easymockclassextension-3.1.jar:"/>
+    <property name="idea.version" value="2023.1.3"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="java.vm.version" value="17.0.7+7-LTS"/>
+    <property name="sun.boot.library.path" value="/Users/biboo/Library/Java/JavaVirtualMachines/corretto-17.0.7/Contents/Home/lib"/>
+    <property name="maven.multiModuleProjectDirectory" value="/Users/biboo/Projects/iquantum/iQuantum"/>
     <property name="java.vm.vendor" value="Amazon.com Inc."/>
-    <property name="sun.arch.data.model" value="64"/>
     <property name="java.vendor.url" value="https://aws.amazon.com/corretto/"/>
-    <property name="os.name" value="Linux"/>
-    <property name="java.vm.specification.version" value="20"/>
-    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="path.separator" value=":"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
     <property name="user.country" value="AU"/>
-    <property name="sun.boot.library.path" value="/home/ubuntu/.jdks/corretto-20.0.2/lib"/>
-    <property name="sun.java.command" value="/home/ubuntu/projects/iQuantum/modules/iquantum/target/surefire/surefirebooter-20230726010243719_3.jar /home/ubuntu/projects/iQuantum/modules/iquantum/target/surefire 2023-07-26T01-02-43_653-jvmRun1 surefire-20230726010243719_1tmp surefire_0-20230726010243719_2tmp"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/Users/biboo/Projects/iquantum/iQuantum"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="java.runtime.version" value="17.0.7+7-LTS"/>
+    <property name="os.arch" value="aarch64"/>
+    <property name="java.io.tmpdir" value="/var/folders/_s/jg1zw33138n0bcr554kbw2lm0000gn/T/"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="maven.ext.class.path" value="/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven-event-listener.jar"/>
+    <property name="classworlds.conf" value="/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/biboo/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="jansi.passthrough" value="true"/>
+    <property name="maven.conf" value="/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3/conf"/>
     <property name="jdk.debug" value="release"/>
-    <property name="surefire.test.class.path" value="/home/ubuntu/projects/iQuantum/modules/iquantum/target/test-classes:/home/ubuntu/projects/iQuantum/modules/iquantum/target/classes:/home/ubuntu/.m2/repository/org/apache/commons/commons-math3/3.4.1/commons-math3-3.4.1.jar:/home/ubuntu/.m2/repository/com/opencsv/opencsv/3.7/opencsv-3.7.jar:/home/ubuntu/.m2/repository/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2.jar:/home/ubuntu/.m2/repository/com/google/guava/guava/32.0.1-jre/guava-32.0.1-jre.jar:/home/ubuntu/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/home/ubuntu/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/ubuntu/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/ubuntu/.m2/repository/org/checkerframework/checker-qual/3.33.0/checker-qual-3.33.0.jar:/home/ubuntu/.m2/repository/com/google/errorprone/error_prone_annotations/2.18.0/error_prone_annotations-2.18.0.jar:/home/ubuntu/.m2/repository/com/google/j2objc/j2objc-annotations/2.8/j2objc-annotations-2.8.jar:/home/ubuntu/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar:/home/ubuntu/.m2/repository/junit/junit/4.13.1/junit-4.13.1.jar:/home/ubuntu/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/ubuntu/.m2/repository/org/apache/commons/commons-csv/1.10.0/commons-csv-1.10.0.jar:/home/ubuntu/.m2/repository/org/easymock/easymock/3.1/easymock-3.1.jar:/home/ubuntu/.m2/repository/cglib/cglib-nodep/2.2.2/cglib-nodep-2.2.2.jar:/home/ubuntu/.m2/repository/org/objenesis/objenesis/1.2/objenesis-1.2.jar:/home/ubuntu/.m2/repository/org/easymock/easymockclassextension/3.1/easymockclassextension-3.1.jar:"/>
-    <property name="sun.cpu.endian" value="little"/>
-    <property name="user.home" value="/home/ubuntu"/>
+    <property name="java.class.version" value="61.0"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="13.4.1"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="user.home" value="/Users/biboo"/>
+    <property name="user.timezone" value="Australia/Melbourne"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="17"/>
+    <property name="user.name" value="biboo"/>
+    <property name="java.class.path" value="/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3/boot/plexus-classworlds.license:/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3/boot/plexus-classworlds-2.6.0.jar"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="sun.java.command" value="org.codehaus.classworlds.Launcher -Didea.version=2023.1.3 deploy"/>
+    <property name="java.home" value="/Users/biboo/Library/Java/JavaVirtualMachines/corretto-17.0.7/Contents/Home"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
-    <property name="java.version.date" value="2023-07-18"/>
-    <property name="java.home" value="/home/ubuntu/.jdks/corretto-20.0.2"/>
-    <property name="file.separator" value="/"/>
-    <property name="basedir" value="/home/ubuntu/projects/iQuantum/modules/iquantum"/>
-    <property name="java.vm.compressedOopsMode" value="Zero based"/>
-    <property name="line.separator" value="&#10;"/>
-    <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/ubuntu/projects/iQuantum/modules/iquantum/target/surefire/surefirebooter-20230726010243719_3.jar"/>
-    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
-    <property name="java.runtime.version" value="20.0.2+9-FR"/>
-    <property name="user.name" value="ubuntu"/>
-    <property name="stdout.encoding" value="UTF-8"/>
-    <property name="path.separator" value=":"/>
-    <property name="os.version" value="5.15.0-76-generic"/>
-    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
-    <property name="file.encoding" value="UTF-8"/>
-    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
-    <property name="java.vendor.version" value="Corretto-20.0.2.9.1"/>
-    <property name="localRepository" value="/home/ubuntu/.m2/repository"/>
-    <property name="java.vendor.url.bug" value="https://github.com/corretto/corretto-20/issues/"/>
-    <property name="java.io.tmpdir" value="/tmp"/>
-    <property name="idea.version" value="2023.2"/>
-    <property name="java.version" value="20.0.2"/>
-    <property name="user.dir" value="/home/ubuntu/projects/iQuantum/modules/iquantum"/>
-    <property name="os.arch" value="amd64"/>
-    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="native.encoding" value="UTF-8"/>
-    <property name="java.library.path" value="/usr/local/cuda-12.0/lib64:/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
     <property name="java.vm.info" value="mixed mode, sharing"/>
-    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.version" value="17.0.7"/>
+    <property name="native.encoding" value="UTF-8"/>
     <property name="java.vendor" value="Amazon.com Inc."/>
-    <property name="java.vm.version" value="20.0.2+9-FR"/>
-    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
-    <property name="java.class.version" value="64.0"/>
+    <property name="maven.home" value="/Applications/IntelliJ IDEA.app/Contents/plugins/maven/lib/maven3"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.version.date" value="2023-04-18"/>
+    <property name="java.vendor.url.bug" value="https://github.com/corretto/corretto-17/issues/"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="java.vendor.version" value="Corretto-17.0.7.7.1"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
   </properties>
-  <testcase name="read" classname="org.iquantum.util.WorkloadFileReaderTest" time="0.741"/>
+  <testcase classname="org.iquantum.util.WorkloadFileReaderTest" name="read" time="0.345"/>
 </testsuite>
