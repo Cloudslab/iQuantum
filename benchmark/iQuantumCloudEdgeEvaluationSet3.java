@@ -6,9 +6,6 @@
  * It also creates a CTask and a QTask to be submitted to the CCloudBroker and QCloudBroker respectively.
  * Finally, it starts the simulation and prints the results.
  */
-
-package org.iquantum.examples.qcloudedge;
-
 import org.iquantum.backends.quantum.IBMQNode;
 import org.iquantum.backends.quantum.QNode;
 import org.iquantum.brokers.*;
@@ -25,17 +22,17 @@ import org.iquantum.utils.QTaskExporter;
 import org.iquantum.utils.QTaskImporter;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
-import java.lang.management.OperatingSystemMXBean;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.OperatingSystemMXBean;
 
-public class iQuantumCloudEdgeExample3 {
+public class iQuantumCloudEdgeEvaluationSet3 {
     private static List<QTask> qTaskList;
 
     private static  List<QNode> qcNodeList;
@@ -43,10 +40,10 @@ public class iQuantumCloudEdgeExample3 {
     private static  List<QNode> qeNodeList;
     public static void main(String[] args) throws Exception {
         Log.disable();
+        String exampleName = "iQuantumCloudEdgeEvaluation";
+        System.out.println("Start the " + exampleName + " simulation");
         // Get the current time before executing the Java code
         long startTime = System.currentTimeMillis();
-        String exampleName = "iQuantumCloudEdgeExample3";
-        System.out.println("Start the " + exampleName + " simulation");
 
         // Step 1: Initialize the core simulation package. It should be called before creating any entities.
         int num_user = 1;
@@ -103,16 +100,16 @@ public class iQuantumCloudEdgeExample3 {
             QTaskExporter.printQTaskList(qeTaskResults);
             QTaskExporter.extractQTaskListToCSV(qeTaskResults, exampleName+"-edge");
         }
-        Log.printLine(exampleName +" finished!");
+        System.out.println(exampleName +" finished!");
 
-        // ----- RESOURCE CONSUMPTION
+        // RESOURCE CONSUMPTION
         // Get the current time after executing the Java code
-        long endTime = System.currentTimeMillis(); // or System.nanoTime();
+        long endTime = System.currentTimeMillis();
 
         // Calculate the execution time
         long executionTime = endTime - startTime;
 
-        // Print the execution time in milliseconds (for System.currentTimeMillis()) or nanoseconds (for System.nanoTime())
+        // Print the execution time in milliseconds
         System.out.println("Execution time: " + executionTime + " milliseconds");
         // Get the OperatingSystemMXBean instance
         OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();

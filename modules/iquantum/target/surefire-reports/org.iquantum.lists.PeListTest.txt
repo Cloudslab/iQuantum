@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: org.iquantum.lists.PeListTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 s - in org.iquantum.lists.PeListTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in org.iquantum.lists.PeListTest

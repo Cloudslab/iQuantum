@@ -3,6 +3,7 @@ package org.iquantum.backends.quantum.qubittopologies;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.iquantum.utils.Log;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -42,7 +43,7 @@ public class IBMQTopology {
                 }
             }
             String filePath = latestFile.getPath();
-            System.out.println("Loaded latest Datasheet CSV Datasheet for " + node + " at " + filePath);
+            Log.printLine("Loaded latest Datasheet CSV Datasheet for " + node + " at " + filePath);
             return filePath;
         } else {
             System.out.println("No CSV files found for " + node);
