@@ -1,12 +1,9 @@
 /**
- * iQuantum Example 5
- * This example shows how to create a QDatacenter with two 27-qubit quantum nodes following the topology of
- * IBM Hanoi and IBM Geneva automatically from the datasheet. Then, it creates a QBroker and four QTasks to
- * be submitted to the QBroker. Finally, it starts the simulation and prints the results.
+ * This is an example of using iQuantum with Py4J to connect with external Python applications.
+ * Note: This example is an experimental feature of iQuantum.
  */
 
-package org.iquantum.examples.p4j;
-import org.iquantum.brokers.QBrokerSimple;
+package org.iquantum.examples.experimental;
 import org.iquantum.brokers.QCloudBroker;
 import py4j.GatewayServer;
 

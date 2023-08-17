@@ -7,7 +7,7 @@
  * Finally, it starts the simulation and prints the results.
  */
 
-package org.iquantum.examples.qcloudedge;
+package org.iquantum.examples.hybrid;
 
 import org.iquantum.backends.classical.Host;
 import org.iquantum.backends.classical.Pe;
@@ -37,7 +37,7 @@ import org.iquantum.utils.Log;
 import java.text.DecimalFormat;
 import java.util.*;
 
-public class iQuantumCloudEdgeExample2 {
+public class iQuantumHybridExample3 {
     /** The CTask list. */
     private static List<CTask> CTaskList;
     /** The vmlist. */
@@ -73,7 +73,7 @@ public class iQuantumCloudEdgeExample2 {
         QEdgeBroker qeBroker = createQEBroker();
 
         CloudGateway cloudGateway = new CloudGateway("CloudGateway", ccBroker, qcBroker);
-        EdgeGateway edgeGateway = new EdgeGateway("EdgeGateway", ceBroker, qeBroker);
+        EdgeGateway edgeGateway = new EdgeGateway("EdgeGateway", ceBroker, qeBroker, cloudGateway);
 
         // Step 4: Create a VM and submit to CDatacenter and EDatacenter
         vmclist = new ArrayList<Vm>();

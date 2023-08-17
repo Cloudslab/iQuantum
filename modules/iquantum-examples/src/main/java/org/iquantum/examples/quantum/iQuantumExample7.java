@@ -69,7 +69,7 @@ public class iQuantumExample7 {
 
     private static List<QTask> createQTaskList(QCloudBroker qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
-        String folderPath = "dataset/iquantum/MQT-Set3-10-27-Mapped-AllAlgorithmLeft-Extra.csv";
+        String folderPath = "dataset/iquantum/MQT-Set04-7-127-AllOpt-IBMMapped-Extra.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {

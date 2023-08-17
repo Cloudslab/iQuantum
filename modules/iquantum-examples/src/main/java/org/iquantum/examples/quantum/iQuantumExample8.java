@@ -5,7 +5,7 @@
  * be submitted to the QBroker. Finally, it starts the simulation and prints the results.
  */
 
-package org.iquantum.examples.multiqpu;
+package org.iquantum.examples.quantum;
 
 
 import org.iquantum.backends.quantum.IBMQNodeMQ;
@@ -25,7 +25,7 @@ import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.*;
 
-public class iQuantumMultiQPUExample1 {
+public class iQuantumExample8 {
     private static List<QTask> QTaskList;
 
     private static  List<QNodeMQ> qNodeList;
@@ -66,7 +66,7 @@ public class iQuantumMultiQPUExample1 {
 
     private static List<QTask> createQTaskList(QDatacenterExtended qDatacenter, QBrokerMQ qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
-        String folderPath = "dataset/iquantum/MQT-Set1-298-10-27-IBMQ27-Opt3.csv";
+        String folderPath = "dataset/iquantum/MQT-Set01-298-10-27-IBMQ27-Opt3-Extra.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {

@@ -8,6 +8,7 @@
 package org.iquantum.examples.quantum;
 import org.iquantum.brokers.QBroker;
 import org.iquantum.brokers.QCloudBroker;
+import org.iquantum.datacenters.QCloudDatacenter;
 import org.iquantum.datacenters.QDatacenter;
 import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.backends.quantum.IBMQNode;
@@ -35,7 +36,7 @@ public class iQuantumExample4 {
         iQuantum.init(num_user, calendar, trace_flag);
 
         // Step 2: Create a QDatacenter and two quantum nodes (IBM Hanoi and IBM Geneva)
-        QDatacenter qDatacenter = createQDatacenter("QDatacenter_0");
+        QCloudDatacenter qDatacenter = createQDatacenter("QDatacenter_0");
 
         // Step 3: Create a QBroker
         QBroker qBroker = createQBroker();
@@ -138,7 +139,7 @@ public class iQuantumExample4 {
      * @param name name of the QDatacenter
      * @return QDatacenter
      */
-    private static QDatacenter createQDatacenter(String name) {
+    private static QCloudDatacenter createQDatacenter(String name) {
         // Automatically create two quantum nodes (IBM Hanoi and IBM Geneva) from the dataset
         QNode qNode1 = IBMQNode.createNode(0,"ibm_hanoi",new QTaskSchedulerSpaceShared());
         QNode qNode2 = IBMQNode.createNode(1,"ibm_washington",new QTaskSchedulerSpaceShared());
@@ -150,7 +151,7 @@ public class iQuantumExample4 {
 
         // Create a QDatacenter with two 7-qubit quantum nodes (IBM Hanoi and IBM Geneva)
         QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qNodeList, timeZone, costPerSec);
-        QDatacenter qDatacenter = new QDatacenter(name, characteristics);
+        QCloudDatacenter qDatacenter = new QCloudDatacenter(name, characteristics);
         return qDatacenter;
     }
 

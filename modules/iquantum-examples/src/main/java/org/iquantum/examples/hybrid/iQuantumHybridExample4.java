@@ -7,48 +7,45 @@
  * Finally, it starts the simulation and prints the results.
  */
 
-package org.iquantum.examples.qcloudedge;
+package org.iquantum.examples.hybrid;
 
-import org.iquantum.backends.classical.Host;
-import org.iquantum.backends.classical.Pe;
-import org.iquantum.backends.classical.Storage;
-import org.iquantum.backends.classical.Vm;
 import org.iquantum.backends.quantum.IBMQNode;
 import org.iquantum.backends.quantum.QNode;
-import org.iquantum.backends.quantum.qubittopologies.QubitTopology;
 import org.iquantum.brokers.*;
 import org.iquantum.core.iQuantum;
-import org.iquantum.datacenters.*;
+import org.iquantum.datacenters.QCloudDatacenter;
+import org.iquantum.datacenters.QDatacenterCharacteristics;
+import org.iquantum.datacenters.QEdgeDatacenter;
 import org.iquantum.gateways.CloudGateway;
 import org.iquantum.gateways.EdgeGateway;
-import org.iquantum.models.UtilizationModel;
-import org.iquantum.models.UtilizationModelFull;
-import org.iquantum.policies.ctasks.CloudletSchedulerSpaceShared;
 import org.iquantum.policies.qtasks.QTaskSchedulerSpaceShared;
-import org.iquantum.policies.vm.VmAllocationPolicySimple;
-import org.iquantum.policies.vm.VmSchedulerTimeShared;
-import org.iquantum.provisioners.BwProvisionerSimple;
-import org.iquantum.provisioners.PeProvisionerSimple;
-import org.iquantum.provisioners.RamProvisionerSimple;
-import org.iquantum.tasks.CTask;
 import org.iquantum.tasks.QTask;
 import org.iquantum.utils.Log;
 import org.iquantum.utils.QTaskExporter;
 import org.iquantum.utils.QTaskImporter;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.OperatingSystemMXBean;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
-public class iQuantumCloudEdgeExample1 {
+public class iQuantumHybridExample4 {
     private static List<QTask> qTaskList;
 
-    private static  List<QNode> qNodeList;
+    private static  List<QNode> qcNodeList;
 
+    private static  List<QNode> qeNodeList;
     public static void main(String[] args) throws Exception {
-        String exampleName = "iQuantumCloudEdgeExample1";
+//        Log.disable();
+        // Get the current time before executing the Java code
+        long startTime = System.currentTimeMillis();
+        String exampleName = "iQuantumCloudEdgeExample3";
         System.out.println("Start the " + exampleName + " simulation");
 
         // Step 1: Initialize the core simulation package. It should be called before creating any entities.
@@ -107,6 +104,35 @@ public class iQuantumCloudEdgeExample1 {
             QTaskExporter.extractQTaskListToCSV(qeTaskResults, exampleName+"-edge");
         }
         Log.printLine(exampleName +" finished!");
+
+        // ----- RESOURCE CONSUMPTION
+        // Get the current time after executing the Java code
+        long endTime = System.currentTimeMillis(); // or System.nanoTime();
+
+        // Calculate the execution time
+        long executionTime = endTime - startTime;
+
+        // Print the execution time in milliseconds (for System.currentTimeMillis()) or nanoseconds (for System.nanoTime())
+        System.out.println("Execution time: " + executionTime + " milliseconds");
+        // Get the OperatingSystemMXBean instance
+        OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
+
+        // Get the MemoryMXBean instance
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+
+        // Get the number of available processors (CPU cores)
+        int availableProcessors = osBean.getAvailableProcessors();
+        System.out.println("Number of available processors (CPU cores): " + availableProcessors);
+
+        // Print CPU usage information
+        double cpuUsage = osBean.getSystemLoadAverage();
+        System.out.println("CPU usage: " + cpuUsage + " (load average)");
+
+        // Print RAM (memory) usage information
+        long usedMemory = memoryBean.getHeapMemoryUsage().getUsed();
+        long maxMemory = memoryBean.getHeapMemoryUsage().getMax();
+        System.out.println("Used memory: " + usedMemory / (1024L * 1024L) + " MB");
+        System.out.println("Max memory: " + maxMemory / (1024L * 1024L) + " MB");
     }
 
     /**
@@ -142,9 +168,10 @@ public class iQuantumCloudEdgeExample1 {
 
     private static List<QTask> createQTaskList(QBroker qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
-//        String folderPath = "dataset/iquantum/MQT-Set1-298-10-27-IBMQ27-Opt3-Extra.csv";
-        String folderPath = "dataset/iquantum/MQT-Set2-7-127-AllOpt-IBMMapped-Extra.csv";
-//        String folderPath = "dataset/iquantum/MQT-Set3-7-127-AllOpt-IBMMapped-Mini.csv";
+//        String folderPath = "dataset/iquantum/MQT-Set01-298-10-27-IBMQ27-Opt3-Extra.csv";
+//        String folderPath = "dataset/iquantum/MQT-Set02-10-27-Mapped-AllAlgorithmLeft-Extra.csv";
+//        String folderPath = "dataset/iquantum/MQT-Set03-7-127-AllOpt-IBMMapped-Only127-Extra.csv";
+        String folderPath = "dataset/iquantum/MQT-Set04-7-127-AllOpt-IBMMapped-Extra.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {
@@ -187,25 +214,38 @@ public class iQuantumCloudEdgeExample1 {
 
     private static QEdgeDatacenter createQEDatacenter(String name) {
         // Automatically create two quantum nodes (IBM Hanoi and IBM Cairo) from the dataset
-        QNode qeNode1 = IBMQNode.createNode(11,"ibm_hanoi",new QTaskSchedulerSpaceShared());
-        QNode qeNode2 = IBMQNode.createNode(12,"ibmq_kolkata",new QTaskSchedulerSpaceShared());
-        QNode qeNode3 = IBMQNode.createNode(13,"ibm_auckland",new QTaskSchedulerSpaceShared());
-        qNodeList = new ArrayList<>();
-        qNodeList.addAll(Arrays.asList(qeNode1, qeNode2, qeNode3));
+        QNode qNode1 = IBMQNode.createNode(11,"ibm_hanoi",new QTaskSchedulerSpaceShared());
+        QNode qNode2 = IBMQNode.createNode(12,"ibm_auckland",new QTaskSchedulerSpaceShared());
+        QNode qNode3 = IBMQNode.createNode(13,"ibm_cairo",new QTaskSchedulerSpaceShared());
+        QNode qNode4 = IBMQNode.createNode(14,"ibmq_mumbai",new QTaskSchedulerSpaceShared());
+        QNode qNode5 = IBMQNode.createNode(15,"ibmq_kolkata",new QTaskSchedulerSpaceShared());
+        qeNodeList = new ArrayList<>();
+        qeNodeList.addAll(Arrays.asList(qNode1, qNode2, qNode3, qNode4, qNode5));
         double timeZone = 0.0;
         double costPerSec = 1.6; // the cost of using a quantum node per second (as IBM Quantum Pricing)
-        QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qNodeList, timeZone, costPerSec);
+        QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qeNodeList, timeZone, costPerSec);
         return new QEdgeDatacenter(name, characteristics);
     }
 
     private static QCloudDatacenter createQCDatacenter(String name) {
-        QNode qcNode1 = IBMQNode.createNode(21,"ibm_washington",new QTaskSchedulerSpaceShared());
-        QNode qcNode2 = IBMQNode.createNode(22,"ibm_washington",new QTaskSchedulerSpaceShared());
-        qNodeList = new ArrayList<>();
-        qNodeList.addAll(Arrays.asList(qcNode1, qcNode2));
+        int[] nodeIds = {21, 22, 23, 24, 25, 26};
+        String backendName = "ibm_washington";
+        QTaskSchedulerSpaceShared taskScheduler = new QTaskSchedulerSpaceShared();
+        int quantumVolume = 128;
+        int clops = 850;
+        List<QNode> qcNodeList = new ArrayList<>();
+        for (int nodeId : nodeIds) {
+            QNode qcNode = IBMQNode.createNode(nodeId, backendName, taskScheduler);
+            qcNodeList.add(qcNode);
+            // Modify the quantum volume and CLOPS of the remaining 3 nodes
+            if (nodeId >= 24) {
+                qcNode.setQuantumVolume(quantumVolume);
+                qcNode.setCLOPS(clops);
+            }
+        }
         double timeZone = 0.0;
         double costPerSec = 1.6; // the cost of using a quantum node per second (as IBM Quantum Pricing)
-        QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qNodeList, timeZone, costPerSec);
+        QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qcNodeList, timeZone, costPerSec);
         QCloudDatacenter qDatacenter = new QCloudDatacenter(name, characteristics);
         return qDatacenter;
     }
