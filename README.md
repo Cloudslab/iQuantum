@@ -2,26 +2,13 @@
 # iQuantum ![Project Status](https://img.shields.io/badge/Project-Beta%20Release-yellow) [![iQuantum Maven Build](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml/badge.svg)](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml)
 
 ##  A Toolkit for Modeling and Simulation of Quantum Computing Environments
+As quantum computers become increasingly accessible through cloud services and potentially extend to edge networks in the future, the demand for efficient resource management strategies is paramount to ensure the efficient utilization of quantum computing resources. However, the limitations of employing practical quantum computing resources and the lack of quantum environment modeling toolkits have hindered the design and evaluation of quantum resource management policies. To address this challenge, we propose iQuantum, a lightweight and versatile discrete-event modeling and simulation toolkit (based on CloudSim) for quantum computing environments. iQuantum provides a set of quantum computing entities that can be customized and extended to support a wide range of different hybrid quantum computing environments, supporting research in quantum resource management (e.g., task scheduling, backend selection, hybrid task orchestration), designing and prototyping of quantum computing systems. 
 
-As quantum computers become increasingly accessible through
-cloud services and potentially extending to the edge networks in the future, the demand for efficient resource
-management strategies is paramount to ensure the efficient utilization of quantum computing resources.
-However, the limitations of employing practical quantum computing resources and the lack of
-quantum environments modeling toolkits have hindered the design and evaluation of quantum resource management policies.
-To address this challenge, we propose iQuantum, a lightweight and versatile discrete-event modeling and simulation toolkit (based on CloudSim)
-for quantum computing environments. iQuantum provides a set of quantum computing entities can be customized and extended to
-support a wide range of different hybrid quantum computing environments, support research in quantum resource management, and prototyping of quantum computing systems.
-
-<center>
+<p align="center">
 <img alt="iQuantum Overview" src="documentation/figures/iQuantum-Overview.png" title="iQuantum Overview" width="500px"/>
-</center>
-
+</p>
 
 ## Main Features
-The iQuantum project aims to facilitate research in quantum software and systems,
-particularly focusing on resource management, job scheduling, and hybrid
-task orchestration in quantum computing environments that
-integrate cloud and edge computing resources.
 - Modeling quantum computing entities: Quantum Datacenters (QDatacenter),
   Quantum Computers (QNode), QPU, Quantum Tasks (QTask), and Quantum Broker (QBroker).
 - Modeling classical computing entities: Classical Datacenters (CDatacenter),
@@ -34,6 +21,7 @@ integrate cloud and edge computing resources.
 ## Setup and Using
 Please refer to the [Release page](https://github.com/Cloudslab/iQuantum/releases) to access the latest release of iQuantum (1.0.0-beta).
 The downloaded package contains the main jar file (`iquantum-1.0.0-beta.jar`) and the entire source code of iQuantum.
+
 ### Prerequisites
 - Java SDK 17+ ([corretto-17](https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/downloads-list.html) is recommended).
 - [Apache Maven](https://maven.apache.org/download.cgi) (All library management and build automation in iQuantum are handled by Maven; version 3.9+ is recommended)
@@ -49,8 +37,10 @@ To build iQuantum from source, please follow these steps:
 6. You are ready to use iQuantum in your project.
 
 ### Modeling and Simulation Workflow
-The simulation workflow of iQuantum is illustrated in the following figure.
+The simulation workflow of iQuantum is illustrated as follows:
+
 <img alt="iQuantum Workflow" src="documentation/figures/iQuantumFlow.png" title="iQuantum Workflow" width="400"/>
+
 1. **Modeling**: The user defines the quantum computing environment (e.g., quantum datacenters, quantum computers, quantum tasks, and quantum brokers) using the iQuantum entities.
    - Quantum tasks and quantum nodes can be modeled manually or automatically by importing from dataset (.csv), which can be generated from QASM files for quantum tasks (e.g., using [MQT Bench](https://www.cda.cit.tum.de/mqtbench/)) and system calibration datasheet (e.g., from [IBM Quantum](https://quantum-computing.ibm.com/lab/docs/iql/manage/systems/configuration)).
    - Resource management policies (scheduling, mapping, backend selection, and offloading) can be customized by extending the corresponding classes (in `org.iquantum.policies` package).
