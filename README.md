@@ -1,5 +1,5 @@
 
-# iQuantum ![Project Status](https://img.shields.io/badge/Project-Under%20Development-yellow) [![iQuantum Maven Build](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml/badge.svg)](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml)
+# iQuantum ![Project Status](https://img.shields.io/badge/Project-Beta%20Release-yellow) [![iQuantum Maven Build](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml/badge.svg)](https://github.com/Cloudslab/iQuantum/actions/workflows/maven.yml)
 
 ##  A Toolkit for Modeling and Simulation of Quantum Computing Environments
 
@@ -23,11 +23,17 @@ Quantum Computers (QNode), QPU, Quantum Tasks (QTask), and Quantum Broker (QBrok
 - Modeling qubit mapping algorithms for quantum computing environments.
 - Modeling Hybrid Quantum-Classical Task Orchestration in the Cloud-Edge Continuum.
 
+## Download and Using
+Please refer to the [Release page](https://github.com/Cloudslab/iQuantum/releases) to access the latest release of iQuantum (1.0.0-beta).
+The downloaded package contains the main jar file (`iquantum-1.0.0-beta.jar`) and the entire source code of iQuantum.
+### Prerequisites 
+- Java SDK 17+ ([corretto-17](https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/downloads-list.html) is recommended).
+- [Apache Maven](https://maven.apache.org/download.cgi) (All library management and build automation in iQuantum are handled by Maven; version 3.9+ is recommended)
+- [IntelliJ IDEA](https://www.jetbrains.com/idea/) (latest version, 2023+) is highly recommended for customizing the source code (e.g., resource management policies or other entities)
 
-## Installation and Examples
-The downloaded package contains all the source code and examples for iQuantum.
-Several examples that demonstrate the use of iQuantum can be found in the `org.iquantum.examples` package, located in `/modules/iquantum-examples` folder.
-More details will be updated soon.
+### Examples of Operation
+Several examples that demonstrate the use of iQuantum can be found in the `org.iquantum.examples` package, located in the `/modules/iquantum-examples` folder.
+
 
 ## Contributing
 Pull requests are welcome. 
