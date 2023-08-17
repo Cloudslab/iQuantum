@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="5" failures="0" name="org.iquantum.HostTest" time="0.001" errors="0" skipped="1">
+<testsuite tests="5" failures="0" name="org.iquantum.HostTest" time="0" errors="0" skipped="1">
   <properties>
     <property name="idea.version" value="2023.1.3"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -67,5 +67,5 @@
   <testcase classname="org.iquantum.HostTest" name="testUpdateVmsProcessing" time="0">
     <skipped/>
   </testcase>
-  <testcase classname="org.iquantum.HostTest" name="testVmDestroy" time="0.001"/>
+  <testcase classname="org.iquantum.HostTest" name="testVmDestroy" time="0"/>
 </testsuite>

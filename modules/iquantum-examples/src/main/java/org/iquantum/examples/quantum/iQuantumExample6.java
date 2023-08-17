@@ -11,7 +11,9 @@ import org.iquantum.backends.quantum.IBMQNode;
 import org.iquantum.backends.quantum.QNode;
 import org.iquantum.brokers.QBroker;
 import org.iquantum.brokers.QBroker;
+import org.iquantum.brokers.QCloudBroker;
 import org.iquantum.core.iQuantum;
+import org.iquantum.datacenters.QCloudDatacenter;
 import org.iquantum.datacenters.QDatacenter;
 import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.policies.qtasks.QTaskSchedulerSpaceShared;
@@ -45,7 +47,7 @@ public class iQuantumExample6 {
         iQuantum.init(num_user, calendar, trace_flag);
 
         // Step 2: Create a QDatacenter and two quantum nodes (IBM Hanoi and IBM Geneva)
-        QDatacenter qDatacenter = createQDatacenter("QDatacenter_0");
+        QCloudDatacenter qDatacenter = createQDatacenter("QDatacenter_0");
 
         // Step 3: Create a QBroker
         QBroker qBroker = createQBroker();
@@ -62,14 +64,17 @@ public class iQuantumExample6 {
         // Step 7: Stop the simulation
         iQuantum.stopSimulation();
 
-
+        // Step 8: Print the results when simulation is over
+        List<QTask> newList = qBroker.getQTaskReceivedList();
+        QTaskExporter.printQTaskList(newList);
+        QTaskExporter.extractQTaskListToCSV(newList, exampleName);
 
         Log.printLine("iQuantum Example 6 finished!");
     }
 
     private static List<QTask> createQTaskList(QDatacenter qDatacenter, QBroker qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
-        String folderPath = "dataset/iquantum/MQT-Set2-7-127-AllOpt-IBMMapped-Extra.csv";
+        String folderPath = "dataset/iquantum/MQT-Set02-10-27-Mapped-AllAlgorithmLeft-Extra.csv";
         Path datasetPath = Paths.get(System.getProperty("user.dir"), folderPath);
         QTaskImporter QTaskImporter = new QTaskImporter();
         try {
@@ -105,7 +110,7 @@ public class iQuantumExample6 {
     private static QBroker createQBroker() {
         QBroker qBroker = null;
         try {
-            qBroker = new QBroker("QBroker");
+            qBroker = new QCloudBroker("QBroker");
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -118,7 +123,7 @@ public class iQuantumExample6 {
      * @param name name of the QDatacenter
      * @return QDatacenter
      */
-    private static QDatacenter createQDatacenter(String name) {
+    private static QCloudDatacenter createQDatacenter(String name) {
         // Automatically create two quantum nodes (IBM Hanoi and IBM Cairo) from the dataset
         QNode qNode1 = IBMQNode.createNode(0,"ibm_hanoi",new QTaskSchedulerSpaceShared());
         QNode qNode2 = IBMQNode.createNode(1,"ibm_washington",new QTaskSchedulerSpaceShared());
@@ -129,7 +134,7 @@ public class iQuantumExample6 {
 
         // Create a QDatacenter with two 7-qubit quantum nodes (IBM Hanoi and IBM Geneva)
         QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qNodeList, timeZone, costPerSec);
-        QDatacenter qDatacenter = new QDatacenter(name, characteristics);
+        QCloudDatacenter qDatacenter = new QCloudDatacenter(name, characteristics);
         return qDatacenter;
     }
 

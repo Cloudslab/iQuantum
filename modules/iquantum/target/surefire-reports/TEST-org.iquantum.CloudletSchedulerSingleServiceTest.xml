@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="15" failures="0" name="org.iquantum.CloudletSchedulerSingleServiceTest" time="0.012" errors="0" skipped="0">
+<testsuite tests="15" failures="0" name="org.iquantum.CloudletSchedulerSingleServiceTest" time="0.011" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2023.1.3"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -65,15 +65,15 @@
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testGetUnderAllocatedMips" time="0"/>
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testCTaskSubmitLowUtilization" time="0"/>
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testGetTotalUtilization" time="0"/>
-  <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testUpdateVmProcessingHighUtilization" time="0.001"/>
+  <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testUpdateVmProcessingHighUtilization" time="0"/>
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testGetNumberOfPes" time="0"/>
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testGetMips" time="0"/>
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testGetTotalCurrentMips" time="0"/>
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testCTaskFinish" time="0"/>
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testGetEstimatedFinishTimeHighUtilization" time="0"/>
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testUpdateVmProcessingLowUtilization" time="0"/>
-  <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testGetEstimatedFinishTimeLowUtilization" time="0"/>
+  <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testGetEstimatedFinishTimeLowUtilization" time="0.001"/>
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testGetCurrentRequestedMips" time="0"/>
-  <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testUpdateVmProcessingLowAndHighUtilization" time="0.001"/>
+  <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testUpdateVmProcessingLowAndHighUtilization" time="0"/>
   <testcase classname="org.iquantum.CloudletSchedulerSingleServiceTest" name="testGetTotalCurrentMipsForCloudlet" time="0"/>
 </testsuite>

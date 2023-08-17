@@ -3,6 +3,7 @@ package org.iquantum.backends.quantum.qubittopologies;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.iquantum.utils.Log;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -42,7 +43,7 @@ public class IBMQTopology {
                 }
             }
             String filePath = latestFile.getPath();
-            System.out.println("Loaded latest Datasheet CSV Datasheet for " + node + " at " + filePath);
+            Log.printLine("Loaded latest Datasheet CSV Datasheet for " + node + " at " + filePath);
             return filePath;
         } else {
             System.out.println("No CSV files found for " + node);
@@ -71,7 +72,7 @@ public class IBMQTopology {
                 double idError = parseDoubleOrDefault(csvRecord.get("ID error "), -1);
                 double sxError = parseDoubleOrDefault(csvRecord.get("√x (sx) error "), -1);
                 double pauliXError = parseDoubleOrDefault(csvRecord.get("Pauli-X error "), -1);
-                String cnotErrors = csvRecord.get("CNOT error ");
+                String cnotErrors = csvRecord.isSet("CNOT error ") ? csvRecord.get("CNOT error ") : (csvRecord.isSet("ECR error ") ? csvRecord.get("ECR error ") : "");
                 String gateTimes = csvRecord.get("Gate time (ns)");
 
 

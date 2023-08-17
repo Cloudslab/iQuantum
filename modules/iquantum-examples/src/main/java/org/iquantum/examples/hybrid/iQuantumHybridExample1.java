@@ -13,10 +13,8 @@ import org.iquantum.backends.classical.Storage;
 import org.iquantum.backends.classical.Vm;
 import org.iquantum.brokers.CBroker;
 import org.iquantum.brokers.QBroker;
-import org.iquantum.datacenters.CDatacenter;
-import org.iquantum.datacenters.CDatacenterCharacteristics;
-import org.iquantum.datacenters.QDatacenter;
-import org.iquantum.datacenters.QDatacenterCharacteristics;
+import org.iquantum.brokers.QCloudBroker;
+import org.iquantum.datacenters.*;
 import org.iquantum.backends.quantum.IBMQNode;
 import org.iquantum.backends.quantum.QNode;
 import org.iquantum.core.iQuantum;
@@ -57,7 +55,7 @@ public class iQuantumHybridExample1 {
         // Step 2: Create a CDatacenter and a QDatacenter
         CDatacenter CDatacenter0 = createDatacenter("CDatacenter_0");
 
-        QDatacenter qDatacenter = createQDatacenter("QDatacenter_0");
+        QCloudDatacenter qDatacenter = createQDatacenter("QDatacenter_0");
 
 
         // Step 3: Create a CBroker and a QBroker
@@ -335,7 +333,7 @@ public class iQuantumHybridExample1 {
     private static QBroker createQBroker() {
         QBroker qBroker = null;
         try {
-            qBroker = new QBroker("QBroker");
+            qBroker = new QCloudBroker("QBroker");
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -348,7 +346,7 @@ public class iQuantumHybridExample1 {
      * @param name name of the QDatacenter
      * @return QDatacenter
      */
-    private static QDatacenter createQDatacenter(String name) {
+    private static QCloudDatacenter createQDatacenter(String name) {
         // Automatically create two quantum nodes (IBM Hanoi and IBM Geneva) from the dataset
         QNode qNode1 = IBMQNode.createNode(0,"ibm_oslo",new QTaskSchedulerSpaceShared());
         qNodeList = new ArrayList<>();
@@ -358,7 +356,7 @@ public class iQuantumHybridExample1 {
 
         // Create a QDatacenter with two 7-qubit quantum nodes (IBM Hanoi and IBM Geneva)
         QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qNodeList, timeZone, costPerSec);
-        QDatacenter qDatacenter = new QDatacenter(name, characteristics);
+        QCloudDatacenter qDatacenter = new QCloudDatacenter(name, characteristics);
         return qDatacenter;
     }
 

@@ -63,7 +63,7 @@ public class QBrokerMQ extends SimEntity {
         getQTaskList().addAll(qtaskList);
     }
 
-    public void bindCloudletToQNode(int qtaskId, int qNodeId) {
+    public void bindQTaskToQNode(int qtaskId, int qNodeId) {
         QTaskList.getById(getQTaskList(), qtaskId).setQNodeId(qNodeId);
     }
 

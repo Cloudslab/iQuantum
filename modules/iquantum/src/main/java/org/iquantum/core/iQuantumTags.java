@@ -343,6 +343,8 @@ public class iQuantumTags {
     public static final int QRESOURCE_LIST = QBASE + 12;
 
     public static final int CLOUD_GATEWAY_DISPATCH_TASK = QBASE + 13;
+
+    public static final int OFFLOAD_QTASK_FROM_EDGE = QBASE + 14;
     /** Private Constructor. */
     private iQuantumTags() {
         throw new UnsupportedOperationException("iQuantumTags cannot be instantiated");

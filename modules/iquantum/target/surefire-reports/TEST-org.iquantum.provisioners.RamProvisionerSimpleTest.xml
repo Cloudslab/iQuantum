@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="5" failures="0" name="org.iquantum.provisioners.RamProvisionerSimpleTest" time="0" errors="0" skipped="0">
+<testsuite tests="5" failures="0" name="org.iquantum.provisioners.RamProvisionerSimpleTest" time="0.001" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2023.1.3"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -62,7 +62,7 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
   </properties>
   <testcase classname="org.iquantum.provisioners.RamProvisionerSimpleTest" name="testGetAllocatedRamForVm" time="0"/>
-  <testcase classname="org.iquantum.provisioners.RamProvisionerSimpleTest" name="testGetAvailableRam" time="0"/>
+  <testcase classname="org.iquantum.provisioners.RamProvisionerSimpleTest" name="testGetAvailableRam" time="0.001"/>
   <testcase classname="org.iquantum.provisioners.RamProvisionerSimpleTest" name="testDeallocateBwForVm" time="0"/>
   <testcase classname="org.iquantum.provisioners.RamProvisionerSimpleTest" name="testGetRam" time="0"/>
   <testcase classname="org.iquantum.provisioners.RamProvisionerSimpleTest" name="testAllocateRamForVm" time="0"/>

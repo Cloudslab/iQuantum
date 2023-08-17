@@ -1,14 +1,15 @@
 /**
  * iQuantum Example 2
- * This example shows how to create a QDatacenter with two 7-qubit quantum nodes (IBM Oslo and IBM Perth),
+ * This example shows how to create a QCloudDatacenter with two 7-qubit quantum nodes (IBM Oslo and IBM Perth),
  * a QBroker, and a list of 2 QTasks for testing. The QTasks are submitted to the QBroker and the simulation
  * is started. The results are printed when the simulation is over.
  */
 package org.iquantum.examples.quantum;
 
+import org.iquantum.brokers.QCloudBroker;
 import org.iquantum.core.iQuantum;
 import org.iquantum.brokers.QBroker;
-import org.iquantum.datacenters.QDatacenter;
+import org.iquantum.datacenters.QCloudDatacenter;
 import org.iquantum.datacenters.QDatacenterCharacteristics;
 import org.iquantum.backends.quantum.QNode;
 import org.iquantum.tasks.QTask;
@@ -37,8 +38,8 @@ public class iQuantumExample2 {
         boolean trace_flag = true;  // trace events
         iQuantum.init(num_user, calendar, trace_flag);
 
-        // Step 2: Create a QDatacenter and two 7-qubit quantum nodes (IBM Oslo and IBM Nairobi)
-        QDatacenter qDatacenter = createQDatacenter("QDatacenter_0");
+        // Step 2: Create a QCloudDatacenter and two 7-qubit quantum nodes (IBM Oslo and IBM Nairobi)
+        QCloudDatacenter qDatacenter = createQCloudDatacenter("QCloudDatacenter_0");
 
         // Step 3: Create a QBroker
         QBroker qBroker = createQBroker();
@@ -64,11 +65,11 @@ public class iQuantumExample2 {
 
     /**
      * Create a list of 2 QTasks and set the QBroker and QNode for each QTask
-     * @param qDatacenter: QDatacenter where the QNode is located
+     * @param qDatacenter: QCloudDatacenter where the QNode is located
      * @param qBroker: QBroker that will receive the QTasks
      * @return A list of 2 QTasks
      */
-    private static List<QTask> createQTaskList(QDatacenter qDatacenter, QBroker qBroker) {
+    private static List<QTask> createQTaskList(QCloudDatacenter qDatacenter, QBroker qBroker) {
         List<QTask> QTaskList = new ArrayList<>();
         ArrayList<String> qlGates = new ArrayList<>(Arrays.asList("CX", "RZ", "X"));
         // Create QTask 1
@@ -113,7 +114,7 @@ public class iQuantumExample2 {
     private static QBroker createQBroker() {
         QBroker qBroker = null;
         try {
-            qBroker = new QBroker("QBroker");
+            qBroker = new QCloudBroker("QBroker");
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -122,11 +123,11 @@ public class iQuantumExample2 {
     }
 
     /**
-     * Create a QDatacenter with two 7-qubit quantum nodes (follow the topology of IBM Oslo and IBM Perth)
-     * @param name: name of the QDatacenter
-     * @return QDatacenter
+     * Create a QCloudDatacenter with two 7-qubit quantum nodes (follow the topology of IBM Oslo and IBM Perth)
+     * @param name: name of the QCloudDatacenter
+     * @return QCloudDatacenter
      */
-    private static QDatacenter createQDatacenter(String name) {
+    private static QCloudDatacenter createQCloudDatacenter(String name) {
         // Create 7-qubit quantum node (IBM Oslo)
         // Manually create the topology of the quantum node (Automatically create the topology in Example 4)
         List<int[]> edges_oslo = new ArrayList<>();
@@ -156,9 +157,9 @@ public class iQuantumExample2 {
         double timeZone = 0.0;
         double costPerSec = 3.0;
 
-        // Create a QDatacenter with two 7-qubit quantum nodes (IBM Oslo and IBM Perth)
+        // Create a QCloudDatacenter with two 7-qubit quantum nodes (IBM Oslo and IBM Perth)
         QDatacenterCharacteristics characteristics = new QDatacenterCharacteristics(qNodeList, timeZone, costPerSec);
-        QDatacenter qDatacenter = new QDatacenter(name, characteristics);
+        QCloudDatacenter qDatacenter = new QCloudDatacenter(name, characteristics);
         return qDatacenter;
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="5" failures="0" name="org.iquantum.provisioners.BwProvisionerSimpleTest" time="0.001" errors="0" skipped="0">
+<testsuite tests="5" failures="0" name="org.iquantum.provisioners.BwProvisionerSimpleTest" time="0" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2023.1.3"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -64,6 +64,6 @@
   <testcase classname="org.iquantum.provisioners.BwProvisionerSimpleTest" name="testGetBw" time="0"/>
   <testcase classname="org.iquantum.provisioners.BwProvisionerSimpleTest" name="testGetAllocatedBwforVm" time="0"/>
   <testcase classname="org.iquantum.provisioners.BwProvisionerSimpleTest" name="testAllocateBwforVm" time="0"/>
-  <testcase classname="org.iquantum.provisioners.BwProvisionerSimpleTest" name="testDeallocateBwForVm" time="0.001"/>
+  <testcase classname="org.iquantum.provisioners.BwProvisionerSimpleTest" name="testDeallocateBwForVm" time="0"/>
   <testcase classname="org.iquantum.provisioners.BwProvisionerSimpleTest" name="testGetAvailableBw" time="0"/>
 </testsuite>

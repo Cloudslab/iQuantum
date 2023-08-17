@@ -56,6 +56,11 @@ public class QNodeSelectionLottery {
     }
 
     private int calculateTicketsForQNode(QNode qNode, List<? extends QNode> qNodeList) {
+        int numIdenticalNodes = 0;
+        if (qNodeList.size() == 1) {
+            // If there is only one QNode, return a default or fallback number of tickets
+            return 1;
+        }
         for (QNode node : qNodeList) {
             double quantumVolume = node.getQuantumVolume();
             double clops = node.getCLOPS();
@@ -64,6 +69,15 @@ public class QNodeSelectionLottery {
             maxQuantumVolume = Math.max(maxQuantumVolume, quantumVolume);
             minClops = Math.min(minClops, clops);
             maxClops = Math.max(maxClops, clops);
+
+            if (quantumVolume == qNode.getQuantumVolume() && clops == qNode.getCLOPS()) {
+                numIdenticalNodes++;
+            }
+        }
+
+        if (numIdenticalNodes > 1) {
+            // If there are multiple identical nodes, return a fixed number of tickets for all of them
+            return numIdenticalNodes;
         }
 
         // Normalize the quantumVolume and clops values to a range between 0 and 1
@@ -91,6 +105,11 @@ public class QNodeSelectionLottery {
 
     private int generateRandomTicket(int totalTickets) {
         Random random = new Random();
-        return random.nextInt(totalTickets) + 1; // Generate a random number within the range of totalTickets
+        if (totalTickets == 1) {
+            return 1; // If there is only one ticket, return 1
+        } else if (totalTickets <= 0) {
+            return 0; // If there are no tickets, return 0
+        }
+        return random.nextInt(totalTickets) + 1; // Generate a random ticket between 1 and totalTickets
     }
 }

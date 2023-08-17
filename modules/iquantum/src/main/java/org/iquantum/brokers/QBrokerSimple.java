@@ -169,6 +169,11 @@ public class QBrokerSimple extends QBroker {
 
     }
 
+    @Override
+    protected void processQTaskOffload(SimEvent ev) {
+
+    }
+
     protected void processQResourceCharacteristicsRequest(SimEvent ev) {
         setDatacenterIdsList(iQuantum.getQuantumResourceList());
         setDatacenterCharacteristicsList(new HashMap<Integer, QDatacenterCharacteristics>());
@@ -198,7 +203,8 @@ public class QBrokerSimple extends QBroker {
      * Process QTask Submit and Scheduling
      * @param ev
      */
-    private void processQTaskSubmit(SimEvent ev) {
+    @Override
+    protected void processQTaskSubmit(SimEvent ev) {
         int[] data = (int[]) ev.getData();
         int qDatacenter = data[0];
         int qNodeId = 0;
@@ -244,7 +250,7 @@ public class QBrokerSimple extends QBroker {
         getQTaskList().removeAll(submittedQTasks);
     }
 
-    private boolean verifyConstraints(QNode qNode, QTask QTask, List<QTask> submittedQTasks){
+    protected boolean verifyConstraints(QNode qNode, QTask QTask, List<QTask> submittedQTasks){
         if(qNode.getNumQubits() < QTask.getNumQubits()) {
             if (!Log.isDisabled()) {
                 Log.printConcatLine(iQuantum.clock(), ": ", getName(), ": Cancel the execution of QTask #", QTask.getQTaskId(),

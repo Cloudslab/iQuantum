@@ -61,8 +61,8 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
   </properties>
-  <testcase classname="org.iquantum.CTaskTest" name="testCTask" time="0"/>
-  <testcase classname="org.iquantum.CTaskTest" name="testGetUtilizationOfBw" time="0.001"/>
+  <testcase classname="org.iquantum.CTaskTest" name="testCTask" time="0.001"/>
+  <testcase classname="org.iquantum.CTaskTest" name="testGetUtilizationOfBw" time="0"/>
   <testcase classname="org.iquantum.CTaskTest" name="testCTaskAlternativeConstructor1" time="0"/>
   <testcase classname="org.iquantum.CTaskTest" name="testCTaskAlternativeConstructor2" time="0"/>
   <testcase classname="org.iquantum.CTaskTest" name="testGetUtilizationOfCpu" time="0"/>
