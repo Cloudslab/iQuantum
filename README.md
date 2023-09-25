@@ -63,7 +63,7 @@ Pull requests are welcome.
 For major changes, please open an issue first to discuss what you would like to change.
 
 ## References
-[1] Hoa T. Nguyen, Muhammad Usman, and Rajkumar Buyya, iQuantum: A Case for Modeling and Simulation of Quantum Computing Environments, Proceedings of the 2023 IEEE International Conference on Quantum Software (QSW 2023, IEEE CS Press, USA), Chicago, USA, July 2-8, 2023.
+[1] Hoa T. Nguyen, Muhammad Usman, and Rajkumar Buyya, [iQuantum: A Case for Modeling and Simulation of Quantum Computing Environments](https://ieeexplore.ieee.org/document/10234319), Proceedings of the 2023 IEEE International Conference on Quantum Software (QSW 2023, IEEE CS Press, USA), Chicago, USA, July 2-8, 2023. DOI: 10.1109/QSW59989.2023.00013
 
 ## License
 [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)
