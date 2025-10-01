@@ -118,6 +118,21 @@
 			<artifactId>commons-csv</artifactId>
 			<version>1.10.0</version>
 		</dependency>
+		<dependency>
+		<groupId>org.graphstream</groupId>
+		<artifactId>gs-core</artifactId>
+		<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.graphstream</groupId>
+			<artifactId>gs-ui-swing</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jgrapht</groupId>
+			<artifactId>jgrapht-core</artifactId>
+			<version>1.5.1</version> <!-- Use the latest version -->
+		</dependency>
     </dependencies>
     <reporting>
 	<plugins>

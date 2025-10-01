@@ -67,7 +67,10 @@ public class QTask {
      * it starts and finishes executing in a single cloud resource, without
      * being migrated, this list will have only one item.
      */
+
     private final List<Resource> resList;
+    /** The total Executable Circuit Layer of qlet */
+    private int ECL;
 
     /**
      * The index of the last resource where the qulet was executed. If the
@@ -167,6 +170,7 @@ public class QTask {
         this.applicationName = null;
         this.record = iQuantum.getTraceFlag();
         this.cost = 0.0;
+        this.ECL = numShots * numLayers;
         execStartTime = 0.0;
         execFinishTime = -1.0;
         qNodeId = -1;
@@ -180,6 +184,7 @@ public class QTask {
      * @param numQubits: the number of qubits in the QTask
      * @param numLayers: the number of circuit layers in the QTask
      * @param numShots: the number of shots the QTask is to be executed
+     * @param ECL: the number of total Executable Circuit Layers
      * @param gateSet: the list of all gate set in the QTask
      * @param qubitTopology: the topology of the qubits in the QTask
      * @param preferredBackend: the preferred backend type to execute the QTask
@@ -199,11 +204,13 @@ public class QTask {
         this.preferredBackend = preferredBackend;
         this.applicationName = applicationName;
         this.record = iQuantum.getTraceFlag();
+        this.ECL = numShots * numLayers;
         execStartTime = 0.0;
         execFinishTime = -1.0;
         qNodeId = -1;
         resList = new ArrayList<Resource>(2);
         index = -1;
+
     }
 
     /**
@@ -262,6 +269,10 @@ public class QTask {
         return numLayers;
     }
 
+    public int getNumECL() {
+        return ECL;
+    }
+    
     public int getNumShots() {
         return numShots;
     }
@@ -297,6 +308,10 @@ public class QTask {
 
     public String getPreferredBackend() {
         return preferredBackend;
+    }
+        
+    public void setECL(int numLayers, int numShots) {
+        this.ECL = numLayers * numShots;
     }
 
     public void setApplicationName(final String applicationName) {
